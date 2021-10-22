@@ -25,6 +25,7 @@ function Login(){
         const {accessToken} = await login(email, password) as Login;
         await AsyncStorage.setItem("@amor-e-patas:user-token", accessToken);
         console.log(accessToken);
+        navigation.navigate("Home");
     } catch (err) {
         alert("Usuário ou senha incorretos.")
     }
