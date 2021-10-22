@@ -1,18 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {View, Text, Button, TextInput} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {authenticatedAPI } from "../../service/api";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack"
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
+import { getAnimaisDesaparecidos } from "../../service/animal";
+import { login } from "../../service/login";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+  interface Login{
+    accessToken: string;
+  }
 
 function Login(){
-  const navigation = useNavigation<NativeStackNavigationProp<AuthRoutesParamList, 'Login'>>()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigation = useNavigation<NativeStackNavigationProp<AuthRoutesParamList, 'Login'>>();
 
-  useEffect(() => {
+  async function handleLogin() {
+    if (email == "" || password == "") {
+        alert("Preencha todos os campos.");
+        return;
+    }
+    try {
+        const {accessToken} = await login(email, password) as Login;
+        await AsyncStorage.setItem("@amor-e-patas:user-token", accessToken);
+        console.log(accessToken);
+    } catch (err) {
+        alert("Usuário ou senha incorretos.")
+    }
+}
+
+ /* useEffect(() => {
     async function getAnimaisApro() {
       try {
-          const response = await authenticatedAPI.get(`/assunto/1`);
-          console.log(response.data);
+          const response = await getAnimaisDesaparecidos();
+          console.log(response);
       } catch (err) {
         console.log(err);
           throw err;
@@ -20,7 +42,7 @@ function Login(){
   }
 
   getAnimaisApro();
-  }, []);
+  }, []);*/
 
 
   return(
@@ -31,12 +53,12 @@ function Login(){
     }}>
       <Text>Login</Text>
 
-      <TextInput/>
-      <TextInput/>
+      <TextInput onChangeText={(e) => setEmail(e)} />
+      <TextInput onChangeText={(e) => setPassword(e)}/>
 
       <Button
         title="Sign Up"
-        onPress={() => navigation.navigate("SignUp")}
+        onPress={handleLogin}
       >
         <Text>Test</Text>
       </Button>
