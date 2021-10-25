@@ -1,28 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, ScrollView } from 'react-native';
-import { formata_CPF, formata_telefone, valida_CPF, valida_email } from "../../utils/format_cpf_email";
-import { Picker } from '@react-native-picker/picker';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Pressable,
+  ImageBackground,
+} from "react-native";
+import {
+  formata_CPF,
+  formata_telefone,
+  valida_CPF,
+  valida_email,
+} from "../../utils/format_cpf_email";
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { criarUsuario } from "../../service/user";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import DatePicker from 'react-native-date-picker';
+import DatePicker from "react-native-date-picker";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-
-
-
-
+import CheckBox from "@react-native-community/checkbox";
 
 interface Endereco {
-  logradouro: string,
-  bairro: string,
-  localidade: string,
-  uf: string
+  logradouro: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
 }
 
 export default function SignUp() {
-
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
   const [genero, setGenero] = useState("");
@@ -40,15 +50,18 @@ export default function SignUp() {
   const [open, setOpen] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [termos, setTermos] = useState(false);
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date());
 
-  const navigation = useNavigation<NativeStackNavigationProp<AuthRoutesParamList, 'SignUp'>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Cadastre-se">>();
 
   useEffect(() => {
     async function buscarEndereco() {
       if (cep.length > 7) {
         const API = axios.create();
-        const res = await API.get<Endereco>(`https://viacep.com.br/ws/${cep}/json/?callback=`);
+        const res = await API.get<Endereco>(
+          `https://viacep.com.br/ws/${cep}/json/?callback=`
+        );
         setEndereco(res.data.logradouro);
         setBairro(res.data.bairro);
         setCidade(res.data.localidade);
@@ -58,7 +71,6 @@ export default function SignUp() {
     }
     buscarEndereco();
   }, [cep]);
-
 
   function teste() {
     console.log(nome);
@@ -77,13 +89,12 @@ export default function SignUp() {
     let ultimoDigito = campoFormatado.charAt(campoFormatado.length - 1);
     if (!valoresPermitidos.includes(ultimoDigito)) {
       campoFormatado = campoFormatado.substr(0, campoFormatado.length - 1);
-      console.log(campoFormatado, 'cep valida')
+      console.log(campoFormatado, "cep valida");
     }
-    return campoFormatado
+    return campoFormatado;
   }
 
   async function eventoCriarUsuario() {
-
     /*if (!valida_CPF(cpf)) {
       alert("CPF inválido! Por favor, insira um CPF válido.");
       return;
@@ -122,7 +133,6 @@ export default function SignUp() {
       alert("Senha não atende os requisitos mínimos.");
       return;
     }
-
 
     /*/let confirsenha = (document.getElementById("confirsenha") as HTMLInputElement).value;
 
@@ -165,7 +175,6 @@ export default function SignUp() {
       return;
     }
 
-
     if (cidade == "") {
       alert("Por favor, insira a cidade.");
       return;
@@ -177,74 +186,69 @@ export default function SignUp() {
     }
 
     try {
-      await
-        criarUsuario(nome,
-          cpf,
-          genero,
-          datanasc,
-          celular,
-          email,
-          senha,
-          endereco,
-          numero,
-          bairro,
-          cep,
-          cidade,
-          estado,
-          referencia)
+      await criarUsuario(
+        nome,
+        cpf,
+        genero,
+        datanasc,
+        celular,
+        email,
+        senha,
+        endereco,
+        numero,
+        bairro,
+        cep,
+        cidade,
+        estado,
+        referencia
+      );
       alert("Usuário criado com sucesso!");
       navigation.navigate("Home");
     } catch (error) {
-      alert("Erro ao criar conta.")
+      alert("Erro ao criar conta.");
     }
-
   }
 
   return (
     <ScrollView>
-      <View style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%'
-      }}>
-        <Text>SignUp</Text>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop:"5%"
+          
+        }}
+      >
+        <Text
+          style={{
+            alignItems: "center",
+            color: "#FFB800",
+            fontSize: 20,
+            margin: "1%",
+          }}
+        >
+          Cadastro de Usuário
+        </Text>
 
-        <Text>Nome</Text>
         <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
+          style={styles.input}
           autoCapitalize="words"
-          placeholder="Nome completo"
-          onChangeText={text => setNome(text)} />
-        <Text>CPF</Text>
+          placeholder="Nome Completo"
+          placeholderTextColor="#575245"
+          onChangeText={(text) => setNome(text)}
+        />
+
         <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
+          style={styles.input}
           placeholder="CPF"
+          placeholderTextColor="#575245"
           keyboardType="decimal-pad"
           value={cpf}
-          onChangeText={text => setCpf(formata_CPF(text, text))} />
-
-        <Text>Gênero</Text>
+          onChangeText={(text) => setCpf(formata_CPF(text, text))}
+        />
 
         <Picker
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%'
-          }}
+          style={styles.input}
           selectedValue={genero}
           onValueChange={(itemValue, itemIndex) => {
             setGenero(itemValue);
@@ -256,184 +260,171 @@ export default function SignUp() {
           <Picker.Item label="Não declarar" value="Não declarar" />
         </Picker>
 
-        <Text>Telefone</Text>
-
         <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
+          style={styles.input}
           placeholder="Celular"
+          placeholderTextColor="#575245"
           keyboardType="decimal-pad"
           value={celular}
-          onChangeText={text => setCelular(formata_telefone(text, text))} />
+          onChangeText={(text) => setCelular(formata_telefone(text, text))}
+        />
 
-        <Text>E-mail</Text>
+        <Text
+          style={{
+            alignItems: "center",
+            color: "#FFB800",
+            fontSize: 20,
+            margin: "1%",
+          }}
+        >
+          Login
+        </Text>
 
         <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
+          style={styles.input}
+          placeholder="E-mail"
+          placeholderTextColor="#575245"
           textContentType="emailAddress"
           keyboardType="email-address"
           autoCapitalize="none"
           value={email}
-          onChangeText={text => setEmail(text)}
+          onChangeText={(text) => setEmail(text)}
         />
 
-        <Text style={{ marginTop: 10 }}>Senha</Text>
         <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
+          style={styles.input}
+          placeholder="Senha"
+          placeholderTextColor="#575245"
           textContentType="password"
           secureTextEntry={true}
           autoCapitalize="none"
           value={senha}
-          onChangeText={text => setSenha(text)}
+          onChangeText={(text) => setSenha(text)}
         />
 
-        <Text style={{ marginTop: 10 }}>Confirme sua senha</Text>
         <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
+          style={styles.input}
+          placeholder="Confirme sua senha"
+          placeholderTextColor="#575245"
           textContentType="password"
           secureTextEntry={true}
           autoCapitalize="none"
           value={passwordConfirm}
-          onChangeText={text => setPasswordConfirm(text)}
+          onChangeText={(text) => setPasswordConfirm(text)}
         />
 
-        <Text>Endereço cep</Text>
+        <Text
+          style={{
+            alignItems: "center",
+            color: "#FFB800",
+            fontSize: 20,
+            margin: "1%",
+          }}
+        >
+          Endereço
+        </Text>
 
         <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
+          style={styles.input}
           placeholder="CEP"
+          placeholderTextColor="#575245"
           keyboardType="decimal-pad"
           value={cep}
           maxLength={8}
-          onChangeText={text => setCep(formata_CEP(text, text))} />
-
-        <Text>Endereco</Text>
-        <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
-          autoCapitalize="words"
-          placeholder="Endereco"
-          value={endereco}
-          onChangeText={text => setEndereco(text)}
-          editable={false} />
-
-        <Text>Bairro</Text>
-        <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
-          autoCapitalize="words"
-          placeholder="Bairro"
-          value={bairro}
-          onChangeText={text => setBairro(text)}
-          editable={false} />
-
-        <Text>Número</Text>
-        <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
-          placeholder="Número"
-          onChangeText={text => setNumero(text)} />
-
-        <Text>Cidade</Text>
-        <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
-          autoCapitalize="words"
-          placeholder="Cidade"
-          value={cidade}
-          onChangeText={text => setCidade(text)}
-          editable={false} />
-
-        <Text>Estado</Text>
-        <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
-          autoCapitalize="words"
-          placeholder="Estado"
-          value={estado}
-          onChangeText={text => setEstado(text)}
-          editable={false} />
-
-        <Text>Referência</Text>
-        <TextInput
-          style={{
-            backgroundColor: '#bfbfca',
-            height: 40,
-            borderRadius: 6,
-            padding: 10,
-            width: '100%',
-          }}
-          autoCapitalize="words"
-          placeholder="Referência"
-          value={referencia}
-          onChangeText={text => setReferencia(text)} />
-
-        <BouncyCheckbox
-          size={25}
-          text="Custom Checkbox"
-          onPress={(isChecked: boolean) => { }}
+          onChangeText={(text) => setCep(formata_CEP(text, text))}
         />
 
-        <Button
-          title="Cadastrar"
-          onPress={eventoCriarUsuario}
-        >
-        </Button>
+        <TextInput
+          style={styles.input}
+          autoCapitalize="words"
+          placeholder="Endereco"
+          placeholderTextColor="#575245"
+          value={endereco}
+          onChangeText={(text) => setEndereco(text)}
+          editable={false}
+        />
+
+        <TextInput
+          style={styles.input}
+          autoCapitalize="words"
+          placeholder="Bairro"
+          placeholderTextColor="#575245"
+          value={bairro}
+          onChangeText={(text) => setBairro(text)}
+          editable={false}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Número"
+          placeholderTextColor="#575245"
+          onChangeText={(text) => setNumero(text)}
+        />
+
+        <TextInput
+          style={styles.input}
+          autoCapitalize="words"
+          placeholder="Cidade"
+          placeholderTextColor="#575245"
+          value={cidade}
+          onChangeText={(text) => setCidade(text)}
+          editable={false}
+        />
+
+        <TextInput
+          style={styles.input}
+          autoCapitalize="words"
+          placeholder="Estado"
+          placeholderTextColor="#575245"
+          value={estado}
+          onChangeText={(text) => setEstado(text)}
+          editable={false}
+        />
+
+        <TextInput
+          style={styles.input}
+          autoCapitalize="words"
+          placeholder="Referência"
+          placeholderTextColor="#575245"
+          value={referencia}
+          onChangeText={(text) => setReferencia(text)}
+        />
+
+        <BouncyCheckbox
+          size={20}
+          style={{margin: "2%"}}
+          text="Li e aceito os termos"
+          onPress={(isChecked: boolean) => {}}
+        />
+
+        <Pressable onPress={eventoCriarUsuario} style={styles.botao}>
+          <Text>Cadastrar</Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
 }
+const styles = StyleSheet.create({
+  input: {
+    alignSelf: "stretch",
+    backgroundColor: "#f8f8f8",
+    borderBottomColor: "#f8f8f8",
+    borderBottomWidth: 1,
+    height: 40,
+    borderRadius: 6,
+    padding: 10,
+    width: "90%",
+    marginLeft: "5%",
+    marginTop: "2%",
+  },
+  botao: {
+    height: 40,
+    width: 150,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: "#B7E394",
+    alignItems: "center",
+    borderRadius: 4,
+  },
+});
