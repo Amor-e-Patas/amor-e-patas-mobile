@@ -1,5 +1,7 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
-import { verifyAdm, verifyToken } from "../services/login";
+import React, { createContext, useState, useEffect, ReactNode } from "react";
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
+import { verifyAdm, verifyToken } from "../service/login";
+import { authenticatedAPI } from "../service/services";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -11,6 +13,7 @@ interface AuthContextData {
   id_usuario: number;
   role: string;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+  sincronizarUsuario: () => void;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -22,14 +25,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    async function fetchAPI(){
-      try{
+    async function fetchAPI() {
+      try {
         const user = await verifyToken();
         setIdUsuario(user.id_usuario);
         setRole(user.role);
-        console.log(user,'data');
+        console.log(user, 'data');
         setIsAuthenticated(true);
-      } catch (err){
+      } catch (err) {
         setIsAuthenticated(false);
       }
     }
@@ -37,17 +40,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   useEffect(() => {
-    async function fetchAPI(){
-      try{
+    async function fetchAPI() {
+      try {
         await verifyAdm();
         setIsAdm(true);
-      } catch (err){
+      } catch (err) {
         setIsAdm(false);
       }
     }
 
     fetchAPI();
   }, []);
+
+  async function sincronizarUsuario() {
+    try {
+      const token = await AsyncStorage.getItem("@amor-e-patas:user-token");
+      console.log(token, "token - services");
+      authenticatedAPI.defaults.headers.common['Authorization'] = `Baerer ${token}`;
+      const user = await verifyToken();
+      setIdUsuario(user.id_usuario);
+      setRole(user.role);
+      console.log(user, 'data auth');
+      setIsAuthenticated(true);
+    } catch (err) {
+      console.log(err);
+      setIsAuthenticated(false);
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -57,7 +76,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           isAuthenticated,
           setIsAuthenticated,
           id_usuario,
-          role
+          role,
+          sincronizarUsuario
         }
       }
     >
