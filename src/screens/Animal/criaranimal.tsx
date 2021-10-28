@@ -23,6 +23,7 @@ import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
+import mime from 'mime'
 
 interface Temp {
   id_temperamento: number;
@@ -37,6 +38,11 @@ interface Soci {
 interface Vive {
   id_vivencia: number;
   descricao: string;
+}
+
+interface Imagem{
+  uri: string,
+  type: string
 }
 
 function Animal() {
@@ -57,7 +63,8 @@ function Animal() {
   const [selectSoci, setSelectSoci] = useState(Array<Number>());
   const [vivencias, setVivencia] = useState(Array<Vive>());
   const [selectVive, setSelectVive] = useState(Array<Number>());
-  const [images, setImages] = useState<File[]>([]);
+  //const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<Imagem[]>([]);
   const [imageUri, setImageUri] = useState<string>();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const navigation =
@@ -82,11 +89,17 @@ function Animal() {
           alert('Upload cancelled');
           return;
         } else {
-          const img = await fetchImageFromUri(pickerResult.uri);
-          var imageFIle = new File([img], "img.jpeg");
-          setImages(old => [...old, imageFIle]);
+         const img = await fetchImageFromUri(pickerResult.uri);
+         console.log(JSON.stringify(img));
+         // var file = new File([img], "name");
+         const file = {
+          uri: pickerResult.uri,
+          type: mime.getType(pickerResult.uri),
+          name: pickerResult.uri.split('/').pop() // pega o ultimo item cortado por '/'
+        }
+          setImages(old => [...old, file]);
+          console.log(file, "type pícker");
           setImageUri(pickerResult.uri);
-          
           //const uploadUrl = await uploadImage('demo.jpg', img);
           //downloadImage(uploadUrl);
         }

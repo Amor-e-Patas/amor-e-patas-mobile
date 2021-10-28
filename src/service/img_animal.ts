@@ -1,7 +1,14 @@
 
 import axios, { authenticatedAPI } from "./services";
+
+interface Imagem{
+    uri: string,
+    type: string
+  }
+
 export async function criarImgAnimal(
-    imagens: Array<File>,
+    //imagens: Array<File> ,
+    imagens: Imagem[] ,
     id_animal: string) {
     try {
         const data = new FormData();
@@ -9,8 +16,15 @@ export async function criarImgAnimal(
         imagens.forEach(image => {
             data.append('image', image);
           });
-        await authenticatedAPI.post("/imagem", data);
+          console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+          //console.log(imagens, "magens img animal");
+          console.log(id_animal, "id ani");
+        /*await authenticatedAPI.post("/imagem", data, {headers: {
+            'Content-Type': 'multipart/form-data'
+          }});*/
+          await authenticatedAPI.post("/imagem", data);
 } catch (error) {
+    console.log(error);
     throw error;
 }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { getAnimaisDesaparecidos } from "../../service/animal";
 import { login } from "../../service/login";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fontFamily } from "../../constants/theme";
+import { AuthContext } from "../../contexts/auth";
 
 
 interface Login {
@@ -26,6 +27,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Login">>();
+  const { sincronizarUsuario } = useContext(AuthContext);
 
   async function handleLogin() {
     if (email == "" || password == "") {
@@ -33,11 +35,13 @@ function Login() {
       return;
     }
     try {
-      const { accessToken } = (await login(email, password)) as Login;
+      const accessToken = await login(email, password);
       await AsyncStorage.setItem("@amor-e-patas:user-token", accessToken);
-      console.log(accessToken);
+      console.log(accessToken, "token depois do login");
+      sincronizarUsuario();
       navigation.navigate("Home");
     } catch (err) {
+      console.log(err);
       alert("Usuário ou senha incorretos.");
     }
   }
@@ -91,7 +95,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "black",
     borderRadius: 7,
-    
+
   },
 
   button: {

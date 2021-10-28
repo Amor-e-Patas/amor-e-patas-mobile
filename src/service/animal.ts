@@ -1,5 +1,10 @@
 
 import axios, { authenticatedAPI } from "./services";
+
+interface Animal{
+    id_animal: number
+}
+
 export async function criarAnimal(nome_ani: string,
     idade: string,
     cor: string,
@@ -13,11 +18,11 @@ export async function criarAnimal(nome_ani: string,
     id_status: number,
     temperamentos: Array<Number>,
     sociaveis: Array<Number>,
-    vivencias: Array<Number>,) :Promise<number> {
+    vivencias: Array<Number>,){
         
     try {
         
-        const res = await authenticatedAPI.post("/animal", {
+        const res = await authenticatedAPI.post<Animal>("/animal", {
             nome_ani,
             idade,
             cor,
@@ -33,7 +38,7 @@ export async function criarAnimal(nome_ani: string,
             sociaveis,
             vivencias
         })
-        return res.data as number;
+        return res.data.id_animal;
 } catch (error) {
     throw error;
 }

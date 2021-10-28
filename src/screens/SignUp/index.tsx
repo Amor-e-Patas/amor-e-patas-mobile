@@ -73,14 +73,14 @@ export default function SignUp() {
   }, [cep]);
 
   function teste() {
-    console.log(nome);
+    /*console.log(nome);
     console.log(cpf);
     console.log(genero);
     //console.log(datanasc);
     console.log(celular);
     console.log(email);
     console.log(senha);
-    console.log(cep);
+    console.log(cep);*/
   }
 
   function formata_CEP(campo: string, campoAtual: string) {
