@@ -1,5 +1,24 @@
 
 import axios, { authenticatedAPI } from "./services";
+
+interface Usuario{
+  id_usuario: number,
+  nome_usu: string,
+  cpf: string,
+  data_nasc: string,
+  genero: string,
+  cep: string,
+  bairro: string,
+  endereco: string,
+  numero: string,
+  referencia: string,
+  estado: string,
+  cidade: string,
+  num_telefone: string,
+  email: string,
+  senha: string
+}
+
 export async function criarUsuario(nome_usu: string,
     cpf: string,
     genero: string,
@@ -45,7 +64,7 @@ export async function criarUsuario(nome_usu: string,
 
 export async function getUser(){
     try{
-      const response = await authenticatedAPI.get(`/user`);
+      const response = await authenticatedAPI.get<Usuario>(`/user`);
       return response.data;
     } catch (err) {
       throw err;
