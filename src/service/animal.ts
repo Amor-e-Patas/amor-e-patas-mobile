@@ -13,8 +13,10 @@ export async function criarAnimal(nome_ani: string,
     id_status: number,
     temperamentos: Array<Number>,
     sociaveis: Array<Number>,
-    vivencias: Array<Number>,) {
+    vivencias: Array<Number>,) :Promise<number> {
+        
     try {
+        
         const res = await authenticatedAPI.post("/animal", {
             nome_ani,
             idade,
@@ -31,7 +33,7 @@ export async function criarAnimal(nome_ani: string,
             sociaveis,
             vivencias
         })
-        return res.data;
+        return res.data as number;
 } catch (error) {
     throw error;
 }
