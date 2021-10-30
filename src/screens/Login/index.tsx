@@ -28,6 +28,7 @@ function Login() {
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Login">>();
   const { sincronizarUsuario } = useContext(AuthContext);
+  const [hidePassword, setHidePassword] = useState(true)
 
   async function handleLogin() {
     if (email == "" || password == "") {
@@ -70,6 +71,7 @@ function Login() {
       />
       <TextInput
         style={styles.input}
+        secureTextEntry={hidePassword}
         onChangeText={(e) => setPassword(e)}
         placeholder="Senha"
       />

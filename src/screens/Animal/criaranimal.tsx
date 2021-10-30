@@ -23,6 +23,7 @@ import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import mime from 'mime'
 
 interface Temp {
@@ -238,11 +239,11 @@ function Animal() {
           </Picker>
         </View>
 
-        <Picker>
-          <Picker.Item label="TROCAR PRA DATA DE NASCIMENTO" value={0} />
-          <Picker.Item label="Fêmea" value="1" />
-          <Picker.Item label="Macho" value="2" />
-        </Picker>
+        <TextInput
+        style={styles.input}
+        onChangeText={(e) => setData(e)}
+        placeholder="Data de Nascimento"
+        placeholderTextColor="#575245"></TextInput>
 
         <Picker
           style={styles.input}
@@ -299,6 +300,7 @@ function Animal() {
           onChangeText={(e) => setCaracteristica(e)}
           placeholder="Características adicionais"
         />
+        
 
         <Pressable onPress={eventoCriarAnimal} style={styles.botao}>
           <Text>Cadastrar</Text>
@@ -310,13 +312,13 @@ function Animal() {
 }
 const styles = StyleSheet.create({
   input: {
-    height: 40,
+    height: 60,
     width: 320,
     margin: 12,
-    borderWidth: 1,
     padding: 10,
     color: "black",
     borderRadius: 2,
+    fontSize: 15,
     backgroundColor: "#f8f8f8",
 
   },

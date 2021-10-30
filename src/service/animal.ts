@@ -3,6 +3,20 @@ import axios, { authenticatedAPI } from "./services";
 
 interface Animal{
     id_animal: number
+    nome_ani: string,
+    idade: string,
+    cor: string,
+    caracteristica_animal: string,
+    data_nasc: string,
+    desaparecido: string,
+    id_usuario: number,
+    id_porte: number,
+    id_especie: number,
+    id_sexo: number,
+    id_status: number,
+    temperamentos: Array<Number>,
+    sociaveis: Array<Number>,
+    vivencias: Array<Number>,
 }
 
 export async function criarAnimal(nome_ani: string,
@@ -56,7 +70,7 @@ export async function getAnimais() {
 
 export async function getAnimaisApro() {
     try {
-        const response = await authenticatedAPI.get(`/aniaprovnormais`);
+        const response = await authenticatedAPI.get<Array<Animal>>(`/aniaprovnormais`);
         return response.data;
     } catch (err) {
         throw err;
