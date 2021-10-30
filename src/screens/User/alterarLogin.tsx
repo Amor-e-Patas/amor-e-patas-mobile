@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
   TextInput,
-  Button,
   ScrollView,
   StyleSheet,
-  Pressable,
-  ImageBackground,
+  Pressable
 } from "react-native";
-import {
-  formata_CPF,
-  formata_telefone,
-  valida_CPF,
-  valida_email,
-} from "../../utils/format_cpf_email";
-import { Picker } from "@react-native-picker/picker";
-import axios from "axios";
-import { criarUsuario } from "../../service/user";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import DatePicker from "react-native-date-picker";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import CheckBox from "@react-native-community/checkbox";
 import { alterarLogin, getLogin } from "../../service/login";
+import { AuthContext } from "../../contexts/auth";
 
 interface Endereco {
   logradouro: string;
@@ -34,25 +21,13 @@ interface Endereco {
 }
 
 export default function SignUp() {
-  const [nome, setNome] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [genero, setGenero] = useState("");
-  const [datanasc, setDatanasc] = useState("22-10-2021");
-  const [celular, setCelular] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [endereco, setEndereco] = useState("");
-  const [numero, setNumero] = useState("");
-  const [bairro, setBairro] = useState("");
-  const [cep, setCep] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
-  const [referencia, setReferencia] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [password, setPassword] = useState("");
+  const { isAuthenticated } = useContext(AuthContext);
 
   const navigation =
-    useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Cadastre-se">>();
+    useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Alterar login">>();
 
     useEffect(() => {
       async function fetchAPI() {
@@ -67,7 +42,7 @@ export default function SignUp() {
       }
 
       fetchAPI();
-  }, []);
+  }, [isAuthenticated]);
 
   async function eventoCriarUsuario() {
    
@@ -76,12 +51,17 @@ export default function SignUp() {
       return;
     }
 
-    if (senha == "") {
+    if (password == "") {
       alert("Por favor, insira a senha.");
       return;
     }
 
-    if (senha.length < 6 || senha.length > 10) {
+    if (password !=  passwordConfirm){
+      alert("Senhas não conferem!");
+      return;
+    }
+
+    if (password.length < 6 || password.length > 10) {
       alert("Senha não atende os requisitos mínimos.");
       return;
     }
@@ -90,7 +70,6 @@ export default function SignUp() {
       const token = await alterarLogin(email, password);
       alert("Login atualizado");
       navigation.navigate("Alterar login");
-      //window.location.href = "/alterarlogin";
   } catch (err) {
       alert("Erro ao atualizar login.")
   }
@@ -126,6 +105,7 @@ export default function SignUp() {
           autoCapitalize="none"
           value={email}
           onChangeText={(text) => setEmail(text)}
+          editable={false}
         />
 
         <TextInput
