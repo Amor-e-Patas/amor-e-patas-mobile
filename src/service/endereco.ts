@@ -1,8 +1,18 @@
 import axios, { authenticatedAPI } from "./services";
 
+interface Endereco{
+  cep: string,
+  bairro: string,
+  endereco: string,
+  numero: string,
+  referencia: string,
+  estado: string,
+  cidade: string
+}
+
 export async function getAddres(){
     try{
-      const response = await authenticatedAPI.get(`/endereco`);
+      const response = await authenticatedAPI.get<Endereco>(`/endereco`);
       return response.data;
     } catch (err) {
       throw err;
