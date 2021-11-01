@@ -10,6 +10,7 @@ import {
   Image,
   Platform
 } from "react-native";
+import {RectButton} from 'react-native-gesture-handler';
 import { Picker } from "@react-native-picker/picker";
 import { Link, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -302,9 +303,9 @@ function Animal() {
         />
         
 
-        <Pressable onPress={eventoCriarAnimal} style={styles.botao}>
+        <RectButton onPress={eventoCriarAnimal} style={styles.botao}>
           <Text>Cadastrar</Text>
-        </Pressable>
+        </RectButton>
 
       </View>
     </ScrollView>

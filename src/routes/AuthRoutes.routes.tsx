@@ -11,6 +11,7 @@ import AlterarEndereco from "../screens/User/alterarEndereco";
 import AlterarTelefone from "../screens/User/alterarTelefone";
 import { AuthContext } from "../contexts/auth";
 import Animal from "../screens/Animal/criaranimal"
+import Post from "../screens/Noticia/criarnoticia";
 
 export type AuthRoutesParamList = {
   'Cadastre-se': undefined
@@ -22,9 +23,8 @@ export type AuthRoutesParamList = {
   'Alterar login': undefined
   'Alterar endereço': undefined
   'Alterar telefone': undefined
+  'Cadastrar Notícia': undefined
 }
-
-
 
 
 const Drawer = createDrawerNavigator<AuthRoutesParamList>();
@@ -43,6 +43,7 @@ function AuthRoutes() {
       <AuthStack.Screen name="Home" component={Home} />
       <AuthStack.Screen name="Login" component={Login} />
       <AuthStack.Screen name="Cadastre-se" component={SignUp} />
+      <AuthStack.Screen name="Cadastrar Notícia" component={Post} />
       *<AuthStack.Screen name="Cadastro de Animal" component={Animal} />
       <AuthStack.Screen name="Alterar usuário" component={AlterarUser} />
       <AuthStack.Screen name="Alterar login" component={AlterarLogin} />
@@ -64,6 +65,7 @@ export function MyDrawer() {
       <Drawer.Screen name="Cadastre-se" component={SignUp}/>
       </> : <>
       <Drawer.Screen name="Cadastro de Animal" component={Animal} />
+      <Drawer.Screen name="Cadastrar Notícia" component={Post} />
       <Drawer.Screen name="Alterar usuário" component={AlterarUser} />
       <Drawer.Screen name="Alterar login" component={AlterarLogin} />
       <Drawer.Screen name="Alterar endereço" component={AlterarEndereco} />

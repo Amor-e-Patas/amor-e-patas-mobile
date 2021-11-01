@@ -14,6 +14,9 @@ interface Animal{
     id_especie: number,
     id_sexo: number,
     id_status: number,
+    images: Array<{
+        filepath: string;
+      }>
     temperamentos: Array<Number>,
     sociaveis: Array<Number>,
     vivencias: Array<Number>,
