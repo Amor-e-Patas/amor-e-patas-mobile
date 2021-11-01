@@ -1,19 +1,31 @@
 
 import axios, { authenticatedAPI } from "./services";
+interface Assunto{
+    id_assunto: number;
+    nome_ass: string;
+}
+
+interface Imagem{
+    uri: string,
+    height: number,
+    type: string
+}
+
 export async function criarPost(titulo: string,
     corpo: string,
     autor: string,
     data: string,
-    assuntos: Array<Number>) {
+    assuntos: Array<Number>
+    ) {
     try {
-        const res = await authenticatedAPI.post("/post", {
+        const res = await authenticatedAPI.post<any>("/post", {
             titulo,
             corpo,
             autor,
             data,
             assuntos
         })
-        return res.data;
+        return res.data.id_post;
     } catch (error) {
         throw error;
     }
@@ -69,7 +81,7 @@ export async function alterarPost(id_post: number,
 
 export async function getAssuntos() {
     try {
-        const response = await authenticatedAPI.get(`/assuntos`);
+        const response = await authenticatedAPI.get<Assunto[]>(`/assuntos`);
         return response.data;
     } catch (err) {
         throw err;
@@ -78,7 +90,7 @@ export async function getAssuntos() {
 
 export async function getAssunto( id_post: number) {
     try {
-        const response = await authenticatedAPI.get(`/assuntos/${id_post}`);
+        const response = await authenticatedAPI.get<Assunto>(`/assuntos/${id_post}`);
         return response.data;
     } catch (err) {
         throw err;
@@ -86,14 +98,19 @@ export async function getAssunto( id_post: number) {
 }
 
 export async function criarImgPost(
-    imagens: Array<File>,
+    imagens: Array<Imagem>,
     id_post: string) {
     try {
         const data = new FormData();
         data.append('id_post', id_post);
         imagens.forEach(image => {
-            data.append('image', image);
-        });
+            data.append('image', { 
+                // @ts-ignore
+                uri: image.uri,
+                name: `${image.height}.${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
+                type: `${image.type}/${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
+              })
+          });
         await authenticatedAPI.post("/imagempost", data);
     } catch (error) {
         throw error;

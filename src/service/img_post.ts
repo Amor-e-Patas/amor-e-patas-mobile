@@ -1,13 +1,24 @@
 
 import axios, { authenticatedAPI } from "./services";
+interface Imagem{
+    uri: string,
+    height: number,
+    type: string
+}
+
 export async function criarImgPost(
-    imagens: Array<File>,
+    imagens: Array<Imagem>,
     id_post: string) {
     try {
         const data = new FormData();
         data.append('id_post', id_post);
         imagens.forEach(image => {
-            data.append('image', image);
+            data.append('image', { 
+                // @ts-ignore
+                uri: image.uri,
+                name: `${image.height}.${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
+                type: `${image.type}/${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
+              })
           });
         await authenticatedAPI.post("/imagem", data);
 } catch (error) {
@@ -18,7 +29,7 @@ export async function criarImgPost(
 
 export async function getImgPost() {
     try {
-        const response = await authenticatedAPI.get(`/imagens`);
+        const response = await authenticatedAPI.get<Imagem>(`/imagens`);
         return response.data;
     } catch (err) {
         throw err;
