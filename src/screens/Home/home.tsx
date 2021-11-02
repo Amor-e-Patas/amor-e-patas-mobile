@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimais, getAnimaisApro } from "../../service/animal";
@@ -7,6 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
+import { RectButton } from "react-native-gesture-handler";
+import { Card, ListItem, Button, Icon } from "react-native-elements";
 
 interface Animal {
   nome_ani: string;
@@ -40,16 +49,24 @@ export default function Home() {
 
     fetchAPI();
   }, []);
+
+  const abrirPaginaAnimal = (animalId: number) => {
+    navigation.navigate("Animal", {
+      animalId,
+    });
+  };
+
   return (
     <ScrollView
-    style={{
-      backgroundColor: "white",
-    }}>
+      style={{
+        backgroundColor: "white",
+      }}
+    >
       <View
         style={{
           alignItems: "center",
           backgroundColor: "white",
-          marginBottom:"100%"
+          marginBottom: "100%",
         }}
       >
         <Image
@@ -64,29 +81,44 @@ export default function Home() {
         </Text>
         <View
           style={{
-            flex: 1,
+            flex: 2,
             flexDirection: "row",
-            flexWrap:'wrap',
-            justifyContent: "space-between",
-            alignItems: 'flex-start'
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            width: 400,
+            marginTop: 10,
           }}
         >
           {animais.map((animal, index) => (
-            <View
-              style={{
-                height: 200,
-                width: "45%",
-                marginBottom:5,
-                marginLeft:5,
-                marginTop:5,
-                alignContent:'flex-end'
-              }}
+            <RectButton
               key={index}
+              onPress={() => abrirPaginaAnimal(animal.id_animal)}
             >
-              <>
-                <Text> {animal.nome_ani}</Text>
-              </>
-            </View>
+              <View
+                style={{
+                  height: 200,
+                  width: "45%",
+                  marginBottom: 5,
+                  marginLeft: 5,
+                  marginTop: 5,
+                  alignContent: "center",
+                }}
+                key={index}
+              >
+                <Image
+                  style={styles.imgani}
+                  source={{
+                    uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+                  }}
+                ></Image>
+                <Text
+                  style={{ color: "purple", fontFamily: "Raleway_600SemiBold", textAlign:"right" }}
+                >
+                  {animal.nome_ani}
+                </Text>
+              </View>
+            </RectButton>
           ))}
         </View>
       </View>
@@ -112,5 +144,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginLeft: "5%",
     marginRight: "5%",
+  },
+  imgani: {
+    width: 180,
+    height: 400,
+    maxWidth: 180,
+    maxHeight: 170,
   },
 });
