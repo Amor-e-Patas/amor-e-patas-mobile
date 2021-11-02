@@ -16,7 +16,7 @@ import { Link, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import axios from "axios";
-import { criarPost, getAssuntos, criarImgPost } from "../../service/post";
+import { criarPost, getAssuntos, criarImgPost, Imagem } from "../../service/post";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
@@ -28,12 +28,6 @@ import mime from "mime";
 interface Assunto {
     id_assunto: number;
     nome_ass: string;
-}
-
-interface Imagem {
-    uri: string,
-    height: number,
-    type: string
 }
 
 export default function Post() {

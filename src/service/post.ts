@@ -1,14 +1,27 @@
 
 import axios, { authenticatedAPI } from "./services";
+
 interface Assunto{
     id_assunto: number;
     nome_ass: string;
 }
 
-interface Imagem{
+export interface Imagem{
     uri: string,
     height: number,
-    type: string
+    type: string,
+    filepath: string,
+}
+
+export interface Noticia{
+    id_post:number,
+    titulo: string,
+    corpo: string,
+    autor: string,
+    data: string,
+    assuntos: Array<Assunto>,
+    filepath: string,
+    images: Array<Imagem>,
 }
 
 export async function criarPost(titulo: string,
@@ -34,7 +47,7 @@ export async function criarPost(titulo: string,
 
 export async function getPosts() {
     try {
-        const response = await authenticatedAPI.get(`/postsall`);
+        const response = await authenticatedAPI.get<Array<Noticia>>(`/postsall`);
         return response.data;
     } catch (err) {
         throw err;
@@ -43,7 +56,7 @@ export async function getPosts() {
 
 export async function getPost(id_post: number) {
     try {
-        const response = await authenticatedAPI.get(`/post/${id_post}`);
+        const response = await authenticatedAPI.get<Noticia>(`/post/${id_post}`);
         return response.data;
     } catch (err) {
         throw err;
