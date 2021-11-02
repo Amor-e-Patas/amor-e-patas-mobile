@@ -71,7 +71,7 @@ export default function Home() {
             alignItems: 'flex-start'
           }}
         >
-          {animais.map((animal) => (
+          {animais.map((animal, index) => (
             <View
               style={{
                 height: 200,
@@ -81,6 +81,7 @@ export default function Home() {
                 marginTop:5,
                 alignContent:'flex-end'
               }}
+              key={index}
             >
               <>
                 <Text> {animal.nome_ani}</Text>
