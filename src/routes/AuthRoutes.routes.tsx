@@ -10,8 +10,12 @@ import AlterarLogin from "../screens/User/alterarLogin";
 import AlterarEndereco from "../screens/User/alterarEndereco";
 import AlterarTelefone from "../screens/User/alterarTelefone";
 import { AuthContext } from "../contexts/auth";
-import Animal from "../screens/Animal/criaranimal"
+import CriarAnimal from "../screens/Animal/criaranimal";
+import Animal from "../screens/Animal/animal";
 import Post from "../screens/Noticia/criarnoticia";
+import MeusAnimais from '../screens/Animal/meusanimais';
+import Noticias from '../screens/Noticia/noticias';
+import Noticia from "../screens/Noticia/noticia";
 
 export type AuthRoutesParamList = {
   'Cadastre-se': undefined
@@ -24,6 +28,14 @@ export type AuthRoutesParamList = {
   'Alterar endereço': undefined
   'Alterar telefone': undefined
   'Cadastrar Notícia': undefined
+  'Meus animais': undefined
+  'Animal': {
+    animalId: number
+  }
+  'Noticias': undefined
+  'Noticia': {
+    noticiaId: number
+  }
 }
 
 
@@ -33,7 +45,6 @@ const AuthStack = createNativeStackNavigator<AuthRoutesParamList>();
 
 
 function AuthRoutes() {
-  const { isAuthenticated } = useContext(AuthContext);
   return (
     <AuthStack.Navigator
       screenOptions={{
@@ -44,7 +55,7 @@ function AuthRoutes() {
       <AuthStack.Screen name="Login" component={Login} />
       <AuthStack.Screen name="Cadastre-se" component={SignUp} />
       <AuthStack.Screen name="Cadastrar Notícia" component={Post} />
-      *<AuthStack.Screen name="Cadastro de Animal" component={Animal} />
+      *<AuthStack.Screen name="Cadastro de Animal" component={CriarAnimal} />
       <AuthStack.Screen name="Alterar usuário" component={AlterarUser} />
       <AuthStack.Screen name="Alterar login" component={AlterarLogin} />
       <AuthStack.Screen name="Alterar endereço" component={AlterarEndereco} />
@@ -55,25 +66,34 @@ function AuthRoutes() {
 }
 
 export function MyDrawer() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, isAdm } = useContext(AuthContext);
   return (
-    
-      <Drawer.Navigator>
-      <Drawer.Screen name="Home" component={Home}  />  
-        {!isAuthenticated ? <>
-      <Drawer.Screen name="Login" component={Login} />
-      <Drawer.Screen name="Cadastre-se" component={SignUp}/>
+
+    <Drawer.Navigator>
+      <Drawer.Screen name="Home" component={Home} />
+      {!isAuthenticated ? <>
+        <Drawer.Screen name="Login" component={Login} />
+        <Drawer.Screen name="Cadastre-se" component={SignUp} />
       </> : <>
-      <Drawer.Screen name="Cadastro de Animal" component={Animal} />
-      <Drawer.Screen name="Cadastrar Notícia" component={Post} />
-      <Drawer.Screen name="Alterar usuário" component={AlterarUser} />
-      <Drawer.Screen name="Alterar login" component={AlterarLogin} />
-      <Drawer.Screen name="Alterar endereço" component={AlterarEndereco} />
-      <Drawer.Screen name="Alterar telefone" component={AlterarTelefone} />
-      <Drawer.Screen name="Log out" component={LogOut} />
-      </>  }
+        <Drawer.Screen name="Cadastro de Animal" component={CriarAnimal} />
+        {
+          isAdm ? <>
+            <Drawer.Screen name="Cadastrar Notícia" component={Post} />
+          </> : <></>
+        }
+        <Drawer.Screen name="Alterar usuário" component={AlterarUser}/>
+        <Drawer.Screen name="Alterar login" component={AlterarLogin} />
+        <Drawer.Screen name="Alterar endereço" component={AlterarEndereco} />
+        <Drawer.Screen name="Alterar telefone" component={AlterarTelefone} />
+        <Drawer.Screen name="Meus animais" component={MeusAnimais} />
+        <Drawer.Screen name="Animal" component={Animal} />
+        <Drawer.Screen name="Noticias" component={Noticias} />
+        <Drawer.Screen name="Noticia" component={Noticia} />
+        <Drawer.Screen name="Log out" component={LogOut} />
+      </>}
+
     </Drawer.Navigator>
-  
+
   );
 }
 

@@ -1,7 +1,7 @@
 
 import axios, { authenticatedAPI } from "./services";
 
-interface Animal{
+export interface Animal{
     id_animal: number
     nome_ani: string,
     idade: string,
@@ -64,7 +64,7 @@ export async function criarAnimal(nome_ani: string,
 
 export async function getAnimais() {
     try {
-        const response = await authenticatedAPI.get(`/animaisaprovados`);
+        const response = await authenticatedAPI.get<Array<Animal>>(`/animaisaprovados`);
         return response.data;
     } catch (err) {
         throw err;
@@ -127,7 +127,7 @@ export async function getAnimaisDesaparecidosAll() {
 
 export async function getAnimal(id_animal:number) {
     try {
-        const response = await authenticatedAPI.get(`/animal/${id_animal}`);
+        const response = await authenticatedAPI.get<Animal>(`/animal/${id_animal}`);
         return response.data;
     } catch (err) {
         throw err;
