@@ -115,6 +115,7 @@ export default function SignUp() {
           placeholderTextColor="#575245"
           keyboardType="decimal-pad"
           value={cpf}
+          editable={false}
           onChangeText={(text) => setCpf(formata_CPF(text, text))}
         />
 
