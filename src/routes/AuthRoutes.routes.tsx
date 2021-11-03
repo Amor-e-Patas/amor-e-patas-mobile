@@ -32,7 +32,7 @@ export type AuthRoutesParamList = {
   'Animal': {
     animalId: number
   }
-  'Noticias': undefined
+  'Blog': undefined
   'Noticia': {
     noticiaId: number
   }
@@ -87,7 +87,7 @@ export function MyDrawer() {
         <Drawer.Screen name="Alterar telefone" component={AlterarTelefone} />
         <Drawer.Screen name="Meus animais" component={MeusAnimais} />
         <Drawer.Screen name="Animal" component={Animal} />
-        <Drawer.Screen name="Noticias" component={Noticias} />
+        <Drawer.Screen name="Blog" component={Noticias} />
         <Drawer.Screen name="Noticia" component={Noticia} />
         <Drawer.Screen name="Log out" component={LogOut} />
       </>}

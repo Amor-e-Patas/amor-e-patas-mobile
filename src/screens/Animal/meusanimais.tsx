@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton } from "react-native-gesture-handler";
 
 export default function Home() {
   const [images, setImages] = useState<File[]>([]);
@@ -31,7 +31,7 @@ export default function Home() {
   }, []);
 
   const abrirPaginaAnimal = (animalId: number) => {
-    navigation.navigate('Animal', {
+    navigation.navigate("Animal", {
       animalId,
     });
   };
@@ -40,37 +40,83 @@ export default function Home() {
     <ScrollView
       style={{
         backgroundColor: "white",
-      }}>
+      }}
+    >
       <View
         style={{
           alignItems: "center",
           backgroundColor: "white",
-          marginBottom: "100%"
+          marginBottom: "100%",
         }}
       >
-        {
-          animais.map((animal, index) => <RectButton key={index} onPress={() => abrirPaginaAnimal(animal.id_animal)}>
-            <View>
-              <Image
-                style={styles.stretch}
-                source={{
-                  uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
-                }}></Image>
-              <Text>{animal.nome_ani}</Text>
-              <Text>{animal.nome_ani}</Text>
-            </View>
-          </RectButton>)
-        }
+        <Text
+          style={{
+            alignItems: "center",
+            color: "#FFB800",
+            fontSize: 25,
+            marginTop: 10,
+            marginBottom: 15,
+          }}
+        >
+          Meus Animais
+        </Text>
 
+        <View
+          style={{
+            flex: 2,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            width: 400,
+            marginTop: 10,
+          }}
+        >
+          {animais.map((animal, index) => (
+            <RectButton
+              key={index}
+              onPress={() => abrirPaginaAnimal(animal.id_animal)}
+            >
+              <View
+                style={{
+                  height: 200,
+                  width: "45%",
+                  marginBottom: 5,
+                  marginLeft: 5,
+                  marginTop: 5,
+                  alignContent: "center",
+                }}
+              >
+                <Image
+                  style={styles.stretch}
+                  source={{
+                    uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+                  }}
+                ></Image>
+
+                <Text
+                  style={{
+                    color: "purple",
+                    fontFamily: "Raleway_600SemiBold",
+                    textAlign: "right",
+                  }}
+                >
+                  {animal.nome_ani}
+                </Text>
+              </View>
+            </RectButton>
+          ))}
+        </View>
       </View>
     </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   stretch: {
-    width: 200,
-    height: 200,
-    resizeMode: "stretch",
+    width: 180,
+    height: 400,
+    maxWidth: 180,
+    maxHeight: 170,
   },
   titulo: {
     fontFamily: "Raleway_600SemiBold",
