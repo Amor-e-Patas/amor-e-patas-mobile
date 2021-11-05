@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimais, Animal } from "../../service/animal";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
@@ -17,6 +17,8 @@ export default function Home() {
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     async function fetchAPI() {
       try {
@@ -28,10 +30,10 @@ export default function Home() {
     }
 
     fetchAPI();
-  }, []);
+  }, [isFocused]);
 
   const abrirPaginaAnimal = (animalId: number) => {
-    navigation.navigate("Animal", {
+    navigation.navigate("Meu animal", {
       animalId,
     });
   };
