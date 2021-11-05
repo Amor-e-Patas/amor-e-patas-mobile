@@ -12,19 +12,20 @@ import {
 } from "react-native";
 import { RectButton } from 'react-native-gesture-handler';
 import { Picker } from "@react-native-picker/picker";
-import { Link, useNavigation } from "@react-navigation/native";
+import { Link, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import axios from "axios";
 import { getAnimaisDesaparecidos } from "../../service/animal";
-import { criarAnimal } from "../../service/animal";
-import { criarImgAnimal } from "../../service/img_animal";
+import { alterarAnimal } from "../../service/animal";
+import { criarImgAnimal, criarImgAnimal2 } from "../../service/img_animal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { getAnimal, Animal } from "../../service/animal";
 import mime from 'mime'
 
 interface Temp {
@@ -48,7 +49,11 @@ interface Imagem {
   type: string
 }
 
-function Animal() {
+interface NoticiaParams {
+  animalId: number
+}
+
+function AlterarAnimal() {
   const [nome_ani, setNome] = useState("");
   const [idade, setIdade] = useState("");
   const [cor, setCor] = useState("");
@@ -61,28 +66,20 @@ function Animal() {
   const [id_sexo, setSexo] = useState("");
   const [id_status, setStatus] = useState("3");
   const [temperamentos, setTemperamentos] = useState(Array<Temp>());
-  const [selectTemp, setSelectTemp] = useState(Array<Number>());
+  const [selectTemps, setSelectTemp] = useState(Array<number>());
   const [sociaveis, setSociavel] = useState(Array<Soci>());
-  const [selectSoci, setSelectSoci] = useState(Array<Number>());
+  const [selectSocis, setSelectSoci] = useState(Array<number>());
   const [vivencias, setVivencia] = useState(Array<Vive>());
-  const [selectVive, setSelectVive] = useState(Array<Number>());
-  const [images, setImages] = useState<Imagem[]>([]);
+  const [selectVives, setSelectVive] = useState(Array<number>());
+  const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const navigation =
     useNavigation<
       NativeStackNavigationProp<AuthRoutesParamList, "Cadastro de Animal">
     >();
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
-  }, []);
+  const route = useRoute();
+  const routeParams = route.params as NoticiaParams;
 
   const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
     try {
@@ -98,6 +95,16 @@ function Animal() {
       alert('Upload failed');
     }
   };
+
+  async function obterImagemBlob(imageUri: string): Promise<File> {
+    const objectBlob = await fetch(imageUri).then(function (response) {
+      return response.blob();
+    })
+    //return URL.createObjectURL(objectURL);
+    return new Promise((resolve, reject) => {
+      resolve(objectBlob as File);
+    });
+  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -136,9 +143,10 @@ function Animal() {
       return;
     }
     try {
-      const id_animal = await criarAnimal(
+      /* await alterarAnimal(
         nome_ani,
-        idade,
+        parseInt(idade),
+        String(routeParams.animalId),
         cor,
         caracteristica_animal,
         data_nasc,
@@ -147,14 +155,13 @@ function Animal() {
         parseInt(id_porte),
         parseInt(id_especie),
         parseInt(id_sexo),
-        parseInt(id_status),
-        selectTemp,
-        selectSoci,
-        selectVive
-      );
-      await criarImgAnimal(
+        selectTemps,
+        selectSocis,
+        selectVives
+      );*/
+      await criarImgAnimal2(
         images,
-        String(id_animal)
+        String(routeParams.animalId)
       );
 
       alert("Animal cadastrado com sucesso e aguardando análise.");
@@ -173,6 +180,59 @@ function Animal() {
     setPreviewImages([...imagesPreviewTemp]);
 
   }
+
+  async function obterImagem(imageUri: string): Promise<string> {
+    const objectURL = await fetch(imageUri).then(function (response) {
+        return response.blob();
+    })
+    //return URL.createObjectURL(objectURL);
+    return new Promise((resolve, reject) => {
+        resolve(URL.createObjectURL(objectURL));
+    });
+}
+
+  useEffect(() => {
+    (async () => {
+      const animal = await getAnimal(routeParams.animalId);
+      setNome(animal.nome_ani);
+      setIdade(animal.idade);
+      setCor(animal.cor);
+      setCaracteristica(animal.caracteristica_animal);
+      setData(animal.data_nasc);
+      setSexo(String(animal.id_sexo));
+      setEspecie(String(animal.id_especie));
+      setPorte(String(animal.id_porte));
+      setDesaparecido(String(animal.desaparecido));
+
+      const selectedImagesPreview = Array<string>();
+      for (const image of animal.images) {
+        selectedImagesPreview.push(`http://192.168.1.69:3333/${image.filepath}`)
+      }
+      setPreviewImages(selectedImagesPreview);
+
+      const imagesTemps = Array<File>();
+      for (const image of animal.images) {
+        const imgBlob = await obterImagemBlob(`http://192.168.1.69:3333/${image.filepath}`);
+        const url = await obterImagem(`http://192.168.1.69:3333/${image.filepath}`);
+        console.log(url);
+        console.log(JSON.stringify(imgBlob));
+        imagesTemps.push(imgBlob as File);
+      }
+      setImages(imagesTemps);
+    })();
+
+  }, [route]);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
 
   return (
     <ScrollView style={{ backgroundColor: 'white' }}>
@@ -210,10 +270,11 @@ function Animal() {
             fontSize: 25,
           }}
         >
-          Cadastro de Animal
+          Alterar Animal
         </Text>
         <TextInput
           style={styles.input}
+          value={nome_ani}
           onChangeText={(e) => setNome(e)}
           placeholderTextColor="#575245"
           placeholder="Nome"
@@ -221,6 +282,7 @@ function Animal() {
 
         <TextInput
           style={styles.input}
+          value={idade}
           onChangeText={(e) => setIdade(e)}
           placeholder="Idade"
           placeholderTextColor="#575245"
@@ -228,6 +290,7 @@ function Animal() {
 
         <TextInput
           style={styles.input}
+          value={cor}
           onChangeText={(e) => setCor(e)}
           placeholder="Cor"
           placeholderTextColor="#575245"
@@ -248,6 +311,7 @@ function Animal() {
         </View>
 
         <TextInput
+          value={data_nasc}
           style={styles.input}
           onChangeText={(e) => setData(e)}
           placeholder="Data de Nascimento"
@@ -292,6 +356,7 @@ function Animal() {
 
         <TextInput
           multiline={true}
+          value={caracteristica_animal}
           numberOfLines={4}
           placeholderTextColor="#575245"
           style={{
@@ -311,7 +376,7 @@ function Animal() {
 
 
         <RectButton onPress={eventoCriarAnimal} style={styles.botao}>
-          <Text>Cadastrar</Text>
+          <Text>Atualizar</Text>
         </RectButton>
 
       </View>
@@ -351,4 +416,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-export default Animal;
+export default AlterarAnimal;

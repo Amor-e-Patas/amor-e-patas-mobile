@@ -179,9 +179,10 @@ export async function alterarStatus(id_animal:number, id_status:number) {
     }
 }
 
-export async function alterarAnimal(nome_ani: string,
-    idade: string,
+export async function alterarAnimal(
+    nome_ani: string,
     id_animal: number,
+    idade: string,
     cor: string,
     caracteristica_animal: string,
     data_nasc: string,

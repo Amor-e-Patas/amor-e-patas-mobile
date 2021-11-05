@@ -34,11 +34,17 @@ export default function Home() {
     }
 
     fetchAPI();
-  }, []);
+  }, [route]);
 
   const abrirModalImagem = (imageUrl: string) => {
     setModalImageUrl(imageUrl);
     setShowImageModal(!showImageModal);
+  }
+
+  const abrirAlterarAnimal = (animalId: number) => {
+    navigation.navigate("Alterar animal", {
+      animalId,
+    });
   }
 
   return (
@@ -75,25 +81,26 @@ export default function Home() {
           marginBottom: "100%"
         }}
       >
-        {
-          <View>
-            <Image
-              style={styles.stretch}
-              source={{
-                uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
-              }}></Image>
-            <Text>{animal?.nome_ani}</Text>
-            {
-              animal?.images.map(image => <Pressable onPress={() => abrirModalImagem(`http://192.168.1.69:3333/${image.filepath}`)}>
-                <Image
-                  style={styles.previewImage}
-                  source={{
-                    uri: `http://192.168.1.69:3333/${image.filepath}`,
-                  }}></Image>
-              </Pressable>)
-            }
-          </View>
-        }
+        <View>
+          <Image
+            style={styles.stretch}
+            source={{
+              uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
+            }}></Image>
+          <Text>{animal?.nome_ani}</Text>
+          {
+            animal?.images.map(image => <Pressable onPress={() => abrirModalImagem(`http://192.168.1.69:3333/${image.filepath}`)}>
+              <Image
+                style={styles.previewImage}
+                source={{
+                  uri: `http://192.168.1.69:3333/${image.filepath}`,
+                }}></Image>
+            </Pressable>)
+          }
+        </View>
+        <RectButton onPress={() => abrirAlterarAnimal(animal?.id_animal as number)}>
+          <Text>Editar</Text>
+        </RectButton>
       </View>
     </ScrollView>
   );

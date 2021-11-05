@@ -2,7 +2,7 @@
 import axios, { authenticatedAPI } from "./services";
 import * as ImagePicker from "expo-image-picker";
 
-interface Imagem{
+interface Imagem {
     uri: string,
     height: number,
     type: string
@@ -10,25 +10,41 @@ interface Imagem{
 
 export async function criarImgAnimal(
     //imagens: Array<File> ,
-    imagens: Array<Imagem> ,
+    imagens: Array<Imagem>,
     id_animal: string) {
     try {
         const data = new FormData();
         data.append('id_animal', id_animal);
         console.log(imagens, 'rfaedwqeddwqd');
         imagens.forEach(image => {
-            data.append('image', { 
+            data.append('image', {
                 // @ts-ignore
                 uri: image.uri,
                 name: `${image.height}.${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
-                type: `${image.type}/${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
-              })
-          });
+                type: `${image.type}/${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`, r
+            })
+        });
         await authenticatedAPI.post("/imagem", data);
-} catch (error) {
-    console.log(error);
-    throw error;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
+
+export async function criarImgAnimal2(
+    //imagens: Array<File> ,
+    imagens: Array<File>,
+    id_animal: string) {
+    try {
+        const data = new FormData();
+        data.append('id_animal', id_animal);
+        imagens.forEach(image => {
+            data.append('image', image);
+        });
+        await authenticatedAPI.post("/imagem", data);
+    } catch (error) {
+        throw error;
+    }
 }
 
 

@@ -90,7 +90,7 @@ export default function Home() {
                 <Image
                   style={styles.stretch}
                   source={{
-                    uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+                    uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
                   }}
                 ></Image>
 
