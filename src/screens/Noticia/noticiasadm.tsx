@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, Modal, Pressable } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimais, Animal } from "../../service/animal";
-import { getPosts, Noticia } from "../../service/post";
+import { getPosts, Noticia, deletePost } from "../../service/post";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
@@ -13,6 +13,8 @@ import { RectButton } from "react-native-gesture-handler";
 export default function NoticiasAdm() {
   const [noticias, setNoticias] = useState(Array<Noticia>());
   const [nome, setNome] = useState("");
+  const [showExcluirModal, setShowExcluirModal] = useState(false);
+  const [excluirNoticiaId, setExcluirNoticiaId] = useState(0);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
@@ -23,7 +25,6 @@ export default function NoticiasAdm() {
     async function fetchAPI() {
       try {
         const noticias = await getPosts();
-        console.log(noticias, "teste");
         setNoticias(noticias);
       } catch (err) {
         console.log(err);
@@ -45,12 +46,29 @@ export default function NoticiasAdm() {
     });
   }
 
+  const deleteNoticia = async () => {
+    await deletePost(excluirNoticiaId);
+    const noticias = await getPosts();
+    setNoticias(noticias);
+    setShowExcluirModal(false);
+  }
+
   return (
     <ScrollView
       style={{
         backgroundColor: "white",
       }}
     >
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showExcluirModal}
+      >
+        <View style={styles.centeredView}>
+          <Pressable onPress={deleteNoticia}><Text>Sim</Text></Pressable>
+          <Pressable onPress={() => { setShowExcluirModal(false) }}><Text>Não</Text></Pressable>
+        </View>
+      </Modal>
       <View
         style={{
           alignItems: "center",
@@ -69,6 +87,7 @@ export default function NoticiasAdm() {
         >
           Blog
         </Text>
+
         <View>
           {noticias.map((noticia, index) => (
             <RectButton
@@ -91,6 +110,10 @@ export default function NoticiasAdm() {
                   <Text style={styles.frase}>{noticia.autor}</Text>
                   <Text style={styles.frase}>{noticia.data}</Text>
                   <RectButton onPress={() => abrirAlterarNoticia(noticia.id_post)}><Text>Alterar</Text></RectButton>
+                  <RectButton onPress={async () => {
+                    await setExcluirNoticiaId(noticia.id_post);
+                    setShowExcluirModal(true);
+                  }}><Text>Deletar</Text></RectButton>
                 </View>
               </View>
             </RectButton>
@@ -102,6 +125,12 @@ export default function NoticiasAdm() {
 }
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
   titulo: {
     fontFamily: "Raleway_600SemiBold",
     fontSize: 20,
