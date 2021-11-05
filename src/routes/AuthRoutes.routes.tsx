@@ -12,6 +12,7 @@ import AlterarTelefone from "../screens/User/alterarTelefone";
 import { AuthContext } from "../contexts/auth";
 import MeusAnimais from '../screens/Animal/meusanimais';
 import CriarAnimal from "../screens/Animal/criaranimal";
+import MeuAnimal from "../screens/Animal/meuanimal";
 import Animal from "../screens/Animal/animal";
 import AlterarAnimal from "../screens/Animal/alteraranimal";
 import Post from "../screens/Noticia/criarnoticia";
@@ -20,6 +21,10 @@ import Noticias from '../screens/Noticia/noticias';
 import Noticia from "../screens/Noticia/noticia";
 import AlterarNoticia from "../screens/Noticia/alterarnoticia";
 import NoticiasAdm from "../screens/Noticia/noticiasadm";
+import Adotar from "../screens/Animal/adotar";
+import Desaparecidos from "../screens/Animal/desaparecidos";
+import Analise from "../screens/Animal/analise";
+
 
 export type AuthRoutesParamList = {
   'Cadastre-se': undefined
@@ -36,6 +41,9 @@ export type AuthRoutesParamList = {
   'Animal': {
     animalId: number
   },
+  'Meu animal': {
+    animalId: number
+  },
   'Alterar animal': {
     animalId: number
   },
@@ -48,7 +56,10 @@ export type AuthRoutesParamList = {
   },
   'Alterar noticia': {
     noticiaId: number
-  }
+  },
+  'Adotar': undefined,
+  'Desaparecidos': undefined,
+  'Analise de animal': undefined
 }
 
 
@@ -93,13 +104,17 @@ export function MyDrawer() {
           isAdm ? <>
             <Drawer.Screen name="Cadastrar Notícia" component={Post} />
             <Drawer.Screen name="Noticias cadastradas" component={NoticiasAdm} />
+            <Drawer.Screen name="Analise de animal" component={Analise} />
           </> : <></>
         }
+        <Drawer.Screen name="Adotar" component={Adotar} />
+        <Drawer.Screen name="Desaparecidos" component={Desaparecidos} />
         <Drawer.Screen name="Alterar usuário" component={AlterarUser} />
         <Drawer.Screen name="Alterar login" component={AlterarLogin} />
         <Drawer.Screen name="Alterar endereço" component={AlterarEndereco} />
         <Drawer.Screen name="Alterar telefone" component={AlterarTelefone} />
         <Drawer.Screen name="Meus animais" component={MeusAnimais} />
+        <Drawer.Screen name="Meu animal" component={MeuAnimal} />
         <Drawer.Screen name="Alterar animal" component={AlterarAnimal} />
         <Drawer.Screen name="Animal" component={Animal} />
         <Drawer.Screen name="Blog" component={Noticias} />
