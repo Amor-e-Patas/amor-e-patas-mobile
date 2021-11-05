@@ -10,9 +10,19 @@ import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
 import RenderHtml from 'react-native-render-html';
 import { useWindowDimensions } from 'react-native';
+import { getComentarios } from "../../service/comentario";
 
 interface NoticiaParams {
     noticiaId: number
+}
+
+interface Comentario {
+    texto: string;
+    data: string;
+    id_comentario: number;
+    nome_usu: string;
+    id_post: number;
+    id_usuario: number;
 }
 
 export default function Post() {
@@ -22,6 +32,8 @@ export default function Post() {
     const navigation =
         useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
     const { width } = useWindowDimensions();
+    const [comentarios, setComentarios] = useState(Array<Comentario>());
+
 
 
     useEffect(() => {
@@ -30,12 +42,18 @@ export default function Post() {
                 const noticia = await getPost(routeParams.noticiaId);
                 console.log(noticia, 'notizia');
                 setNoticia(noticia);
+
+                const comentario = await getComentarios(routeParams.noticiaId);
+                setComentarios(comentario);
+                console.log(comentario);
             } catch (err) {
                 console.log(err);
             }
         }
         fetchAPI();
     }, [routeParams]);
+
+
     return (
         <ScrollView
             style={{
@@ -59,10 +77,39 @@ export default function Post() {
                 <Text>{noticia?.titulo}</Text>
                 <Text>{noticia?.autor}</Text>
                 <Text>{noticia?.data}</Text>
+                {noticia?.assuntos.map(assunto => <Text>{assunto.nome_ass}</Text>)}
                 <RenderHtml
                     contentWidth={width}
                     source={{ html: noticia?.corpo || '' }}
                 />
+
+                {comentarios.map((comentario) => (
+                <>
+                    <Text>{comentario.nome_usu}</Text>
+                    <Text>{comentario.data}</Text>
+                    <Text>{comentario.texto}</Text>
+                </>
+                ))}
+
+                <TextInput
+                    multiline={true}
+                    numberOfLines={4}
+                    placeholderTextColor="#575245"
+                    style={{
+                        height: 100,
+                        textAlignVertical: "top",
+                        width: 320,
+                        margin: 12,
+                        borderWidth: 1,
+                        padding: 10,
+                        color: "black",
+                        borderRadius: 2,
+                        backgroundColor: "#f8f8f8",
+                    }}
+                    //onChangeText={(e) => setCorpo(e)}
+                    placeholder="Adicionar um comentário..."
+                />
+
 
             </View>
         </ScrollView>

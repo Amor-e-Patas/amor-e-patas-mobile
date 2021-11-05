@@ -1,5 +1,15 @@
 
 import axios, { authenticatedAPI } from "./services";
+
+interface Comentario {
+    texto: string;
+    data: string;
+    id_comentario: number;
+    nome_usu: string;
+    id_post: number;
+    id_usuario: number;
+  }
+
 export async function criarComentario(
     texto: string,
     data: string,
@@ -21,7 +31,7 @@ export async function criarComentario(
 
 export async function getComentarios(id_comentario: number) {
     try {
-        const response = await authenticatedAPI.get(`/comentarios/${id_comentario}`);
+        const response = await authenticatedAPI.get<Comentario[]>(`/comentarios/${id_comentario}`);
         return response.data;
     } catch (err) {
         throw err;
@@ -30,7 +40,7 @@ export async function getComentarios(id_comentario: number) {
 
 export async function getComentario(id_comentario: number) {
     try {
-        const response = await authenticatedAPI.get(`/comentario/${id_comentario}`);
+        const response = await authenticatedAPI.get<Comentario>(`/comentario/${id_comentario}`);
         return response.data;
     } catch (err) {
         throw err;

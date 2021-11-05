@@ -10,7 +10,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
 import { RectButton } from "react-native-gesture-handler";
 
-export default function Noticias() {
+export default function NoticiasAdm() {
   const [noticias, setNoticias] = useState(Array<Noticia>());
   const [nome, setNome] = useState("");
 
@@ -38,6 +38,12 @@ export default function Noticias() {
       noticiaId,
     });
   };
+
+  const abrirAlterarNoticia = (noticiaId: number) => {
+    navigation.navigate("Alterar noticia", {
+      noticiaId,
+    });
+  }
 
   return (
     <ScrollView
@@ -84,6 +90,7 @@ export default function Noticias() {
                   <Text style={styles.frase}>{noticia.titulo}</Text>
                   <Text style={styles.frase}>{noticia.autor}</Text>
                   <Text style={styles.frase}>{noticia.data}</Text>
+                  <RectButton onPress={() => abrirAlterarNoticia(noticia.id_post)}><Text>Alterar</Text></RectButton>
                 </View>
               </View>
             </RectButton>
