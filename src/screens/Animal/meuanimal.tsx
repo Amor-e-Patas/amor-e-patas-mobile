@@ -42,11 +42,55 @@ export default function Home() {
     setShowImageModal(!showImageModal);
   }
 
+  const excluirAnimal = async () => {
+    await deleteAnimal(excluirAnimalId);
+    console.log(excluirAnimalId);
+    setShowExcluirModal(false);
+    navigation.navigate("Meus animais");
+  }
+
+  const abrirAlterarAnimal = (animalId: number) => {
+    navigation.navigate("Alterar animal", {
+      animalId,
+    });
+  }
+
   return (
     <ScrollView
       style={{
         backgroundColor: "white",
       }}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showImageModal}
+        onRequestClose={() => {
+          setShowImageModal(!showImageModal);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <Pressable
+            onPress={() => setShowImageModal(!showImageModal)}
+          >
+            <Text>X</Text>
+          </Pressable>
+          <Image
+            style={styles.stretch}
+            source={{
+              uri: modalImagelUrl,
+            }}></Image>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showExcluirModal}
+      >
+        <View style={styles.centeredView}>
+          <Pressable onPress={excluirAnimal}><Text>Sim</Text></Pressable>
+          <Pressable onPress={() => { setShowExcluirModal(false) }}><Text>Não</Text></Pressable>
+        </View>
+      </Modal>
       <View
         style={{
           alignItems: "center",
@@ -71,6 +115,15 @@ export default function Home() {
             </Pressable>)
           }
         </View>
+        <RectButton onPress={() => abrirAlterarAnimal(animal?.id_animal as number)}>
+          <Text>Editar</Text>
+        </RectButton>
+        <RectButton onPress={() => {
+          setExcluirIdAnimal(animal?.id_animal as number);
+          setShowExcluirModal(true);
+        }}>
+          <Text>Excluir</Text>
+        </RectButton>
       </View>
     </ScrollView>
   );
