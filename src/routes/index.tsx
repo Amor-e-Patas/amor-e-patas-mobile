@@ -6,7 +6,7 @@ import AuthRoutes, {MyDrawer }from './AuthRoutes.routes';
 function Routes(){
   return(
     <NavigationContainer>
-      <MyDrawer />
+      <AuthRoutes />
     </NavigationContainer>
   );
 }
