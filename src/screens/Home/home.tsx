@@ -10,7 +10,7 @@ import {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimais, getAnimaisApro } from "../../service/animal";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
@@ -27,12 +27,12 @@ interface Animal {
 }
 
 export default function Home() {
-  const [images, setImages] = useState<File[]>([]);
   const [animais, setAnimais] = useState(Array<Animal>());
-  const [nome, setNome] = useState("");
 
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     async function fetchAPI() {
@@ -48,7 +48,7 @@ export default function Home() {
     }
 
     fetchAPI();
-  }, []);
+  }, [isFocused]);
 
   const abrirPaginaAnimal = (animalId: number) => {
     navigation.navigate("Animal", {
@@ -113,7 +113,7 @@ export default function Home() {
                   }}
                 ></Image>
                 <Text
-                  style={{ color: "purple", fontFamily: "Raleway_600SemiBold", textAlign:"right" }}
+                  style={{ color: "purple", fontFamily: "Raleway_600SemiBold", textAlign: "right" }}
                 >
                   {animal.nome_ani}
                 </Text>
