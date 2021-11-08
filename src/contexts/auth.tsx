@@ -37,7 +37,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     }
     fetchAPI();
-  }, []);
+  }, [id_usuario]);
 
   useEffect(() => {
     async function fetchAPI() {
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     fetchAPI();
-  }, []);
+  }, [id_usuario]);
 
   async function sincronizarUsuario() {
     try {
