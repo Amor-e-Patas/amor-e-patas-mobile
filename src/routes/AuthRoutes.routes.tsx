@@ -24,6 +24,8 @@ import NoticiasAdm from "../screens/Noticia/noticiasadm";
 import Adotar from "../screens/Animal/adotar";
 import Desaparecidos from "../screens/Animal/desaparecidos";
 import Analise from "../screens/Animal/analise";
+import MeuPerfil from "../screens/User/meuperfil";
+import MeusAnimaisDesaparecidos from "../screens/Animal/meusanimaisdesaparecidos";
 
 
 export type AuthRoutesParamList = {
@@ -38,6 +40,7 @@ export type AuthRoutesParamList = {
   'Alterar telefone': undefined
   'Cadastrar Notícia': undefined
   'Meus animais': undefined
+  'Meus animais desaparecidos': undefined
   'Animal': {
     animalId: number
   },
@@ -59,7 +62,10 @@ export type AuthRoutesParamList = {
   },
   'Adotar': undefined,
   'Desaparecidos': undefined,
-  'Analise de animal': undefined
+  'Analise de animal': undefined,
+  'Navigator': undefined,
+  'Meu perfil': undefined,
+
 }
 
 
@@ -69,22 +75,29 @@ const AuthStack = createNativeStackNavigator<AuthRoutesParamList>();
 
 
 function AuthRoutes() {
+  const { isAuthenticated, isAdm } = useContext(AuthContext);
+  console.log(isAuthenticated, isAdm, "autenticação");
   return (
-    <AuthStack.Navigator
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <AuthStack.Screen name="Home" component={Home} />
-      <AuthStack.Screen name="Login" component={Login} />
-      <AuthStack.Screen name="Cadastre-se" component={SignUp} />
-      <AuthStack.Screen name="Cadastrar Notícia" component={Post} />
-      *<AuthStack.Screen name="Cadastro de Animal" component={CriarAnimal} />
-      <AuthStack.Screen name="Alterar usuário" component={AlterarUser} />
-      <AuthStack.Screen name="Alterar login" component={AlterarLogin} />
-      <AuthStack.Screen name="Alterar endereço" component={AlterarEndereco} />
-      <AuthStack.Screen name="Alterar telefone" component={AlterarTelefone} />
-      <AuthStack.Screen name="Log out" component={LogOut} />
+    <AuthStack.Navigator>
+      <AuthStack.Screen name="Navigator" options={{ headerShown: false }} component={MyDrawer} />
+      {
+        isAuthenticated ? <>
+          <AuthStack.Screen name="Animal" component={Animal} />
+          <AuthStack.Screen name="Meu animal" component={MeuAnimal} />
+          <AuthStack.Screen name="Alterar animal" component={AlterarAnimal} />
+          <AuthStack.Screen name="Noticia" component={Noticia} />
+
+          <AuthStack.Screen name="Alterar usuário" component={AlterarUser} />
+          <AuthStack.Screen name="Alterar login" component={AlterarLogin} />
+          <AuthStack.Screen name="Alterar endereço" component={AlterarEndereco} />
+          <AuthStack.Screen name="Alterar telefone" component={AlterarTelefone} />
+          {
+            isAdm ? <>
+              <AuthStack.Screen name="Alterar noticia" component={AlterarNoticia} />
+            </> : <></>
+          }
+        </> : <></>
+      }
     </AuthStack.Navigator>
   );
 }
@@ -94,32 +107,27 @@ export function MyDrawer() {
   return (
 
     <Drawer.Navigator>
+
       <Drawer.Screen name="Home" component={Home} />
+
       {!isAuthenticated ? <>
         <Drawer.Screen name="Login" component={Login} />
         <Drawer.Screen name="Cadastre-se" component={SignUp} />
       </> : <>
+        <Drawer.Screen name="Desaparecidos" component={Desaparecidos} />
+        <Drawer.Screen name="Adotar" component={Adotar} />
+        <Drawer.Screen name="Blog" component={Noticias} />
+        <Drawer.Screen name="Meu perfil" component={MeuPerfil} />
+        <Drawer.Screen name="Meus animais" component={MeusAnimais} />
+        <Drawer.Screen name="Meus animais desaparecidos" component={MeusAnimaisDesaparecidos} />
         <Drawer.Screen name="Cadastro de Animal" component={CriarAnimal} />
         {
           isAdm ? <>
-            <Drawer.Screen name="Cadastrar Notícia" component={Post} />
             <Drawer.Screen name="Noticias cadastradas" component={NoticiasAdm} />
+            <Drawer.Screen name="Cadastrar Notícia" component={Post} />
             <Drawer.Screen name="Analise de animal" component={Analise} />
           </> : <></>
         }
-        <Drawer.Screen name="Adotar" component={Adotar} />
-        <Drawer.Screen name="Desaparecidos" component={Desaparecidos} />
-        <Drawer.Screen name="Alterar usuário" component={AlterarUser} />
-        <Drawer.Screen name="Alterar login" component={AlterarLogin} />
-        <Drawer.Screen name="Alterar endereço" component={AlterarEndereco} />
-        <Drawer.Screen name="Alterar telefone" component={AlterarTelefone} />
-        <Drawer.Screen name="Meus animais" component={MeusAnimais} />
-        <Drawer.Screen name="Meu animal" component={MeuAnimal} />
-        <Drawer.Screen name="Alterar animal" component={AlterarAnimal} />
-        <Drawer.Screen name="Animal" component={Animal} />
-        <Drawer.Screen name="Blog" component={Noticias} />
-        <Drawer.Screen name="Noticia" component={Noticia} />
-        <Drawer.Screen name="Alterar noticia" component={AlterarNoticia} />
         <Drawer.Screen name="Log out" component={LogOut} />
       </>}
 
