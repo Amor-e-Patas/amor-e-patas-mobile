@@ -74,7 +74,7 @@ export default function Noticias() {
                   <Image
                     style={styles.stretch}
                     source={{
-                      uri: `http://192.168.1.64:3333/${noticia.filepath}`,
+                      uri: `http://192.168.1.69:3333/${noticia.filepath}`,
                     }}
                   ></Image>
                 </View >

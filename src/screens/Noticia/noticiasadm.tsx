@@ -76,18 +76,6 @@ export default function NoticiasAdm() {
           marginBottom: "100%",
         }}
       >
-        <Text
-          style={{
-            alignItems: "center",
-            color: "#FFB800",
-            fontSize: 25,
-            marginTop: 10,
-            marginBottom: 15,
-          }}
-        >
-          Blog
-        </Text>
-
         <View>
           {noticias.map((noticia, index) => (
             <RectButton

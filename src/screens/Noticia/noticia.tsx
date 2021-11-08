@@ -67,7 +67,7 @@ export default function Post() {
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.64:3333/${noticia?.images[0].filepath}`,
+              uri: `http://192.168.1.69:3333/${noticia?.images[0].filepath}`,
             }}
           ></Image>
         </View>

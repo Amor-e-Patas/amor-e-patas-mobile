@@ -23,7 +23,6 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import mime from "mime";
 
 interface Assunto {
     id_assunto: number;
@@ -83,9 +82,10 @@ export default function AlterarNoticia() {
                 setCorpo(post.corpo);
                 setTitulo(post.titulo);
                 setData(post.data);
-                setSelectAssuntos(post.assuntos.map(assunto => assunto.id_assunto));
-                assuntos.map(assunto => console.log(selectAssuntos.some(selectedAssunto => selectedAssunto == assunto.id_assunto)))
-                
+                console.log(post.assuntos, 'assuntasikodsao');
+                //setSelectAssuntos(post.assuntos.map(assunto => assunto.id_assunto));
+                assuntos.map(assunto => console.log(selectAssuntos.some(selectedAssunto => selectedAssunto === assunto.id_assunto)))
+
             } catch (err) {
                 console.log(err);
             }
@@ -138,8 +138,10 @@ export default function AlterarNoticia() {
                 selectAssuntos)
 
             await criarImgPost(images, String(routeParams.noticiaId));
-            alert("Post criado ;)");
-            //router.push("/noticia/"+id_post);
+            alert("Noticia atualizada");
+            navigation.navigate("Noticia", {
+                noticiaId: routeParams.noticiaId,
+            });
         } catch (error) {
             console.log(error);
             alert("Erro ao criar post.");
@@ -242,8 +244,21 @@ export default function AlterarNoticia() {
                             <BouncyCheckbox size={20}
                                 style={{ margin: "2%" }}
                                 text={assunto.nome_ass}
-                                isChecked={selectAssuntos.some(selectedAssunto => selectedAssunto == assunto.id_assunto)}
-                                onPress={(isChecked: boolean) => { setSelectAssuntos(old => [...old, assunto.id_assunto]) }} />
+                                onPress={(isChecked: boolean) => {
+                                    if (isChecked) {
+                                        const aux = [...selectAssuntos];
+                                        aux.push(assunto.id_assunto);
+                                        console.log(aux);
+                                        setSelectAssuntos(aux);
+                                    } else {
+                                        const aux = [...selectAssuntos.filter(item => item != assunto.id_assunto)]
+                                        console.log(aux);
+                                        setSelectAssuntos(aux);
+                                    }
+
+                                }}
+                                isChecked={selectAssuntos.some(selectedAssunto => selectedAssunto === assunto.id_assunto)}
+                            />
 
                         </View>
                     ))}
