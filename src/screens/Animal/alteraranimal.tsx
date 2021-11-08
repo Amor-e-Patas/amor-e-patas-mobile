@@ -49,7 +49,7 @@ interface Imagem {
   type: string
 }
 
-interface NoticiaParams {
+interface AnimalParams {
   animalId: number
 }
 
@@ -71,7 +71,8 @@ function AlterarAnimal() {
   const [selectSocis, setSelectSoci] = useState(Array<number>());
   const [vivencias, setVivencia] = useState(Array<Vive>());
   const [selectVives, setSelectVive] = useState(Array<number>());
-  const [images, setImages] = useState<File[]>([]);
+  // const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<Imagem[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const navigation =
     useNavigation<
@@ -79,7 +80,7 @@ function AlterarAnimal() {
     >();
 
   const route = useRoute();
-  const routeParams = route.params as NoticiaParams;
+  const routeParams = route.params as AnimalParams;
 
   const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
     try {
@@ -116,7 +117,6 @@ function AlterarAnimal() {
     handleImagePicked(result)
   }
 
-
   async function eventoCriarAnimal() {
     if (nome_ani == "") {
       alert("Preencha o nome do animal.");
@@ -143,10 +143,10 @@ function AlterarAnimal() {
       return;
     }
     try {
-      /* await alterarAnimal(
+      await alterarAnimal(
         nome_ani,
-        parseInt(idade),
-        String(routeParams.animalId),
+        routeParams.animalId,
+        idade,
         cor,
         caracteristica_animal,
         data_nasc,
@@ -157,18 +157,20 @@ function AlterarAnimal() {
         parseInt(id_sexo),
         selectTemps,
         selectSocis,
-        selectVives
-      );*/
-      await criarImgAnimal2(
+        selectVives,
+      );
+      await criarImgAnimal(
         images,
         String(routeParams.animalId)
       );
 
-      alert("Animal cadastrado com sucesso e aguardando análise.");
-      // navigation.navigate("Home");
+      alert("Animal atualizado.");
+      navigation.navigate("Meu animal", {
+        animalId: routeParams.animalId,
+      });
     } catch (error) {
       console.log(error);
-      alert("Erro ao criar animal.");
+      alert("Erro ao atualizar animal.");
     }
   }
 
@@ -210,7 +212,7 @@ function AlterarAnimal() {
       }
       setPreviewImages(selectedImagesPreview);
 
-      const imagesTemps = Array<File>();
+      /*      const imagesTemps = Array<File>();
       for (const image of animal.images) {
         const imgBlob = await obterImagemBlob(`http://192.168.1.69:3333/${image.filepath}`);
         const url = await obterImagem(`http://192.168.1.69:3333/${image.filepath}`);
@@ -218,7 +220,7 @@ function AlterarAnimal() {
         console.log(JSON.stringify(imgBlob));
         imagesTemps.push(imgBlob as File);
       }
-      setImages(imagesTemps);
+      setImages(imagesTemps); */
     })();
 
   }, [route]);
@@ -243,6 +245,7 @@ function AlterarAnimal() {
           marginTop: "15%",
           backgroundColor: "#f8f8f8",
         }}>
+        <Button title="Selecionar imagem" onPress={pickImage} />
         {
           previewImages.map((imageUri, index) => <View key={imageUri + index}>
             <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
@@ -251,7 +254,7 @@ function AlterarAnimal() {
             </Pressable>
           </View>)
         }
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        
       </View>
       <View
         style={{
@@ -263,15 +266,6 @@ function AlterarAnimal() {
 
         }}
       >
-        <Text
-          style={{
-            alignItems: "center",
-            color: "#FFB800",
-            fontSize: 25,
-          }}
-        >
-          Alterar Animal
-        </Text>
         <TextInput
           style={styles.input}
           value={nome_ani}

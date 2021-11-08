@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import { getAnimais, Animal } from "../../service/animal";
+import { getAnimais, Animal, getAnimaisDesaparecidos } from "../../service/animal";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
 import { RectButton } from "react-native-gesture-handler";
 
-export default function Home() {
+export default function MeusAnimaisDesaparecidos() {
   const [images, setImages] = useState<File[]>([]);
   const [animais, setAnimais] = useState(Array<Animal>());
   const [nome, setNome] = useState("");
@@ -22,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchAPI() {
       try {
-        const animais = await getAnimais();
+        const animais = await getAnimaisDesaparecidos();
         setAnimais(animais);
       } catch (err) {
         console.log(err);

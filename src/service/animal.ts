@@ -91,7 +91,7 @@ export async function getAnimaisEmAnalise() {
 
 export async function getAnimaisDesaparecidos() {
     try {
-        const response = await authenticatedAPI.get(`/animaisdesaparecidos`);
+        const response = await authenticatedAPI.get<Array<Animal>>(`/animaisdesaparecidos`);
         return response.data;
     } catch (err) {
         throw err;

@@ -21,7 +21,7 @@ export async function criarImgAnimal(
                 // @ts-ignore
                 uri: image.uri,
                 name: `${image.height}.${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
-                type: `${image.type}/${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`, r
+                type: `${image.type}/${image.uri.substr(image.uri.lastIndexOf('.') + 1)}`,
             })
         });
         await authenticatedAPI.post("/imagem", data);
