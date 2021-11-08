@@ -26,21 +26,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import mime from 'mime'
-
-interface Temp {
-  id_temperamento: number;
-  descricao: string;
-}
-
-interface Soci {
-  id_sociavel: number;
-  descricao: string;
-}
-
-interface Vive {
-  id_vivencia: number;
-  descricao: string;
-}
+import { getTemperamento, Temperamento } from "../../service/temperamento";
+import { getSociavel, Sociavel } from "../../service/sociavel";
+import { getVivencia, Vivencia } from "../../service/vivencia";
 
 interface Imagem {
   uri: string,
@@ -60,11 +48,11 @@ function Animal() {
   const [id_especie, setEspecie] = useState("");
   const [id_sexo, setSexo] = useState("");
   const [id_status, setStatus] = useState("3");
-  const [temperamentos, setTemperamentos] = useState(Array<Temp>());
+  const [temperamentos, setTemperamentos] = useState(Array<Temperamento>());
   const [selectTemp, setSelectTemp] = useState(Array<Number>());
-  const [sociaveis, setSociavel] = useState(Array<Soci>());
+  const [sociaveis, setSociavel] = useState(Array<Sociavel>());
   const [selectSoci, setSelectSoci] = useState(Array<Number>());
-  const [vivencias, setVivencia] = useState(Array<Vive>());
+  const [vivencias, setVivencia] = useState(Array<Vivencia>());
   const [selectVive, setSelectVive] = useState(Array<Number>());
   const [images, setImages] = useState<Imagem[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -82,6 +70,18 @@ function Animal() {
         }
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    async function fetchAPI() {
+      const temperamento = await getTemperamento();
+      const sociavel = await getSociavel();
+      const vivencia = await getVivencia();
+      setTemperamentos(temperamento);
+      setSociavel(sociavel);
+      setVivencia(vivencia);
+    }
+    fetchAPI();
   }, []);
 
   const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
@@ -136,6 +136,9 @@ function Animal() {
       return;
     }
     try {
+      console.log(selectVive, 'vive');
+      console.log(selectSoci, 'soci');
+      console.log(selectVive, 'vive');
       const id_animal = await criarAnimal(
         nome_ani,
         idade,
@@ -152,6 +155,7 @@ function Animal() {
         selectSoci,
         selectVive
       );
+     
       await criarImgAnimal(
         images,
         String(id_animal)
@@ -191,7 +195,7 @@ function Animal() {
             </Pressable>
           </View>)
         }
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        <Button title="Selecionar imagem" onPress={pickImage} />
       </View>
       <View
         style={{
@@ -308,8 +312,85 @@ function Animal() {
           onChangeText={(e) => setCaracteristica(e)}
           placeholder="Características adicionais"
         />
+        <Text>Temperamento</Text>
+        {temperamentos.map((temperamento, index) => (
+          <View key={index}
+            style={{
+              alignContent: 'flex-end'
+            }}
+          >
 
+            <BouncyCheckbox size={20}
+              style={{ margin: "2%" }}
+              text={temperamento.descricao}
+              onPress={(isChecked: boolean) => {
+                if (isChecked) {
+                  const aux = [...selectTemp];
+                  aux.push(temperamento.id_temperamento);
+                  console.log(aux);
+                  setSelectTemp(aux);
+                } else {
+                  const aux = [...selectTemp.filter(item => item != temperamento.id_temperamento)]
+                  console.log(aux);
+                  setSelectTemp(aux);
+                }
+              }} />
 
+          </View>
+        ))}
+        <Text>Vivencia</Text>
+        {vivencias.map((vivencia, index) => (
+          <View key={index}
+            style={{
+              alignContent: 'flex-end'
+            }}
+          >
+
+            <BouncyCheckbox size={20}
+              style={{ margin: "2%" }}
+              text={vivencia.descricao}
+              onPress={(isChecked: boolean) => {
+                if (isChecked) {
+                  const aux = [...selectVive];
+                  aux.push(vivencia.id_vivencia);
+                  console.log(aux);
+                  setSelectVive(aux);
+                } else {
+                  const aux = [...selectVive.filter(item => item != vivencia.id_vivencia)]
+                  console.log(aux);
+                  setSelectVive(aux);
+                }
+              }} />
+
+          </View>
+        ))}
+        <Text>Sociavel com</Text>
+        {sociaveis.map((sociavel, index) => (
+          <View key={index}
+            style={{
+              alignContent: 'flex-end'
+            }}
+          >
+
+            <BouncyCheckbox size={20}
+              style={{ margin: "2%" }}
+              text={sociavel.descricao}
+              onPress={(isChecked: boolean) => {
+                if (isChecked) {
+                  const aux = [...selectSoci];
+                  aux.push(sociavel.id_sociavel);
+                  console.log(aux);
+                  setSelectSoci(aux);
+                } else {
+                  const aux = [...selectSoci.filter(item => item != sociavel.id_sociavel)]
+                  console.log(aux);
+                  setSelectSoci(aux);
+                }
+
+              }} />
+
+          </View>
+        ))}
         <RectButton onPress={eventoCriarAnimal} style={styles.botao}>
           <Text>Cadastrar</Text>
         </RectButton>
