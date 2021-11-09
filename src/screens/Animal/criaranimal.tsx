@@ -29,6 +29,7 @@ import mime from 'mime'
 import { getTemperamento, Temperamento } from "../../service/temperamento";
 import { getSociavel, Sociavel } from "../../service/sociavel";
 import { getVivencia, Vivencia } from "../../service/vivencia";
+import DatePicker from '../../components/DatePicker';
 
 interface Imagem {
   uri: string,
@@ -41,7 +42,7 @@ function Animal() {
   const [idade, setIdade] = useState("");
   const [cor, setCor] = useState("");
   const [caracteristica_animal, setCaracteristica] = useState("");
-  const [data_nasc, setData] = useState("");
+  const [data, setData] = useState("");
   const [desaparecido, setDesaparecido] = useState("");
   const [id_porte, setPorte] = useState("");
   const [id_usuario, setUsuario] = useState("");
@@ -135,16 +136,17 @@ function Animal() {
       alert("Informe se o animal está desaparecido.");
       return;
     }
+    if (images.length < 1 || images.length >= 5) {
+      alert("Adicione pelo menos uma imagem");
+      return;
+    }
     try {
-      console.log(selectVive, 'vive');
-      console.log(selectSoci, 'soci');
-      console.log(selectVive, 'vive');
       const id_animal = await criarAnimal(
         nome_ani,
         idade,
         cor,
         caracteristica_animal,
-        data_nasc,
+        data,
         desaparecido,
         parseInt(id_usuario),
         parseInt(id_porte),
@@ -155,14 +157,14 @@ function Animal() {
         selectSoci,
         selectVive
       );
-     
+
       await criarImgAnimal(
         images,
         String(id_animal)
       );
 
       alert("Animal cadastrado com sucesso e aguardando análise.");
-      // navigation.navigate("Home");
+      navigation.navigate("Home");
     } catch (error) {
       console.log(error);
       alert("Erro ao criar animal.");
@@ -195,7 +197,7 @@ function Animal() {
             </Pressable>
           </View>)
         }
-        <Button title="Selecionar imagem" onPress={pickImage} />
+        {!(images.length >= 5) ? <Button title="Selecionar imagem" onPress={pickImage} /> : <></>}
       </View>
       <View
         style={{
@@ -251,11 +253,7 @@ function Animal() {
           </Picker>
         </View>
 
-        <TextInput
-          style={styles.input}
-          onChangeText={(e) => setData(e)}
-          placeholder="Data de Nascimento"
-          placeholderTextColor="#575245"></TextInput>
+        <DatePicker onChange={setData} label="Data de nascimento" buttonText="Selecione a data de nascimento" />
 
         <Picker
           style={styles.input}
