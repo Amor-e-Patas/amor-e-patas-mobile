@@ -54,6 +54,27 @@ export default function Home() {
           marginBottom: "100%"
         }}
       >
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showImageModal}
+          onRequestClose={() => {
+            setShowImageModal(!showImageModal);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <Pressable
+              onPress={() => setShowImageModal(!showImageModal)}
+            >
+              <Text>X</Text>
+            </Pressable>
+            <Image
+              style={styles.stretch}
+              source={{
+                uri: modalImagelUrl,
+              }}></Image>
+          </View>
+        </Modal>
         <View>
           <Image
             style={styles.stretch}

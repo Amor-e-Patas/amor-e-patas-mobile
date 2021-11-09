@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Pressable,
   ImageBackground,
+  Platform
 } from "react-native";
 import {
   formata_CPF,
@@ -21,9 +22,8 @@ import { criarUsuario } from "../../service/user";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import DatePicker from "react-native-date-picker";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import CheckBox from "@react-native-community/checkbox";
+import DatePicker from '../../components/DatePicker';
 
 interface Endereco {
   logradouro: string;
@@ -36,7 +36,7 @@ export default function SignUp() {
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
   const [genero, setGenero] = useState("");
-  const [datanasc, setDatanasc] = useState("22-10-2021");
+  const [datanasc, setDatanasc] = useState("");
   const [celular, setCelular] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -47,10 +47,9 @@ export default function SignUp() {
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
   const [referencia, setReferencia] = useState("");
-  const [open, setOpen] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [termos, setTermos] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [termosVenda, setTermosVenda] = useState(false);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Cadastre-se">>();
@@ -72,17 +71,6 @@ export default function SignUp() {
     buscarEndereco();
   }, [cep]);
 
-  function teste() {
-    /*console.log(nome);
-    console.log(cpf);
-    console.log(genero);
-    //console.log(datanasc);
-    console.log(celular);
-    console.log(email);
-    console.log(senha);
-    console.log(cep);*/
-  }
-
   function formata_CEP(campo: string, campoAtual: string) {
     let valoresPermitidos = "0123456789";
     let campoFormatado = campo;
@@ -95,10 +83,11 @@ export default function SignUp() {
   }
 
   async function eventoCriarUsuario() {
-    /*if (!valida_CPF(cpf)) {
+    if (!valida_CPF(cpf)) {
       alert("CPF inválido! Por favor, insira um CPF válido.");
       return;
-    }*/
+    }
+
     if (!valida_email(email)) {
       alert("E-mail inválido! Por favor, insira um e-mail válido.");
       return;
@@ -134,26 +123,19 @@ export default function SignUp() {
       return;
     }
 
-    /*/let confirsenha = (document.getElementById("confirsenha") as HTMLInputElement).value;
-
-    if (senha != confirsenha) {
+    if (senha != passwordConfirm) {
       alert("Senhas não correspondentes, favor digite novamente.");
       return;
     }
 
-    let termos = (document.getElementById("termos") as HTMLInputElement).checked;
-
-    if (termos == false) {
+    if (!termos) {
       alert("É preciso aceitar os termos.");
       return;
     }
-
-    let vendas = (document.getElementById("vendas") as HTMLInputElement).checked;
-
-    if (vendas == false) {
+    if (!termosVenda) {
       alert("É preciso concordar com a política de não venda de animais.");
       return;
-    }*/
+    }
 
     if (bairro == "") {
       alert("Por favor, insira o bairro.");
@@ -203,7 +185,7 @@ export default function SignUp() {
         referencia
       );
       alert("Usuário criado com sucesso!");
-      navigation.navigate("Home");
+      navigation.navigate("Login");
     } catch (error) {
       alert("Erro ao criar conta.");
     }
@@ -215,8 +197,8 @@ export default function SignUp() {
         style={{
           alignItems: "center",
           justifyContent: "center",
-          marginTop:"5%"
-          
+          marginTop: "5%"
+
         }}
       >
         <Text
@@ -238,12 +220,15 @@ export default function SignUp() {
           onChangeText={(text) => setNome(text)}
         />
 
+        <DatePicker onChange={setDatanasc} label="Data de nascimento" buttonText="Selecione a data de nascimento" />
+
         <TextInput
           style={styles.input}
           placeholder="CPF"
           placeholderTextColor="#575245"
           keyboardType="decimal-pad"
           value={cpf}
+          maxLength={14}
           onChangeText={(text) => setCpf(formata_CPF(text, text))}
         />
 
@@ -392,10 +377,18 @@ export default function SignUp() {
 
         <BouncyCheckbox
           size={20}
-          style={{margin: "2%"}}
+          style={{ margin: "2%" }}
           text="Li e aceito os termos"
-          onPress={(isChecked: boolean) => {}}
+          onPress={(isChecked: boolean) => { setTermos(isChecked) }}
         />
+
+        <BouncyCheckbox
+          size={20}
+          style={{ margin: "2%" }}
+          text="Não permitimos a venda de animais através do site."
+          onPress={(isChecked: boolean) => { setTermosVenda(isChecked) }}
+        />
+
 
         <Pressable onPress={eventoCriarUsuario} style={styles.botao}>
           <Text>Cadastrar</Text>
