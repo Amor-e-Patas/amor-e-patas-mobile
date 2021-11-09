@@ -9,6 +9,7 @@ import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
 import { RectButton } from "react-native-gesture-handler";
+import moment from "moment";
 
 export default function NoticiasAdm() {
   const [noticias, setNoticias] = useState(Array<Noticia>());
@@ -96,7 +97,7 @@ export default function NoticiasAdm() {
                 }}>
                   <Text style={styles.frase}>{noticia.titulo}</Text>
                   <Text style={styles.frase}>{noticia.autor}</Text>
-                  <Text style={styles.frase}>{noticia.data}</Text>
+                  <Text style={styles.frase}>{moment(noticia.data, 'YYYY-MM-DD').format('DD/MM/YYYY')}</Text>
                   <RectButton onPress={() => abrirAlterarNoticia(noticia.id_post)}><Text>Alterar</Text></RectButton>
                   <RectButton onPress={async () => {
                     await setExcluirNoticiaId(noticia.id_post);
