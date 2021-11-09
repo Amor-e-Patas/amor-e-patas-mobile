@@ -6,30 +6,24 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
-  ImageBackground,
   Image,
   Platform,
-  FlatList,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { RectButton } from "react-native-gesture-handler";
 import { Link, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import axios from "axios";
 import {
   criarPost,
   getAssuntos,
   criarImgPost,
   Imagem,
 } from "../../service/post";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import mime from "mime";
+import moment from 'moment';
+
 
 interface Assunto {
   id_assunto: number;
@@ -40,7 +34,7 @@ export default function Post() {
   const [titulo, setTitulo] = useState("");
   const [corpo, setCorpo] = useState("");
   const [autor, setAutor] = useState("");
-  const [data, setData] = useState("");
+  const [data, setData] = useState(moment().format('YYYY-MM-DD'));
   const [assuntos, setAssuntos] = useState<Assunto[]>([]);
   const [selectAssunto, setSelectAssunto] = useState<Number[]>([]);
   const [images, setImages] = useState<Imagem[]>([]);
@@ -67,7 +61,6 @@ export default function Post() {
       try {
         const assunto = await getAssuntos();
         setAssuntos(assunto);
-        setData("");
       } catch (err) {
         console.log(err);
       }
@@ -109,7 +102,10 @@ export default function Post() {
       return;
     }
 
-    //let imagens = (document.getElementById("image") as HTMLInputElement).value;
+    if (images.length !== 1) {
+      alert("Adicione pelo menos uma imagem");
+      return;
+    }
 
     try {
       const id_post = await criarPost(
@@ -124,7 +120,7 @@ export default function Post() {
       console.log(images, "imagenss");
       await criarImgPost(images, String(id_post));
       alert("Post criado ;)");
-      //router.push("/noticia/"+id_post);
+      navigation.navigate("Noticias cadastradas");
     } catch (error) {
       console.log(error);
       alert("Erro ao criar post.");
@@ -169,7 +165,7 @@ export default function Post() {
             </Pressable>
           </View>
         ))}
-        <Button title="Selecionar Imagem" onPress={pickImage} />
+        {!(images.length >= 1) ? <Button title="Selecionar Imagem" onPress={pickImage} /> : <></>}
       </View>
       <View
         style={{
@@ -217,7 +213,7 @@ export default function Post() {
             <View
               key={index}
               style={{
-                
+
               }}
             >
               <BouncyCheckbox
@@ -258,6 +254,7 @@ export default function Post() {
     </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   input: {
     height: 60,
