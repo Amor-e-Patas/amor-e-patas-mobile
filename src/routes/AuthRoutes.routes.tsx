@@ -54,9 +54,7 @@ export type AuthRoutesParamList = {
   'Noticia': {
     noticiaId: number
   },
-  'Noticias cadastradas': {
-    noticiaId: number
-  },
+  'Noticias cadastradas': undefined,
   'Alterar noticia': {
     noticiaId: number
   },
