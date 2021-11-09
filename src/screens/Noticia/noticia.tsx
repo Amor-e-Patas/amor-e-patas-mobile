@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, Image, StyleSheet, ScrollView, Button, Modal, Pressable } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimais, Animal } from "../../service/animal";
@@ -10,7 +10,11 @@ import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
 import RenderHtml from "react-native-render-html";
 import { useWindowDimensions } from "react-native";
-import { getComentarios } from "../../service/comentario";
+import { deleteComentario, getComentarios } from "../../service/comentario";
+import { RectButton } from "react-native-gesture-handler";
+import moment from "moment";
+import { criarComentario } from "../../service/comentario";
+import { AuthContext } from "../../contexts/auth";
 
 interface NoticiaParams {
   noticiaId: number;
@@ -27,23 +31,40 @@ interface Comentario {
 
 export default function Post() {
   const [noticia, setNoticia] = useState<Noticia>();
+  const [comentarios, setComentarios] = useState(Array<Comentario>());
+  const [novoComentario, setNovoComentario] = useState('');
+  const [showDeleteComentario, setShowDeleteComentario] = useState(false);
+  const [deleteComentarioId, setDeleteComentarioId] = useState(0);
   const route = useRoute();
   const routeParams = route.params as NoticiaParams;
+  const { id_usuario, isAdm } = useContext(AuthContext);
+  const { width } = useWindowDimensions();
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
-  const { width } = useWindowDimensions();
-  const [comentarios, setComentarios] = useState(Array<Comentario>());
+
+  async function addComentario() {
+    await criarComentario(novoComentario, moment().format('YYYY-MM-DD'), 0, routeParams.noticiaId);
+    await fetchComentarios();
+    setNovoComentario('');
+  }
+  async function fetchComentarios() {
+    const comentario = await getComentarios(routeParams.noticiaId);
+    setComentarios(comentario);
+  }
+
+  async function handleDeleteComentario() {
+    await deleteComentario(deleteComentarioId);
+    await fetchComentarios();
+    setShowDeleteComentario(false);
+  }
 
   useEffect(() => {
     async function fetchAPI() {
       try {
         const noticia = await getPost(routeParams.noticiaId);
-        console.log(noticia, "notizia");
+        noticia.data = moment(noticia.data, 'YYYY-MM-DD').format('DD/MM/YYYY');
         setNoticia(noticia);
-
-        const comentario = await getComentarios(routeParams.noticiaId);
-        setComentarios(comentario);
-        console.log(comentario);
+        await fetchComentarios();
       } catch (err) {
         console.log(err);
       }
@@ -64,6 +85,16 @@ export default function Post() {
         }}
       >
         <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showDeleteComentario}
+          >
+            <View style={styles.centeredView}>
+              <Pressable onPress={handleDeleteComentario}><Text>Sim</Text></Pressable>
+              <Pressable onPress={() => { setShowDeleteComentario(false) }}><Text>Não</Text></Pressable>
+            </View>
+          </Modal>
           <Image
             style={styles.stretch}
             source={{
@@ -104,6 +135,7 @@ export default function Post() {
           }}
         >
           <TextInput
+            value={novoComentario}
             multiline={true}
             numberOfLines={4}
             placeholderTextColor="#575245"
@@ -118,9 +150,10 @@ export default function Post() {
               borderRadius: 2,
               backgroundColor: "#f8f8f8",
             }}
-            //onChangeText={(e) => setCorpo(e)}
+            onChangeText={setNovoComentario}
             placeholder="Adicionar um comentário..."
           />
+          <RectButton onPress={addComentario}><Text>Adicionar comentário</Text></RectButton>
         </View>
 
         <View
@@ -142,25 +175,29 @@ export default function Post() {
                   fontSize: 12,
                   margin: "2%",
                   textAlign: "left",
-                  color:"purple"
+                  color: "purple"
                 }}
               >
                 {comentario.nome_usu}
               </Text>
               <Text style={{
-                  fontFamily: "Raleway_600SemiBold",
-                  fontSize: 12,
-                  margin: "2%",
-                  textAlign: "left",
-                  color:"#737373"
-                }}>{comentario.data}</Text>
+                fontFamily: "Raleway_600SemiBold",
+                fontSize: 12,
+                margin: "2%",
+                textAlign: "left",
+                color: "#737373"
+              }}>{moment(comentario.data).format("DD/MM/YYYY")}</Text>
               <Text style={{
-                  fontFamily: "Raleway_600SemiBold",
-                  fontSize: 12,
-                  marginLeft: "10%",
-                  textAlign: "left",
-                  color:"black"
-                }}>{comentario.texto}</Text>
+                fontFamily: "Raleway_600SemiBold",
+                fontSize: 12,
+                marginLeft: "10%",
+                textAlign: "left",
+                color: "black"
+              }}>{comentario.texto}</Text>
+              {(id_usuario === comentario.id_usuario || isAdm) ? <RectButton onPress={() => {
+                setDeleteComentarioId(comentario.id_comentario);
+                setShowDeleteComentario(true);
+              }}><Text>Deletar comentário</Text></RectButton> : <></>}
             </>
           ))}
         </View>
@@ -170,6 +207,12 @@ export default function Post() {
 }
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
   titulo: {
     fontFamily: "Raleway_600SemiBold",
     fontSize: 20,
