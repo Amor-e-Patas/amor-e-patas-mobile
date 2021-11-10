@@ -30,12 +30,7 @@ import { getTemperamento, Temperamento } from "../../service/temperamento";
 import { getSociavel, Sociavel } from "../../service/sociavel";
 import { getVivencia, Vivencia } from "../../service/vivencia";
 import DatePicker from '../../components/DatePicker';
-
-interface Imagem {
-  uri: string,
-  height: number,
-  type: string
-}
+import { Imagem } from "../../service/img_animal";
 
 function Animal() {
   const [nome_ani, setNome] = useState("");

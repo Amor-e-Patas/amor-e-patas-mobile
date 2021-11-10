@@ -1,7 +1,8 @@
 
 import axios, { authenticatedAPI } from "./services";
+import { Imagem } from "./img_animal";
 
-export interface Animal{
+export interface Animal {
     id_animal: number
     nome_ani: string,
     idade: string,
@@ -14,9 +15,7 @@ export interface Animal{
     id_especie: number,
     id_sexo: number,
     id_status: number,
-    images: Array<{
-        filepath: string;
-      }>
+    images: Array<Imagem>,
     temperamentos: Array<Number>,
     sociaveis: Array<Number>,
     vivencias: Array<Number>,
@@ -35,10 +34,10 @@ export async function criarAnimal(nome_ani: string,
     id_status: number,
     temperamentos: Array<Number>,
     sociaveis: Array<Number>,
-    vivencias: Array<Number>,){
-        
+    vivencias: Array<Number>,) {
+
     try {
-        
+
         const res = await authenticatedAPI.post<Animal>("/animal", {
             nome_ani,
             idade,
@@ -56,11 +55,10 @@ export async function criarAnimal(nome_ani: string,
             vivencias
         })
         return res.data.id_animal;
-} catch (error) {
-    throw error;
+    } catch (error) {
+        throw error;
+    }
 }
-}
-
 
 export async function getAnimais() {
     try {
@@ -125,7 +123,7 @@ export async function getAnimaisDesaparecidosAll() {
     }
 }
 
-export async function getAnimal(id_animal:number) {
+export async function getAnimal(id_animal: number) {
     try {
         const response = await authenticatedAPI.get<Animal>(`/animal/${id_animal}`);
         return response.data;
@@ -134,7 +132,7 @@ export async function getAnimal(id_animal:number) {
     }
 }
 
-export async function getAnimalIndex(id_animal:number) {
+export async function getAnimalIndex(id_animal: number) {
     try {
         const response = await authenticatedAPI.get(`/animalindex/${id_animal}`);
         return response.data;
@@ -161,18 +159,18 @@ export async function getAnimaisAnalises() {
     }
 }
 
-export async function deleteAnimal(id_animal:number) {
+export async function deleteAnimal(id_animal: number) {
     try {
-        const response = await authenticatedAPI.delete(`/animal/${id_animal}`);
+        const response = await authenticatedAPI.post(`/animal/${id_animal}`);
         return response.data;
     } catch (err) {
         throw err;
     }
 }
 
-export async function alterarStatus(id_animal:number, id_status:number) {
+export async function alterarStatus(id_animal: number, id_status: number) {
     try {
-        const response = await authenticatedAPI.put(`/animal/status/${id_animal}`, {id_status});
+        const response = await authenticatedAPI.put(`/animal/status/${id_animal}`, { id_status });
         return response.data;
     } catch (err) {
         throw err;
@@ -193,9 +191,11 @@ export async function alterarAnimal(
     id_sexo: number,
     selectTemps: Array<number>,
     selectSocis: Array<number>,
-    selectVives: Array<number>) {
+    selectVives: Array<number>,
+    imagesToRemove: Array<number>
+) {
     try {
-        const response = await authenticatedAPI.put(`/animal/${id_animal}`, {
+        await authenticatedAPI.put(`/animal/${id_animal}`, {
             nome_ani,
             idade,
             cor,
@@ -208,7 +208,8 @@ export async function alterarAnimal(
             id_sexo,
             selectTemps,
             selectSocis,
-            selectVives
+            selectVives,
+            imagesToRemove
         });
         return
     } catch (err) {
