@@ -6,7 +6,6 @@ import {
     StyleSheet,
     TextInput,
     Pressable,
-    ImageBackground,
     Image,
     Platform,
 } from "react-native";
@@ -15,14 +14,10 @@ import { RectButton } from 'react-native-gesture-handler';
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import axios from "axios";
 import { alterarPost, getAssuntos, criarImgPost, Imagem, getPost } from "../../service/post";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 interface Assunto {
     id_assunto: number;
@@ -38,9 +33,12 @@ export default function AlterarNoticia() {
     const [autor, setAutor] = useState("");
     const [data, setData] = useState("");
     const [assuntos, setAssuntos] = useState<Assunto[]>([]);
-    const [selectAssuntos, setSelectAssuntos] = useState<Number[]>([]);
+    const [selectAssuntos, setSelectAssuntos] = useState<number[]>([]);
     const [images, setImages] = useState<Imagem[]>([]);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
+    const [oldPreviewImages, setOldPreviewImages] = useState<string[]>([]);
+    const [removeOldImage, setRemoveOldImage] = useState(false);
+    const [checkedCheckBox, setCheckedCheckBox] = useState<Array<boolean>>([]);
     const navigation =
         useNavigation<
             NativeStackNavigationProp<AuthRoutesParamList, "Cadastrar Notícia">
@@ -49,6 +47,7 @@ export default function AlterarNoticia() {
     const route = useRoute();
     const routeParams = route.params as NoticiaParams;
     const isFocused = useIsFocused();
+
     useEffect(() => {
         (async () => {
             if (Platform.OS !== "web") {
@@ -82,16 +81,26 @@ export default function AlterarNoticia() {
                 setCorpo(post.corpo);
                 setTitulo(post.titulo);
                 setData(post.data);
-                console.log(post.assuntos, 'assuntasikodsao');
-                //setSelectAssuntos(post.assuntos.map(assunto => assunto.id_assunto));
-                assuntos.map(assunto => console.log(selectAssuntos.some(selectedAssunto => selectedAssunto === assunto.id_assunto)))
-
+                console.log(post, 'POST');
+                const selectAssuntos = [...post.assuntos.map(assunto => assunto.id_assunto)];
+                setSelectAssuntos(selectAssuntos);
+                const selectedImagesPreview = [];
+                for (const image of post.images) {
+                    selectedImagesPreview.push(`http://192.168.1.69:3333/${image.filepath}`);
+                }
+                setOldPreviewImages(selectedImagesPreview);
             } catch (err) {
                 console.log(err);
             }
         }
         fetchAPI();
     }, [route, isFocused]);
+
+    useEffect(() => {
+        for (const selectedAssunto of selectAssuntos) {
+            checkedCheckBox[selectedAssunto] = true;
+        }
+    }, [selectAssuntos]);
 
     const handleImagePicked = async (
         pickerResult: ImagePicker.ImagePickerResult
@@ -101,7 +110,7 @@ export default function AlterarNoticia() {
                 alert("Upload cancelled");
                 return;
             } else {
-                setPreviewImages([...previewImages, pickerResult.uri as any]);
+                setPreviewImages([...oldPreviewImages, pickerResult.uri as any]);
                 setImages([...images, pickerResult as any]);
             }
         } catch (e) {
@@ -125,9 +134,6 @@ export default function AlterarNoticia() {
             alert("Preencha o título.");
             return;
         }
-
-        //let imagens = (document.getElementById("image") as HTMLInputElement).value;
-
         try {
 
             await alterarPost(routeParams.noticiaId,
@@ -135,7 +141,9 @@ export default function AlterarNoticia() {
                 corpo,
                 autor,
                 data,
-                selectAssuntos)
+                selectAssuntos,
+                removeOldImage
+            );
 
             await criarImgPost(images, String(routeParams.noticiaId));
             alert("Noticia atualizada");
@@ -154,14 +162,24 @@ export default function AlterarNoticia() {
             ...images.slice(index + 1, images.length),
         ];
         const imagesPreviewTemp = [
-            ...previewImages.slice(0, index),
-            ...previewImages.slice(index + 1, previewImages.length),
+            ...oldPreviewImages.slice(0, index),
+            ...oldPreviewImages.slice(index + 1, oldPreviewImages.length),
         ];
         console.log("312312", imagesPreviewTemp);
         setImages([...imagesTemp]);
         setPreviewImages([...imagesPreviewTemp]);
     }
 
+    function removerOldImagem() {
+        setOldPreviewImages([]);
+        setRemoveOldImage(true);
+    }
+
+    function checkAssunto(id: number){
+        console.log(selectAssuntos.some(selectedAssunto => selectedAssunto === id))
+        return selectAssuntos.some(selectedAssunto => selectedAssunto === id);
+    }
+    let bouncyCheckboxRef: BouncyCheckbox | null = null;
     return (
         <ScrollView style={{ backgroundColor: "white" }}>
             <View
@@ -172,6 +190,20 @@ export default function AlterarNoticia() {
                     backgroundColor: "#f8f8f8",
                 }}
             >
+                {oldPreviewImages.map((imageUri, index) => (
+                    <View key={imageUri + index}>
+                        <Image
+                            source={{ uri: imageUri }}
+                            style={{ width: 300, height: 200 }}
+                        />
+                        <Pressable
+                            onPress={removerOldImagem}
+                            style={styles.botao}
+                        >
+                            <Text>Remover</Text>
+                        </Pressable>
+                    </View>
+                ))}
                 {previewImages.map((imageUri, index) => (
                     <View key={imageUri + index}>
                         <Image
@@ -186,7 +218,8 @@ export default function AlterarNoticia() {
                         </Pressable>
                     </View>
                 ))}
-                <Button title="Selecionar Imagem" onPress={pickImage} />
+
+                {!((images.length + oldPreviewImages.length) > 0) ? <Button title="Selecionar imagem" onPress={pickImage} /> : <></>}
             </View>
             <View
                 style={{
@@ -244,22 +277,21 @@ export default function AlterarNoticia() {
                             <BouncyCheckbox size={20}
                                 style={{ margin: "2%" }}
                                 text={assunto.nome_ass}
+                                isChecked={selectAssuntos.some(selectedAssunto => selectedAssunto === assunto.id_assunto)}
+                                ref={(ref: any) => (bouncyCheckboxRef = ref)}
                                 onPress={(isChecked: boolean) => {
                                     if (isChecked) {
                                         const aux = [...selectAssuntos];
                                         aux.push(assunto.id_assunto);
-                                        console.log(aux);
                                         setSelectAssuntos(aux);
+                                        console.log(aux, '1');
                                     } else {
-                                        const aux = [...selectAssuntos.filter(item => item != assunto.id_assunto)]
-                                        console.log(aux);
+                                        const aux = [...selectAssuntos.filter(item => item != assunto.id_assunto)];
+                                        console.log(aux, '2');
                                         setSelectAssuntos(aux);
                                     }
-
                                 }}
-                                isChecked={selectAssuntos.some(selectedAssunto => selectedAssunto === assunto.id_assunto)}
                             />
-
                         </View>
                     ))}
                 </View>

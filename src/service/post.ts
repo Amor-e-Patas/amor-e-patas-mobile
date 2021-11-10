@@ -77,16 +77,17 @@ export async function alterarPost(id_post: number,
     corpo: string,
     autor: string,
     data: string,
-    assuntos: Array<Number>) {
+    assuntos: Array<Number>,
+    removeOldImage: boolean) {
     try {
-        const response = await authenticatedAPI.put(`/post/${id_post}`, {
+        await authenticatedAPI.put(`/post/${id_post}`, {
             titulo,
             corpo,
             autor,
             data,
-            assuntos
+            assuntos,
+            removeOldImage
         });
-        return
     } catch (err) {
         throw err;
     }
