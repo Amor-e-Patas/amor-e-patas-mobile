@@ -2,10 +2,12 @@
 import axios, { authenticatedAPI } from "./services";
 import * as ImagePicker from "expo-image-picker";
 
-interface Imagem {
+export interface Imagem {
     uri: string,
     height: number,
-    type: string
+    type: string,
+    filepath: string,
+    id_imagem: number,
 }
 
 export async function criarImgAnimal(

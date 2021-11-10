@@ -26,6 +26,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { getAnimal, Animal } from "../../service/animal";
+import {
+  Imagem
+} from "../../service/img_animal";
 import mime from 'mime'
 
 interface Temp {
@@ -41,12 +44,6 @@ interface Soci {
 interface Vive {
   id_vivencia: number;
   descricao: string;
-}
-
-interface Imagem {
-  uri: string,
-  height: number,
-  type: string
 }
 
 interface AnimalParams {
@@ -74,6 +71,9 @@ function AlterarAnimal() {
   // const [images, setImages] = useState<File[]>([]);
   const [images, setImages] = useState<Imagem[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [oldPreviewImages, setOldPreviewImages] = useState<Array<Imagem>>([]);
+  const [imagesToRemove, setImagesToRemove] = useState<Array<number>>([]);
+
   const navigation =
     useNavigation<
       NativeStackNavigationProp<AuthRoutesParamList, "Cadastro de Animal">
@@ -97,16 +97,6 @@ function AlterarAnimal() {
     }
   };
 
-  async function obterImagemBlob(imageUri: string): Promise<File> {
-    const objectBlob = await fetch(imageUri).then(function (response) {
-      return response.blob();
-    })
-    //return URL.createObjectURL(objectURL);
-    return new Promise((resolve, reject) => {
-      resolve(objectBlob as File);
-    });
-  }
-
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -117,7 +107,7 @@ function AlterarAnimal() {
     handleImagePicked(result)
   }
 
-  async function eventoCriarAnimal() {
+  async function eventoAlterarAnimal() {
     if (nome_ani == "") {
       alert("Preencha o nome do animal.");
       return;
@@ -142,6 +132,12 @@ function AlterarAnimal() {
       alert("Informe se o animal está desaparecido.");
       return;
     }
+
+    if ((images.length + oldPreviewImages.length) < 1 || (images.length + oldPreviewImages.length) > 5) {
+      alert("Adicione pelo menos uma imagem");
+      return;
+    }
+
     try {
       await alterarAnimal(
         nome_ani,
@@ -158,6 +154,7 @@ function AlterarAnimal() {
         selectTemps,
         selectSocis,
         selectVives,
+        imagesToRemove
       );
       await criarImgAnimal(
         images,
@@ -183,15 +180,13 @@ function AlterarAnimal() {
 
   }
 
-  async function obterImagem(imageUri: string): Promise<string> {
-    const objectURL = await fetch(imageUri).then(function (response) {
-        return response.blob();
-    })
-    //return URL.createObjectURL(objectURL);
-    return new Promise((resolve, reject) => {
-        resolve(URL.createObjectURL(objectURL));
-    });
-}
+  function removerImagemAntiga(index: number, imageId: number) {
+    const oldImagesPreviewTemp = [...oldPreviewImages.slice(0, index), ...oldPreviewImages.slice(index + 1, oldPreviewImages.length)]
+    const imagesToRemoveTemp = [...imagesToRemove, imageId];
+    setImagesToRemove([...imagesToRemoveTemp]);
+    setOldPreviewImages([...oldImagesPreviewTemp]);
+    console.log(imagesToRemove, 'images to rmv');
+  }
 
   useEffect(() => {
     (async () => {
@@ -206,21 +201,14 @@ function AlterarAnimal() {
       setPorte(String(animal.id_porte));
       setDesaparecido(String(animal.desaparecido));
 
-      const selectedImagesPreview = Array<string>();
-      for (const image of animal.images) {
-        selectedImagesPreview.push(`http://192.168.1.69:3333/${image.filepath}`)
-      }
-      setPreviewImages(selectedImagesPreview);
+      const selectedImagesPreview = [...animal.images];
+      console.log(animal.images);
 
-      /*      const imagesTemps = Array<File>();
       for (const image of animal.images) {
-        const imgBlob = await obterImagemBlob(`http://192.168.1.69:3333/${image.filepath}`);
-        const url = await obterImagem(`http://192.168.1.69:3333/${image.filepath}`);
-        console.log(url);
-        console.log(JSON.stringify(imgBlob));
-        imagesTemps.push(imgBlob as File);
+        image.filepath = `http://192.168.1.69:3333/${image.filepath}`;
       }
-      setImages(imagesTemps); */
+
+      setOldPreviewImages(selectedImagesPreview);
     })();
 
   }, [route]);
@@ -245,7 +233,7 @@ function AlterarAnimal() {
           marginTop: "15%",
           backgroundColor: "#f8f8f8",
         }}>
-        <Button title="Selecionar imagem" onPress={pickImage} />
+        {!((images.length + oldPreviewImages.length) >= 5) ? <Button title="Selecionar imagem" onPress={pickImage} /> : <></>}
         {
           previewImages.map((imageUri, index) => <View key={imageUri + index}>
             <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
@@ -254,7 +242,14 @@ function AlterarAnimal() {
             </Pressable>
           </View>)
         }
-        
+        {
+          oldPreviewImages.map((image, index) => <View key={image.filepath + index}>
+            <Image source={{ uri: image.filepath }} style={{ width: 200, height: 200 }} />
+            <Pressable onPress={() => removerImagemAntiga(index, image.id_imagem)} style={styles.botao}>
+              <Text>Remover</Text>
+            </Pressable>
+          </View>)
+        }
       </View>
       <View
         style={{
@@ -369,7 +364,7 @@ function AlterarAnimal() {
         />
 
 
-        <RectButton onPress={eventoCriarAnimal} style={styles.botao}>
+        <RectButton onPress={eventoAlterarAnimal} style={styles.botao}>
           <Text>Atualizar</Text>
         </RectButton>
 
