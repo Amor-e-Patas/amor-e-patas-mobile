@@ -161,7 +161,7 @@ export async function getAnimaisAnalises() {
 
 export async function deleteAnimal(id_animal: number) {
     try {
-        const response = await authenticatedAPI.post(`/animal/${id_animal}`);
+        const response = await authenticatedAPI.delete(`/animal/${id_animal}`);
         return response.data;
     } catch (err) {
         throw err;
