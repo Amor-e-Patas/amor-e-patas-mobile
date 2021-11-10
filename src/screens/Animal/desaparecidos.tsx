@@ -62,7 +62,7 @@ export default function Desaparecidos() {
         style={{
           alignItems: "center",
           backgroundColor: "white",
-          marginBottom: "100%",
+          marginBottom: "auto",
         }}
       >
         <View
@@ -95,7 +95,7 @@ export default function Desaparecidos() {
                 <Image
                   style={styles.imgani}
                   source={{
-                    uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
+                    uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
                   }}
                 ></Image>
                 <Text

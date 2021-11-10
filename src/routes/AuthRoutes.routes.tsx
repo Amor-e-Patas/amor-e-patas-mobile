@@ -16,7 +16,7 @@ import MeuAnimal from "../screens/Animal/meuanimal";
 import Animal from "../screens/Animal/animal";
 import AlterarAnimal from "../screens/Animal/alteraranimal";
 import Post from "../screens/Noticia/criarnoticia";
-
+import AnaliseAnimalDesaparecidos from "../screens/Animal/analisedesaparecido";
 import Noticias from '../screens/Noticia/noticias';
 import Noticia from "../screens/Noticia/noticia";
 import AlterarNoticia from "../screens/Noticia/alterarnoticia";
@@ -41,6 +41,7 @@ export type AuthRoutesParamList = {
   'Cadastrar Notícia': undefined
   'Meus animais': undefined
   'Meus animais desaparecidos': undefined
+  "Analise de animal desaparecido": undefined
   'Animal': {
     animalId: number
   },
@@ -124,6 +125,7 @@ export function MyDrawer() {
             <Drawer.Screen name="Noticias cadastradas" component={NoticiasAdm} />
             <Drawer.Screen name="Cadastrar Notícia" component={Post} />
             <Drawer.Screen name="Analise de animal" component={Analise} />
+            <Drawer.Screen name="Analise de animal desaparecido" component={AnaliseAnimalDesaparecidos} />
           </> : <></>
         }
         <Drawer.Screen name="Log out" component={LogOut} />

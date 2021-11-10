@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView, Modal, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Modal,
+  Pressable,
+} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import { Animal, getAnimaisEmAnalise, alterarStatus } from "../../service/animal";
+import {
+  Animal,
+  getAnimaisEmAnalise,
+  alterarStatus,
+} from "../../service/animal";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
@@ -40,14 +52,14 @@ export default function Analise() {
     const animais = await getAnimaisEmAnalise();
     setAnimais(animais);
     setShowAprovarModal(false);
-  }
+  };
 
   const negarAnimal = async () => {
     await alterarStatus(animalId, 2);
     const animais = await getAnimaisEmAnalise();
     setAnimais(animais);
     setShowNegarModal(false);
-  }
+  };
 
   return (
     <ScrollView
@@ -59,7 +71,7 @@ export default function Analise() {
         style={{
           alignItems: "center",
           backgroundColor: "white",
-          marginBottom: "100%",
+          marginBottom: "auto",
         }}
       >
         <Modal
@@ -68,8 +80,17 @@ export default function Analise() {
           visible={showAprovarModal}
         >
           <View style={styles.centeredView}>
-            <Pressable onPress={aprovarAnimal}><Text>Sim</Text></Pressable>
-            <Pressable onPress={() => { setShowAprovarModal(false) }}><Text>Não</Text></Pressable>
+          <Text style={styles.rText2}>Deseja realmente aprovar?</Text>
+            <Pressable onPress={aprovarAnimal}>
+              <Text style={styles.rText2}>Sim</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                setShowAprovarModal(false);
+              }}
+            >
+              <Text style={styles.rText2}>Não</Text>
+            </Pressable>
           </View>
         </Modal>
         <Modal
@@ -77,22 +98,21 @@ export default function Analise() {
           transparent={true}
           visible={showNegarModal}
         >
+          
           <View style={styles.centeredView}>
-            <Pressable onPress={negarAnimal}><Text>Sim</Text></Pressable>
-            <Pressable onPress={() => { setShowNegarModal(false) }}><Text>Não</Text></Pressable>
+          <Text style={styles.rText2}>Deseja realmente negar?</Text>
+            <Pressable onPress={negarAnimal}>
+              <Text style={styles.rText2}>Sim</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                setShowNegarModal(false);
+              }}
+            >
+              <Text style={styles.rText2}>Não</Text>
+            </Pressable>
           </View>
         </Modal>
-        <Text
-          style={{
-            alignItems: "center",
-            color: "#FFB800",
-            fontSize: 25,
-            marginTop: 10,
-            marginBottom: 15,
-          }}
-        >
-          Animais aguardando análise
-        </Text>
 
         <View
           style={{
@@ -106,10 +126,9 @@ export default function Analise() {
           }}
         >
           {animais.map((animal, index) => (
-
             <View
               style={{
-                height: 200,
+                height: 230,
                 width: "45%",
                 marginBottom: 5,
                 marginLeft: 5,
@@ -120,7 +139,7 @@ export default function Analise() {
               <Image
                 style={styles.stretch}
                 source={{
-                  uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
+                  uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
                 }}
               ></Image>
 
@@ -128,23 +147,49 @@ export default function Analise() {
                 style={{
                   color: "purple",
                   fontFamily: "Raleway_600SemiBold",
-                  textAlign: "right",
+                  textAlign: "center",
                 }}
               >
                 {animal.nome_ani}
               </Text>
-              <RectButton onPress={() => {
-                setAnimalId(animal.id_animal);
-                setShowAprovarModal(true);
-              }}>
-                <Text>Aprovar</Text>
-              </RectButton>
-              <RectButton onPress={() => {
-                setAnimalId(animal.id_animal);
-                setShowNegarModal(true);
-              }}>
-                <Text>Negar</Text>
-              </RectButton>
+              <View
+                style={{
+                  flex: 2,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flex: 2,
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 10,
+                  }}
+                >
+                  <RectButton
+                    onPress={() => {
+                      setAnimalId(animal.id_animal);
+                      setShowAprovarModal(true);
+                    }}
+                  >
+                    <Text style={styles.acoes}>Aprovar</Text>
+                  </RectButton>
+                  <RectButton
+                    onPress={() => {
+                      setAnimalId(animal.id_animal);
+                      setShowNegarModal(true);
+                    }}
+                  >
+                    <Text style={styles.acoes}>Negar</Text>
+                  </RectButton>
+                </View>
+              </View>
             </View>
           ))}
         </View>
@@ -157,7 +202,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
+    backgroundColor: "white",
+    flexDirection: "row",
   },
   stretch: {
     width: 180,
@@ -178,5 +225,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginLeft: "5%",
     marginRight: "5%",
+  },
+
+  acoes: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 14,
+    color: "#737373",
+    textAlign: "center",
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+
+  rText2: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 17,
+    margin: "2%",
+    textAlign: "center",
   },
 });

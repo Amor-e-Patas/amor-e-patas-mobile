@@ -74,7 +74,7 @@ export default function NoticiasAdm() {
         style={{
           alignItems: "center",
           backgroundColor: "white",
-          marginBottom: "100%",
+          marginBottom: "auto",
         }}
       >
         <View>
@@ -88,7 +88,7 @@ export default function NoticiasAdm() {
                   <Image
                     style={styles.stretch}
                     source={{
-                      uri: `http://192.168.1.69:3333/${noticia.filepath}`,
+                      uri: `http://192.168.1.64:3333/${noticia.filepath}`,
                     }}
                   ></Image>
                 </View >
