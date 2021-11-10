@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView, Modal, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Modal,
+  Pressable,
+} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimal, Animal, deleteAnimal } from "../../service/animal";
@@ -7,10 +15,10 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton } from "react-native-gesture-handler";
 
 interface NoticiaParams {
-  animalId: number
+  animalId: number;
 }
 
 export default function Home() {
@@ -40,18 +48,19 @@ export default function Home() {
   const abrirModalImagem = (imageUrl: string) => {
     setModalImageUrl(imageUrl);
     setShowImageModal(!showImageModal);
-  }
+  };
 
   return (
     <ScrollView
       style={{
         backgroundColor: "white",
-      }}>
+      }}
+    >
       <View
         style={{
           alignItems: "center",
           backgroundColor: "white",
-          marginBottom: "100%"
+          marginBottom: "100%",
         }}
       >
         <Modal
@@ -65,32 +74,57 @@ export default function Home() {
           <View style={styles.centeredView}>
             <Pressable
               onPress={() => setShowImageModal(!showImageModal)}
-            >
-              <Text>X</Text>
-            </Pressable>
+            ></Pressable>
             <Image
               style={styles.stretch}
               source={{
                 uri: modalImagelUrl,
-              }}></Image>
+              }}
+            ></Image>
           </View>
         </Modal>
-        <View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            marginLeft: 7,
+          }}
+        >
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
-            }}></Image>
-          <Text>{animal?.nome_ani}</Text>
-          {
-            animal?.images.map(image => <Pressable onPress={() => abrirModalImagem(`http://192.168.1.69:3333/${image.filepath}`)}>
+              uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+            }}
+          ></Image>
+
+          {animal?.images.map((image) => (
+            <Pressable
+              onPress={() =>
+                abrirModalImagem(`http://192.168.1.64:3333/${image.filepath}`)
+              }
+            >
               <Image
                 style={styles.previewImage}
                 source={{
-                  uri: `http://192.168.1.69:3333/${image.filepath}`,
-                }}></Image>
-            </Pressable>)
-          }
+                  uri: `http://192.168.1.64:3333/${image.filepath}`,
+                }}
+              ></Image>
+            </Pressable>
+          ))}
+          <View></View>
+        </View>
+        <View>
+          <Text
+            style={{
+              color: "purple",
+              fontFamily: "Raleway_600SemiBold",
+              fontSize: 20,
+              textAlign: "center",
+            }}
+          >
+            {animal?.nome_ani}
+          </Text>
         </View>
       </View>
     </ScrollView>
@@ -102,16 +136,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    backgroundColor: "white",
+    flexDirection: "row",
   },
+
   stretch: {
-    width: 200,
-    height: 200,
+    width: 380,
+    height: 350,
     resizeMode: "stretch",
   },
+  
   previewImage: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
+    marginTop: 5,
   },
   titulo: {
     fontFamily: "Raleway_600SemiBold",

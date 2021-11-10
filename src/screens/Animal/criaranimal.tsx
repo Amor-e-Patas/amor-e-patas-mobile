@@ -8,9 +8,9 @@ import {
   Pressable,
   ImageBackground,
   Image,
-  Platform
+  Platform,
 } from "react-native";
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import { Link, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -24,17 +24,17 @@ import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import mime from 'mime'
+import DateTimePicker from "@react-native-community/datetimepicker";
+import mime from "mime";
 import { getTemperamento, Temperamento } from "../../service/temperamento";
 import { getSociavel, Sociavel } from "../../service/sociavel";
 import { getVivencia, Vivencia } from "../../service/vivencia";
-import DatePicker from '../../components/DatePicker';
+import DatePicker from "../../components/DatePicker";
 
 interface Imagem {
-  uri: string,
-  height: number,
-  type: string
+  uri: string;
+  height: number;
+  type: string;
 }
 
 function Animal() {
@@ -64,10 +64,11 @@ function Animal() {
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
     })();
@@ -85,10 +86,12 @@ function Animal() {
     fetchAPI();
   }, []);
 
-  const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
+  const handleImagePicked = async (
+    pickerResult: ImagePicker.ImagePickerResult
+  ) => {
     try {
       if (pickerResult.cancelled) {
-        alert('Upload cancelled');
+        alert("Upload cancelled");
         return;
       } else {
         setPreviewImages([...previewImages, pickerResult.uri as any]);
@@ -96,7 +99,7 @@ function Animal() {
       }
     } catch (e) {
       console.log(e);
-      alert('Upload failed');
+      alert("Upload failed");
     }
   };
 
@@ -107,9 +110,8 @@ function Animal() {
       aspect: [1, 1],
       quality: 1,
     });
-    handleImagePicked(result)
-  }
-
+    handleImagePicked(result);
+  };
 
   async function eventoCriarAnimal() {
     if (nome_ani == "") {
@@ -158,10 +160,7 @@ function Animal() {
         selectVive
       );
 
-      await criarImgAnimal(
-        images,
-        String(id_animal)
-      );
+      await criarImgAnimal(images, String(id_animal));
 
       alert("Animal cadastrado com sucesso e aguardando análise.");
       navigation.navigate("Home");
@@ -172,32 +171,48 @@ function Animal() {
   }
 
   function removerImagem(index: number) {
-    const imagesTemp = [...images.slice(0, index), ...images.slice(index + 1, images.length)]
-    const imagesPreviewTemp = [...previewImages.slice(0, index), ...previewImages.slice(index + 1, previewImages.length)]
-    console.log('312312', imagesPreviewTemp);
+    const imagesTemp = [
+      ...images.slice(0, index),
+      ...images.slice(index + 1, images.length),
+    ];
+    const imagesPreviewTemp = [
+      ...previewImages.slice(0, index),
+      ...previewImages.slice(index + 1, previewImages.length),
+    ];
+    console.log("312312", imagesPreviewTemp);
     setImages([...imagesTemp]);
     setPreviewImages([...imagesPreviewTemp]);
-
   }
 
   return (
-    <ScrollView style={{ backgroundColor: 'white' }}>
+    <ScrollView style={{ backgroundColor: "white" }}>
       <View
         style={{
           alignItems: "center",
           justifyContent: "center",
           marginTop: "15%",
-          backgroundColor: "#f8f8f8",
-        }}>
-        {
-          previewImages.map((imageUri, index) => <View key={imageUri + index}>
-            <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
-            <Pressable onPress={() => removerImagem(index)} style={styles.botao}>
+          backgroundColor: "white",
+        }}
+      >
+        {previewImages.map((imageUri, index) => (
+          <View key={imageUri + index}>
+            <Image
+              source={{ uri: imageUri }}
+              style={{ width: 200, height: 200 }}
+            />
+            <Pressable
+              onPress={() => removerImagem(index)}
+              style={styles.botao}
+            >
               <Text>Remover</Text>
             </Pressable>
-          </View>)
-        }
-        {!(images.length >= 5) ? <Button title="Selecionar imagem" onPress={pickImage} /> : <></>}
+          </View>
+        ))}
+        {!(images.length >= 5) ? (
+          <Button title="Selecionar imagem" onPress={pickImage} />
+        ) : (
+          <></>
+        )}
       </View>
       <View
         style={{
@@ -205,8 +220,7 @@ function Animal() {
           justifyContent: "center",
           marginTop: "15%",
           marginBottom: "10%",
-          backgroundColor: 'white',
-
+          backgroundColor: "white",
         }}
       >
         <Text
@@ -253,7 +267,23 @@ function Animal() {
           </Picker>
         </View>
 
-        <DatePicker onChange={setData} label="Data de nascimento" buttonText="Selecione a data de nascimento" />
+        <View
+          style={{
+            height: 60,
+            width: 320,
+            margin: 12,
+            padding: 10,
+            borderRadius: 2,
+            backgroundColor: "#f8f8f8",
+            marginBottom: 30,
+          }}
+        >
+          <DatePicker
+            onChange={setData}
+            label="Data de nascimento"
+            buttonText="Selecione a data de nascimento"
+          />
+        </View>
 
         <Picker
           style={styles.input}
@@ -296,6 +326,7 @@ function Animal() {
           multiline={true}
           numberOfLines={4}
           placeholderTextColor="#575245"
+          
           style={{
             height: 200,
             textAlignVertical: "top",
@@ -310,89 +341,107 @@ function Animal() {
           onChangeText={(e) => setCaracteristica(e)}
           placeholder="Características adicionais"
         />
-        <Text>Temperamento</Text>
-        {temperamentos.map((temperamento, index) => (
-          <View key={index}
-            style={{
-              alignContent: 'flex-end'
-            }}
-          >
-
-            <BouncyCheckbox size={20}
-              style={{ margin: "2%" }}
-              text={temperamento.descricao}
-              onPress={(isChecked: boolean) => {
-                if (isChecked) {
-                  const aux = [...selectTemp];
-                  aux.push(temperamento.id_temperamento);
-                  console.log(aux);
-                  setSelectTemp(aux);
-                } else {
-                  const aux = [...selectTemp.filter(item => item != temperamento.id_temperamento)]
-                  console.log(aux);
-                  setSelectTemp(aux);
-                }
-              }} />
-
-          </View>
-        ))}
-        <Text>Vivencia</Text>
-        {vivencias.map((vivencia, index) => (
-          <View key={index}
-            style={{
-              alignContent: 'flex-end'
-            }}
-          >
-
-            <BouncyCheckbox size={20}
-              style={{ margin: "2%" }}
-              text={vivencia.descricao}
-              onPress={(isChecked: boolean) => {
-                if (isChecked) {
-                  const aux = [...selectVive];
-                  aux.push(vivencia.id_vivencia);
-                  console.log(aux);
-                  setSelectVive(aux);
-                } else {
-                  const aux = [...selectVive.filter(item => item != vivencia.id_vivencia)]
-                  console.log(aux);
-                  setSelectVive(aux);
-                }
-              }} />
-
-          </View>
-        ))}
-        <Text>Sociavel com</Text>
-        {sociaveis.map((sociavel, index) => (
-          <View key={index}
-            style={{
-              alignContent: 'flex-end'
-            }}
-          >
-
-            <BouncyCheckbox size={20}
-              style={{ margin: "2%" }}
-              text={sociavel.descricao}
-              onPress={(isChecked: boolean) => {
-                if (isChecked) {
-                  const aux = [...selectSoci];
-                  aux.push(sociavel.id_sociavel);
-                  console.log(aux);
-                  setSelectSoci(aux);
-                } else {
-                  const aux = [...selectSoci.filter(item => item != sociavel.id_sociavel)]
-                  console.log(aux);
-                  setSelectSoci(aux);
-                }
-
-              }} />
-
-          </View>
-        ))}
+        <View
+          style={{
+            flex: 2,
+            flexDirection: "column",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
+            width: 300,
+            marginTop: 10,
+            
+          }}
+        >
+          <Text style={styles.tem}>Temperamento</Text>
+          {temperamentos.map((temperamento, index) => (
+            <View
+              key={index}
+            >
+              <BouncyCheckbox
+                size={20}
+                style={{ margin: "2%" }}
+                text={temperamento.descricao}
+                onPress={(isChecked: boolean) => {
+                  if (isChecked) {
+                    const aux = [...selectTemp];
+                    aux.push(temperamento.id_temperamento);
+                    console.log(aux);
+                    setSelectTemp(aux);
+                  } else {
+                    const aux = [
+                      ...selectTemp.filter(
+                        (item) => item != temperamento.id_temperamento
+                      ),
+                    ];
+                    console.log(aux);
+                    setSelectTemp(aux);
+                  }
+                }}
+              />
+            </View>
+          ))}
+          <Text style={styles.tem}>Vivencia</Text>
+          {vivencias.map((vivencia, index) => (
+            <View
+              key={index}
+              
+            >
+              <BouncyCheckbox
+                size={20}
+                style={{ margin: "2%" }}
+                text={vivencia.descricao}
+                onPress={(isChecked: boolean) => {
+                  if (isChecked) {
+                    const aux = [...selectVive];
+                    aux.push(vivencia.id_vivencia);
+                    console.log(aux);
+                    setSelectVive(aux);
+                  } else {
+                    const aux = [
+                      ...selectVive.filter(
+                        (item) => item != vivencia.id_vivencia
+                      ),
+                    ];
+                    console.log(aux);
+                    setSelectVive(aux);
+                  }
+                }}
+              />
+            </View>
+          ))}
+          <Text style={styles.tem}>Sociavel com</Text>
+          {sociaveis.map((sociavel, index) => (
+            <View
+              key={index}
+              
+            >
+              <BouncyCheckbox
+                size={20}
+                style={{ margin: "2%" }}
+                text={sociavel.descricao}
+                onPress={(isChecked: boolean) => {
+                  if (isChecked) {
+                    const aux = [...selectSoci];
+                    aux.push(sociavel.id_sociavel);
+                    console.log(aux);
+                    setSelectSoci(aux);
+                  } else {
+                    const aux = [
+                      ...selectSoci.filter(
+                        (item) => item != sociavel.id_sociavel
+                      ),
+                    ];
+                    console.log(aux);
+                    setSelectSoci(aux);
+                  }
+                }}
+              />
+            </View>
+          ))}
+        </View>
         <RectButton onPress={eventoCriarAnimal} style={styles.botao}>
           <Text>Cadastrar</Text>
         </RectButton>
-
       </View>
     </ScrollView>
   );
@@ -407,7 +456,12 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     fontSize: 15,
     backgroundColor: "#f8f8f8",
+  },
 
+  tem:{
+    color:"#575245",
+    fontFamily: "Raleway_600SemiBold",
+    fontSize:17,
   },
 
   button: {

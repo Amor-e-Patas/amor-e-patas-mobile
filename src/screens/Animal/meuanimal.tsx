@@ -95,7 +95,7 @@ export default function Home() {
         visible={showExcluirModal}
       >
         <View style={styles.centeredView}>
-        <Text style={styles.rText2}>Deseja realmente excluir?</Text>
+          <Text style={styles.rText2}>Deseja realmente excluir?</Text>
           <Pressable onPress={excluirAnimal}>
             <Text style={styles.rText}>Sim</Text>
           </Pressable>
@@ -115,7 +115,15 @@ export default function Home() {
           marginBottom: "100%",
         }}
       >
-        <View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            marginLeft:7,
+            
+          }}
+        >
           <Image
             style={styles.stretch}
             source={{
@@ -190,7 +198,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     flexDirection: "row",
-    
   },
 
   stretch: {
@@ -203,7 +210,6 @@ const styles = StyleSheet.create({
     width: 380,
     height: 350,
     resizeMode: "stretch",
-    
   },
 
   rText: {
@@ -225,6 +231,7 @@ const styles = StyleSheet.create({
     height: 70,
     marginTop: 5,
   },
+
   titulo: {
     fontFamily: "Raleway_600SemiBold",
     fontSize: 20,
