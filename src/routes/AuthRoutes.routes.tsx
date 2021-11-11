@@ -87,28 +87,17 @@ function AuthRoutes() {
         <>
           <AuthStack.Screen name="Animal" component={Animal} />
           <AuthStack.Screen name="Meu animal" component={MeuAnimal} />
-          <AuthStack.Screen
-            name="Noticias cadastradas"
-            component={NoticiasAdm}
-          />
+          <AuthStack.Screen name="Noticias cadastradas"component={NoticiasAdm}/>
           <AuthStack.Screen name="Cadastrar Notícia" component={Post} />
           <AuthStack.Screen name="Alterar animal" component={AlterarAnimal} />
           <AuthStack.Screen name="Noticia" component={Noticia} />
           <AuthStack.Screen name="Meus animais" component={MeusAnimais} />
-          <AuthStack.Screen
-            name="Meus animais desaparecidos"
-            component={MeusAnimaisDesaparecidos}
-          />
+          <AuthStack.Screen name="Meus animais desaparecidos" component={MeusAnimaisDesaparecidos}/>
           <AuthStack.Screen name="Alterar usuário" component={AlterarUser} />
           <AuthStack.Screen name="Alterar login" component={AlterarLogin} />
-          <AuthStack.Screen
-            name="Alterar endereço"
-            component={AlterarEndereco}
-          />
-          <AuthStack.Screen
-            name="Alterar telefone"
-            component={AlterarTelefone}
-          />
+          <AuthStack.Screen name="Alterar endereço" component={AlterarEndereco}/>
+          <AuthStack.Screen name="Alterar telefone" component={AlterarTelefone}/>
+          <AuthStack.Screen name="Cadastro de Animal" component={CriarAnimal} />
           {isAdm ? (
             <>
               <AuthStack.Screen
@@ -140,9 +129,9 @@ export function MyDrawer() {
         </>
       ) : (
         <>
-          <Drawer.Screen name="Desaparecidos" component={Desaparecidos} />
           <Drawer.Screen name="Adotar" component={Adotar} />
           <Drawer.Screen name="Blog" component={Noticias} />
+          <Drawer.Screen name="Desaparecidos" component={Desaparecidos} />
           <Drawer.Screen name="Meu perfil" component={MeuPerfil} />
           <Drawer.Screen name="Menu animais" component={MenuAnimais} />
           {isAdm ? (

@@ -21,9 +21,10 @@ export default function MenuAnimais() {
 
   return (
     <ScrollView
-    style={{
-      backgroundColor: "white",
-    }}>
+      style={{
+        backgroundColor: "white",
+      }}
+    >
       <View
         style={{
           alignItems: "center",
@@ -42,41 +43,46 @@ export default function MenuAnimais() {
           }}
         >
           <View style={styles.cards}>
-            <Image
-              style={styles.stretch}
-              source={require("../../../assets/addanimal.png")}
-            ></Image>
-            <RectButton onPress={() => navigation.navigate("Cadastro de Animal")}>
+            <RectButton
+              onPress={() => navigation.navigate("Cadastro de Animal")}
+            >
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/addanimal.png")}
+              ></Image>
+
               <Text style={styles.text}>Cadastrar animal</Text>
             </RectButton>
           </View>
 
           <View style={styles.cards}>
-            <Image
-              style={styles.stretch}
-              source={require("../../../assets/analise.png")}
-            ></Image>
             <RectButton onPress={() => navigation.navigate("Alterar endereço")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/analise.png")}
+              ></Image>
               <Text style={styles.text}>Animais em análise</Text>
             </RectButton>
           </View>
 
           <View style={styles.cards}>
-            <Image
-              style={styles.stretch}
-              source={require("../../../assets/animais.png")}
-            ></Image>
             <RectButton onPress={() => navigation.navigate("Meus animais")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/animais.png")}
+              ></Image>
               <Text style={styles.text}>Meus animais</Text>
             </RectButton>
           </View>
 
           <View style={styles.cards}>
-            <Image
-              style={styles.stretch}
-              source={require("../../../assets/desaparecidos.png")}
-            ></Image>
-            <RectButton onPress={() => navigation.navigate("Meus animais desaparecidos")}>
+            <RectButton
+              onPress={() => navigation.navigate("Meus animais desaparecidos")}
+            >
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/desaparecidos.png")}
+              ></Image>
               <Text style={styles.text}>Meus animais desaparecidos</Text>
             </RectButton>
           </View>
@@ -122,10 +128,10 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     resizeMode: "stretch",
-    marginHorizontal:35,
-    marginVertical:35
+    marginHorizontal: 35,
+    marginVertical: 35,
   },
-  
+
   text: {
     color: "purple",
     fontFamily: "Raleway_600SemiBold",
