@@ -21,7 +21,7 @@ interface NoticiaParams {
   animalId: number;
 }
 
-export default function Home() {
+export default function MeuAnimal() {
   const [animal, setAnimal] = useState<Animal>();
   const [showImageModal, setShowImageModal] = useState(false);
   const [showExcluirModal, setShowExcluirModal] = useState(false);
@@ -127,20 +127,21 @@ export default function Home() {
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+              uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
             }}
           ></Image>
 
-          {animal?.images.map((image) => (
+          {animal?.images.map((image, index) => (
             <Pressable
+              key={index}
               onPress={() =>
-                abrirModalImagem(`http://192.168.1.64:3333/${image.filepath}`)
+                abrirModalImagem(`http://192.168.1.69:3333/${image.filepath}`)
               }
             >
               <Image
                 style={styles.previewImage}
                 source={{
-                  uri: `http://192.168.1.64:3333/${image.filepath}`,
+                  uri: `http://192.168.1.69:3333/${image.filepath}`,
                 }}
               ></Image>
             </Pressable>
@@ -159,6 +160,14 @@ export default function Home() {
           >
             {animal?.nome_ani}
           </Text>
+          <Text>{animal?.nome_esp}</Text>
+          <Text>{animal?.idade}</Text>
+          <Text>{animal?.tipo_sexo}</Text>
+          <Text>Localizado em {animal?.cidade} - {animal?.estado}</Text>
+          <Text>{animal?.caracteristica_animal}</Text>
+          {animal?.temperamentos.map((temperamento, index) => <Text key={index}>{temperamento.descricao}</Text>)}
+          {animal?.sociaveis.map((sociavel, index) => <Text key={index}>{sociavel.descricao}</Text>)}
+          {animal?.vivencias.map((vivencia, index) => <Text key={index}>{vivencia.descricao}</Text>)}
         </View>
         <View
           style={{

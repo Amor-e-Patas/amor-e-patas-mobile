@@ -29,7 +29,10 @@ import { getAnimal, Animal } from "../../service/animal";
 import {
   Imagem
 } from "../../service/img_animal";
-import mime from 'mime'
+import { getTemperamento, Temperamento } from "../../service/temperamento";
+import { getSociavel, Sociavel } from "../../service/sociavel";
+import { getVivencia, Vivencia } from "../../service/vivencia";
+import DatePicker from "../../components/DatePicker";
 
 interface Temp {
   id_temperamento: number;
@@ -55,7 +58,7 @@ function AlterarAnimal() {
   const [idade, setIdade] = useState("");
   const [cor, setCor] = useState("");
   const [caracteristica_animal, setCaracteristica] = useState("");
-  const [data_nasc, setData] = useState("");
+  const [data_nasc, setData_nasc] = useState("");
   const [desaparecido, setDesaparecido] = useState("");
   const [id_porte, setPorte] = useState("");
   const [id_usuario, setUsuario] = useState("");
@@ -68,17 +71,17 @@ function AlterarAnimal() {
   const [selectSocis, setSelectSoci] = useState(Array<number>());
   const [vivencias, setVivencia] = useState(Array<Vive>());
   const [selectVives, setSelectVive] = useState(Array<number>());
-  // const [images, setImages] = useState<File[]>([]);
   const [images, setImages] = useState<Imagem[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [oldPreviewImages, setOldPreviewImages] = useState<Array<Imagem>>([]);
   const [imagesToRemove, setImagesToRemove] = useState<Array<number>>([]);
-
+  const [vivenciaCheckBoxes, setVivenviaCheckBoxes] = useState<Array<boolean>>([]);
+  const [temperamentoCheckBoxes, setTemperamentoCheckBoxes] = useState<Array<boolean>>([]);
+  const [sociavelCheckBoxes, setSociavelCheckBoxes] = useState<Array<boolean>>([]);
   const navigation =
     useNavigation<
       NativeStackNavigationProp<AuthRoutesParamList, "Cadastro de Animal">
     >();
-
   const route = useRoute();
   const routeParams = route.params as AnimalParams;
 
@@ -188,6 +191,48 @@ function AlterarAnimal() {
     console.log(imagesToRemove, 'images to rmv');
   }
 
+  function toggleVivenciaCheckBox(id: number) {
+    if (!vivenciaCheckBoxes[id]) {
+      const aux = [...selectVives];
+      aux.push(id);
+      setSelectVive(aux);
+    } else {
+      const aux = [...selectVives.filter(item => item != id)];
+      setSelectVive(aux);
+    }
+    const tempCheckboxes = [...vivenciaCheckBoxes];
+    tempCheckboxes[id] = !vivenciaCheckBoxes[id];
+    setVivenviaCheckBoxes(tempCheckboxes);
+  }
+
+  function toggleTemperamentoCheckBox(id: number) {
+    if (!temperamentoCheckBoxes[id]) {
+      const aux = [...selectTemps];
+      aux.push(id);
+      setSelectTemp(aux);
+    } else {
+      const aux = [...selectTemps.filter(item => item != id)];
+      setSelectTemp(aux);
+    }
+    const tempCheckboxes = [...temperamentoCheckBoxes];
+    tempCheckboxes[id] = !temperamentoCheckBoxes[id];
+    setTemperamentoCheckBoxes(tempCheckboxes);
+  }
+
+  function toggleSociavelCheckBox(id: number) {
+    if (!sociavelCheckBoxes[id]) {
+      const aux = [...selectSocis];
+      aux.push(id);
+      setSelectSoci(aux);
+    } else {
+      const aux = [...selectSocis.filter(item => item != id)];
+      setSelectSoci(aux);
+    }
+    const tempCheckboxes = [...sociavelCheckBoxes];
+    tempCheckboxes[id] = !sociavelCheckBoxes[id];
+    setSociavelCheckBoxes(tempCheckboxes);
+  }
+
   useEffect(() => {
     (async () => {
       const animal = await getAnimal(routeParams.animalId);
@@ -195,22 +240,28 @@ function AlterarAnimal() {
       setIdade(animal.idade);
       setCor(animal.cor);
       setCaracteristica(animal.caracteristica_animal);
-      setData(animal.data_nasc);
+      setData_nasc(animal.data_nasc);
       setSexo(String(animal.id_sexo));
       setEspecie(String(animal.id_especie));
       setPorte(String(animal.id_porte));
       setDesaparecido(String(animal.desaparecido));
+      setSelectSoci(animal.sociaveis.map(sociavel => sociavel.id_sociavel));
+      setSelectTemp(animal.temperamentos.map(temperamento => temperamento.id_temperamento));
+      setSelectVive(animal.vivencias.map(vivencia => vivencia.id_vivencia));
 
       const selectedImagesPreview = [...animal.images];
-      console.log(animal.images);
-
       for (const image of animal.images) {
         image.filepath = `http://192.168.1.69:3333/${image.filepath}`;
       }
-
       setOldPreviewImages(selectedImagesPreview);
-    })();
 
+      const temperamento = await getTemperamento();
+      const sociavel = await getSociavel();
+      const vivencia = await getVivencia();
+      setTemperamentos(temperamento);
+      setSociavel(sociavel);
+      setVivencia(vivencia);
+    })();
   }, [route]);
 
   useEffect(() => {
@@ -223,6 +274,24 @@ function AlterarAnimal() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    for (const sociavel of selectSocis) {
+      sociavelCheckBoxes[sociavel] = true;
+    }
+  }, [selectSocis]);
+
+  useEffect(() => {
+    for (const temperamento of selectTemps) {
+      temperamentoCheckBoxes[temperamento] = true;
+    }
+  }, [selectTemps]);
+
+  useEffect(() => {
+    for (const vivencia of selectVives) {
+      vivenciaCheckBoxes[vivencia] = true;
+    }
+  }, [selectVives]);
 
   return (
     <ScrollView style={{ backgroundColor: 'white' }}>
@@ -299,12 +368,12 @@ function AlterarAnimal() {
           </Picker>
         </View>
 
-        <TextInput
-          value={data_nasc}
-          style={styles.input}
-          onChangeText={(e) => setData(e)}
-          placeholder="Data de Nascimento"
-          placeholderTextColor="#575245"></TextInput>
+        <DatePicker
+            startDate={data_nasc}
+            onChange={setData_nasc}
+            label="Data de nascimento"
+            buttonText="Selecione a data de nascimento"
+        />
 
         <Picker
           style={styles.input}
@@ -363,6 +432,55 @@ function AlterarAnimal() {
           placeholder="Características adicionais"
         />
 
+        <Text style={styles.tem}>Temperamento</Text>
+        {temperamentos.map((temperamento, index) => (
+          <View
+            key={index}
+          >
+            <BouncyCheckbox
+              disableBuiltInState
+              isChecked={temperamentoCheckBoxes[temperamento.id_temperamento]}
+              onPress={() => toggleTemperamentoCheckBox(temperamento.id_temperamento)}
+              size={20}
+              style={{ margin: "2%" }}
+              text={temperamento.descricao}
+
+            />
+          </View>
+        ))}
+        <Text style={styles.tem}>Vivencia</Text>
+        {vivencias.map((vivencia, index) => (
+          <View
+            key={index}
+
+          >
+            <BouncyCheckbox
+              disableBuiltInState
+              isChecked={vivenciaCheckBoxes[vivencia.id_vivencia]}
+              onPress={() => toggleVivenciaCheckBox(vivencia.id_vivencia)}
+              size={20}
+              style={{ margin: "2%" }}
+              text={vivencia.descricao}
+            />
+          </View>
+        ))}
+        <Text style={styles.tem}>Sociavel com</Text>
+        {sociaveis.map((sociavel, index) => (
+          <View
+            key={index}
+
+          >
+            <BouncyCheckbox
+              disableBuiltInState
+              isChecked={sociavelCheckBoxes[sociavel.id_sociavel]}
+              onPress={() => toggleSociavelCheckBox(sociavel.id_sociavel)}
+              size={20}
+              style={{ margin: "2%" }}
+              text={sociavel.descricao}
+
+            />
+          </View>
+        ))}
 
         <RectButton onPress={eventoAlterarAnimal} style={styles.botao}>
           <Text>Atualizar</Text>
@@ -384,7 +502,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8f8",
 
   },
-
+  tem: {
+    color: "#575245",
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 17,
+  },
   button: {
     padding: 2,
   },

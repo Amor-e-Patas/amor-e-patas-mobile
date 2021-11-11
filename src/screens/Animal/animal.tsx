@@ -16,14 +16,16 @@ import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
 import { RectButton } from "react-native-gesture-handler";
+import { Button } from "react-native-elements/dist/buttons/Button";
 
 interface NoticiaParams {
   animalId: number;
 }
 
-export default function Home() {
+export default function AnimalHome() {
   const [animal, setAnimal] = useState<Animal>();
   const [showImageModal, setShowImageModal] = useState(false);
+  const [showAdotarModal, setShowAdotarModal] = useState(false);
   const [showExcluirModal, setShowExcluirModal] = useState(false);
   const [modalImagelUrl, setModalImageUrl] = useState("");
   const navigation =
@@ -36,6 +38,7 @@ export default function Home() {
     async function fetchAPI() {
       try {
         const animal = await getAnimal(routeParams.animalId);
+        console.log(animal, 'aniii')
         setAnimal(animal);
       } catch (err) {
         console.log(err);
@@ -63,6 +66,22 @@ export default function Home() {
           marginBottom: "100%",
         }}
       >
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showAdotarModal}
+          onRequestClose={() => {
+            setShowAdotarModal(!showAdotarModal);
+          }}
+        >
+          <View style={styles.centeredView}>
+          <Text>Dados do anunciante</Text>
+          <Text>{animal?.nome_usu}</Text>
+          <Text>{animal?.num_telefone}</Text>
+          <Text>{animal?.cidade} - {animal?.estado}</Text>
+          </View>
+        </Modal>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -94,20 +113,21 @@ export default function Home() {
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+              uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
             }}
           ></Image>
 
-          {animal?.images.map((image) => (
+          {animal?.images.map((image, index) => (
             <Pressable
+              key={index}
               onPress={() =>
-                abrirModalImagem(`http://192.168.1.64:3333/${image.filepath}`)
+                abrirModalImagem(`http://192.168.1.69:3333/${image.filepath}`)
               }
             >
               <Image
                 style={styles.previewImage}
                 source={{
-                  uri: `http://192.168.1.64:3333/${image.filepath}`,
+                  uri: `http://192.168.1.69:3333/${image.filepath}`,
                 }}
               ></Image>
             </Pressable>
@@ -125,6 +145,15 @@ export default function Home() {
           >
             {animal?.nome_ani}
           </Text>
+          <Text>{animal?.nome_esp}</Text>
+          <Text>{animal?.idade}</Text>
+          <Text>{animal?.tipo_sexo}</Text>
+          <Text>Localizado em {animal?.cidade} - {animal?.estado}</Text>
+          <RectButton onPress={() => setShowAdotarModal(true)}><Text>Quero adotar</Text></RectButton>
+          <Text>{animal?.caracteristica_animal}</Text>
+          {animal?.temperamentos.map((temperamento, index) => <Text key={index}>{temperamento.descricao}</Text>)}
+          {animal?.sociaveis.map((sociavel, index) => <Text key={index}>{sociavel.descricao}</Text>)}
+          {animal?.vivencias.map((vivencia, index) => <Text key={index}>{vivencia.descricao}</Text>)}
         </View>
       </View>
     </ScrollView>
@@ -145,7 +174,13 @@ const styles = StyleSheet.create({
     height: 350,
     resizeMode: "stretch",
   },
-  
+
+  stretch2: {
+    width: 380,
+    height: 350,
+    resizeMode: "stretch",
+  },
+
   previewImage: {
     width: 70,
     height: 70,

@@ -1,7 +1,9 @@
 
 import axios, { authenticatedAPI } from "./services";
 import { Imagem } from "./img_animal";
-
+import { Sociavel } from "./sociavel";
+import { Temperamento } from "./temperamento";
+import { Vivencia } from "./vivencia";
 export interface Animal {
     id_animal: number
     nome_ani: string,
@@ -16,9 +18,15 @@ export interface Animal {
     id_sexo: number,
     id_status: number,
     images: Array<Imagem>,
-    temperamentos: Array<Number>,
-    sociaveis: Array<Number>,
-    vivencias: Array<Number>,
+    temperamentos: Array<Temperamento>,
+    sociaveis: Array<Sociavel>,
+    vivencias: Array<Vivencia>,
+    nome_esp: string,
+    tipo_sexo: string,
+    cidade: string,
+    estado: string,
+    nome_usu: string,
+    num_telefone: string,
 }
 
 export async function criarAnimal(nome_ani: string,

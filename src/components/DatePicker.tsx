@@ -3,13 +3,14 @@ import { View, Platform, Button, Text } from "react-native";
 import moment from "moment";
 import DateTimePicker from "@react-native-community/datetimepicker";
 interface DatePickerProps {
+  startDate?: string;
   onChange: (value: string) => void;
   label: string;
   buttonText: string;
 }
 import { RectButton } from "react-native-gesture-handler";
 
-function DatePicker({ onChange, label, buttonText }: DatePickerProps) {
+function DatePicker({ startDate, onChange, label, buttonText }: DatePickerProps) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [dateNasc, setDataNasc] = useState("");
@@ -18,11 +19,19 @@ function DatePicker({ onChange, label, buttonText }: DatePickerProps) {
     const currentDate = selectedDate || date;
     setOpen(Platform.OS === "ios");
     setDate(currentDate);
-    const dateNasc = moment(date).format("YYYY-MM-DD");
+    const dateNasc = moment(currentDate).format("YYYY-MM-DD");
     onChange(dateNasc);
-    const displayDate = moment(date).format("DD/MM/YYYY");
+    const displayDate = moment(currentDate).format("DD/MM/YYYY");
     setDataNasc(displayDate);
   };
+
+  useEffect(() => {
+    console.log('std', startDate);
+    if (startDate) {
+      const displayDate = moment(startDate, 'YYYY-MM-DD').format("DD/MM/YYYY");
+      setDataNasc(displayDate);
+    }
+  }, [startDate]);
 
   return (
     <View>
@@ -30,10 +39,10 @@ function DatePicker({ onChange, label, buttonText }: DatePickerProps) {
         <Text>{label}</Text>
         <Text>{dateNasc}</Text>
       </View>
-      <View style={{ backgroundColor: "#f8f8f8", width: 310, marginTop:10}}>
+      <View style={{ backgroundColor: "#f8f8f8", width: 310, marginTop: 10 }}>
         <RectButton
           onPress={() => setOpen(true)}
-          >
+        >
           <Text>{buttonText}</Text>
         </RectButton>
       </View>
