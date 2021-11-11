@@ -230,6 +230,7 @@ function Animal() {
         <TextInput
           style={styles.input}
           onChangeText={(e) => setNome(e)}
+          maxLength={30}
           placeholderTextColor="#575245"
           placeholder="Nome"
         />

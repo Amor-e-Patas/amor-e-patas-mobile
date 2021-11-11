@@ -98,11 +98,9 @@ export default function Home() {
               <View
                 style={{
                   height: 200,
-                  width: "45%",
-                  marginBottom: 5,
                   marginLeft: 5,
-                  marginTop: 5,
-                  alignContent: "center",
+                  marginHorizontal: 3,
+                  //alignContent: "center",
                 }}
                 key={index}
               >
@@ -113,7 +111,11 @@ export default function Home() {
                   }}
                 ></Image>
                 <Text
-                  style={{ color: "purple", fontFamily: "Raleway_600SemiBold", textAlign: "right" }}
+                  style={{
+                    color: "purple",
+                    fontFamily: "Raleway_600SemiBold",
+                    textAlign: "center",
+                  }}
                 >
                   {animal.nome_ani}
                 </Text>

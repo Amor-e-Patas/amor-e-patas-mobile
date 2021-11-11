@@ -9,7 +9,12 @@ import {
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import { getAnimais, getAnimaisApro, getAnimaisDesaparecidosAll, Animal } from "../../service/animal";
+import {
+  getAnimais,
+  getAnimaisApro,
+  getAnimaisDesaparecidosAll,
+  Animal,
+} from "../../service/animal";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
@@ -17,7 +22,6 @@ import { BackgroundImage } from "react-native-elements/dist/config";
 import { RectButton } from "react-native-gesture-handler";
 import { Card, ListItem, Button, Icon } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
-
 
 export default function Desaparecidos() {
   const [images, setImages] = useState<File[]>([]);
@@ -84,7 +88,6 @@ export default function Desaparecidos() {
               <View
                 style={{
                   height: 200,
-                  width: "45%",
                   marginBottom: 5,
                   marginLeft: 5,
                   marginTop: 5,
@@ -99,7 +102,11 @@ export default function Desaparecidos() {
                   }}
                 ></Image>
                 <Text
-                  style={{ color: "purple", fontFamily: "Raleway_600SemiBold", textAlign: "right" }}
+                  style={{
+                    color: "purple",
+                    fontFamily: "Raleway_600SemiBold",
+                    textAlign: "center",
+                  }}
                 >
                   {animal.nome_ani}
                 </Text>

@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Pressable,
   ImageBackground,
-  Platform
+  Platform,
 } from "react-native";
 import {
   formata_CPF,
@@ -23,7 +23,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/core";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import DatePicker from '../../components/DatePicker';
+import DatePicker from "../../components/DatePicker";
 
 interface Endereco {
   logradouro: string;
@@ -52,7 +52,9 @@ export default function SignUp() {
   const [termosVenda, setTermosVenda] = useState(false);
 
   const navigation =
-    useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Cadastre-se">>();
+    useNavigation<
+      NativeStackNavigationProp<AuthRoutesParamList, "Cadastre-se">
+    >();
 
   useEffect(() => {
     async function buscarEndereco() {
@@ -197,21 +199,9 @@ export default function SignUp() {
         style={{
           alignItems: "center",
           justifyContent: "center",
-          marginTop: "5%"
-
+          marginTop: "5%",
         }}
       >
-        <Text
-          style={{
-            alignItems: "center",
-            color: "#FFB800",
-            fontSize: 20,
-            margin: "1%",
-          }}
-        >
-          Cadastro de Usuário
-        </Text>
-
         <TextInput
           style={styles.input}
           autoCapitalize="words"
@@ -219,9 +209,25 @@ export default function SignUp() {
           placeholderTextColor="#575245"
           onChangeText={(text) => setNome(text)}
         />
-
-        <DatePicker onChange={setDatanasc} label="Data de nascimento" buttonText="Selecione a data de nascimento" />
-
+        <View
+          style={{
+            alignSelf: "stretch",
+            backgroundColor: "#f8f8f8",
+            borderBottomColor: "#f8f8f8",
+            borderBottomWidth: 1,
+            borderRadius: 6,
+            padding: 10,
+            width: "90%",
+            marginLeft: "5%",
+            marginTop: "2%",
+          }}
+        >
+          <DatePicker
+            onChange={setDatanasc}
+            label="Data de nascimento"
+            buttonText="Selecione a data de nascimento"
+          />
+        </View>
         <TextInput
           style={styles.input}
           placeholder="CPF"
@@ -251,6 +257,7 @@ export default function SignUp() {
           placeholderTextColor="#575245"
           keyboardType="decimal-pad"
           value={celular}
+          maxLength={15}
           onChangeText={(text) => setCelular(formata_telefone(text, text))}
         />
 
@@ -379,16 +386,19 @@ export default function SignUp() {
           size={20}
           style={{ margin: "2%" }}
           text="Li e aceito os termos"
-          onPress={(isChecked: boolean) => { setTermos(isChecked) }}
+          onPress={(isChecked: boolean) => {
+            setTermos(isChecked);
+          }}
         />
 
         <BouncyCheckbox
           size={20}
           style={{ margin: "2%" }}
           text="Não permitimos a venda de animais através do site."
-          onPress={(isChecked: boolean) => { setTermosVenda(isChecked) }}
+          onPress={(isChecked: boolean) => {
+            setTermosVenda(isChecked);
+          }}
         />
-
 
         <Pressable onPress={eventoCriarUsuario} style={styles.botao}>
           <Text>Cadastrar</Text>

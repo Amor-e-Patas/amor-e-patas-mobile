@@ -70,7 +70,6 @@ export default function Home() {
               <View
                 style={{
                   height: 200,
-                  width: "45%",
                   marginBottom: 5,
                   marginLeft: 5,
                   marginTop: 5,
@@ -88,7 +87,7 @@ export default function Home() {
                   style={{
                     color: "purple",
                     fontFamily: "Raleway_600SemiBold",
-                    textAlign: "right",
+                    textAlign: "center",
                   }}
                 >
                   {animal.nome_ani}

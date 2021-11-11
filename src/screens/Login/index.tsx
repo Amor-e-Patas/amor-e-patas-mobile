@@ -17,7 +17,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fontFamily } from "../../constants/theme";
 import { AuthContext } from "../../contexts/auth";
 
-
 interface Login {
   accessToken: string;
 }
@@ -28,7 +27,7 @@ function Login() {
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Login">>();
   const { sincronizarUsuario } = useContext(AuthContext);
-  const [hidePassword, setHidePassword] = useState(true)
+  const [hidePassword, setHidePassword] = useState(true);
 
   async function handleLogin() {
     if (email == "" || password == "") {
@@ -65,6 +64,8 @@ function Login() {
         Login
       </Text>
       <TextInput
+        textContentType="emailAddress"
+        keyboardType="email-address"
         style={styles.input}
         onChangeText={(e) => setEmail(e)}
         placeholder="E-mail"
@@ -97,7 +98,6 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "black",
     borderRadius: 7,
-
   },
 
   button: {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 
   cad: {
     color: "#890620",
-    padding: 2
+    padding: 2,
   },
 
   botao: {
