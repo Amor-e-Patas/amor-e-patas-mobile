@@ -38,7 +38,7 @@ export default function AlterarNoticia() {
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [oldPreviewImages, setOldPreviewImages] = useState<string[]>([]);
     const [removeOldImage, setRemoveOldImage] = useState(false);
-    const [checkedCheckBox, setCheckedCheckBox] = useState<Array<boolean>>([]);
+    const [checkBoxes, setCheckBoxes] = useState<Array<boolean>>([]);
     const navigation =
         useNavigation<
             NativeStackNavigationProp<AuthRoutesParamList, "Cadastrar Notícia">
@@ -98,7 +98,7 @@ export default function AlterarNoticia() {
 
     useEffect(() => {
         for (const selectedAssunto of selectAssuntos) {
-            checkedCheckBox[selectedAssunto] = true;
+            checkBoxes[selectedAssunto] = true;
         }
     }, [selectAssuntos]);
 
@@ -134,6 +134,14 @@ export default function AlterarNoticia() {
             alert("Preencha o título.");
             return;
         }
+
+        if (removeOldImage){
+            if(images.length !== 1){
+                alert("Adicione pelo menos uma imagem");
+                return;
+            }
+        }
+        
         try {
 
             await alterarPost(routeParams.noticiaId,
@@ -147,9 +155,7 @@ export default function AlterarNoticia() {
 
             await criarImgPost(images, String(routeParams.noticiaId));
             alert("Noticia atualizada");
-            navigation.navigate("Noticia", {
-                noticiaId: routeParams.noticiaId,
-            });
+            navigation.navigate("Noticias cadastradas");
         } catch (error) {
             console.log(error);
             alert("Erro ao criar post.");
@@ -175,11 +181,22 @@ export default function AlterarNoticia() {
         setRemoveOldImage(true);
     }
 
-    function checkAssunto(id: number){
-        console.log(selectAssuntos.some(selectedAssunto => selectedAssunto === id))
-        return selectAssuntos.some(selectedAssunto => selectedAssunto === id);
+    function toggleCheckBox(id: number){
+        if (!checkBoxes[id]) {
+            const aux = [...selectAssuntos];
+            aux.push(id);
+            setSelectAssuntos(aux);
+            console.log(aux, '1');
+        } else {
+            const aux = [...selectAssuntos.filter(item => item != id)];
+            console.log(aux, '2');
+            setSelectAssuntos(aux);
+        }
+        const tempCheckboxes = [...checkBoxes];
+        tempCheckboxes[id] = !checkBoxes[id];
+        setCheckBoxes(tempCheckboxes);
     }
-    let bouncyCheckboxRef: BouncyCheckbox | null = null;
+
     return (
         <ScrollView style={{ backgroundColor: "white" }}>
             <View
@@ -273,24 +290,12 @@ export default function AlterarNoticia() {
                                 alignContent: 'flex-end'
                             }}
                         >
-
                             <BouncyCheckbox size={20}
                                 style={{ margin: "2%" }}
                                 text={assunto.nome_ass}
-                                isChecked={selectAssuntos.some(selectedAssunto => selectedAssunto === assunto.id_assunto)}
-                                ref={(ref: any) => (bouncyCheckboxRef = ref)}
-                                onPress={(isChecked: boolean) => {
-                                    if (isChecked) {
-                                        const aux = [...selectAssuntos];
-                                        aux.push(assunto.id_assunto);
-                                        setSelectAssuntos(aux);
-                                        console.log(aux, '1');
-                                    } else {
-                                        const aux = [...selectAssuntos.filter(item => item != assunto.id_assunto)];
-                                        console.log(aux, '2');
-                                        setSelectAssuntos(aux);
-                                    }
-                                }}
+                                disableBuiltInState
+                                isChecked={checkBoxes[assunto.id_assunto]}
+                                onPress={() => toggleCheckBox(assunto.id_assunto)}
                             />
                         </View>
                     ))}
