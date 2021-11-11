@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
     height: 200,
     maxHeight: 200,
     marginBottom: "4%",
+    maxWidth: 400,
   },
 
   corpo: {

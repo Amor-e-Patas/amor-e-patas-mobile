@@ -27,6 +27,7 @@ import Analise from "../screens/Animal/analise";
 import MeuPerfil from "../screens/User/meuperfil";
 import MeusAnimaisDesaparecidos from "../screens/Animal/meusanimaisdesaparecidos";
 import MenuAnimais from "../screens/Animal/menu";
+import MenuNoticias from "../screens/Noticia/menu";
 
 export type AuthRoutesParamList = {
   "Cadastre-se": undefined;
@@ -65,6 +66,7 @@ export type AuthRoutesParamList = {
   Navigator: undefined;
   "Meu perfil": undefined;
   "Menu animais": undefined;
+  "Menu noticias": undefined;
 };
 
 const Drawer = createDrawerNavigator<AuthRoutesParamList>();
@@ -85,10 +87,18 @@ function AuthRoutes() {
         <>
           <AuthStack.Screen name="Animal" component={Animal} />
           <AuthStack.Screen name="Meu animal" component={MeuAnimal} />
+          <AuthStack.Screen
+            name="Noticias cadastradas"
+            component={NoticiasAdm}
+          />
+          <AuthStack.Screen name="Cadastrar Notícia" component={Post} />
           <AuthStack.Screen name="Alterar animal" component={AlterarAnimal} />
           <AuthStack.Screen name="Noticia" component={Noticia} />
           <AuthStack.Screen name="Meus animais" component={MeusAnimais} />
-          <AuthStack.Screen name="Meus animais desaparecidos" component={MeusAnimaisDesaparecidos}/>
+          <AuthStack.Screen
+            name="Meus animais desaparecidos"
+            component={MeusAnimaisDesaparecidos}
+          />
           <AuthStack.Screen name="Alterar usuário" component={AlterarUser} />
           <AuthStack.Screen name="Alterar login" component={AlterarLogin} />
           <AuthStack.Screen
@@ -135,19 +145,11 @@ export function MyDrawer() {
           <Drawer.Screen name="Blog" component={Noticias} />
           <Drawer.Screen name="Meu perfil" component={MeuPerfil} />
           <Drawer.Screen name="Menu animais" component={MenuAnimais} />
-          <Drawer.Screen name="Cadastro de Animal" component={CriarAnimal} />
           {isAdm ? (
             <>
-              <Drawer.Screen
-                name="Noticias cadastradas"
-                component={NoticiasAdm}
-              />
-              <Drawer.Screen name="Cadastrar Notícia" component={Post} />
+              <Drawer.Screen name="Menu noticias" component={MenuNoticias} />
               <Drawer.Screen name="Analise de animal" component={Analise} />
-              <Drawer.Screen
-                name="Analise de animal desaparecido"
-                component={AnaliseAnimalDesaparecidos}
-              />
+              <Drawer.Screen name="Analise de animal desaparecido"component={AnaliseAnimalDesaparecidos}/>
             </>
           ) : (
             <></>

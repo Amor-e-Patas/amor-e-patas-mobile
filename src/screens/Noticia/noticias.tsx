@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     margin: "2%",
   },
   stretch: {
+    width: 400,
     maxWidth: 400,
     height: 200,
   },
