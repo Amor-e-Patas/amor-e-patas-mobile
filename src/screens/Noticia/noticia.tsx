@@ -98,7 +98,7 @@ export default function Post() {
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.64:3333/${noticia?.images[0].filepath}`,
+              uri: `http://192.168.1.69:3333/${noticia?.images[0].filepath}`,
             }}
           ></Image>
         </View>
@@ -114,8 +114,8 @@ export default function Post() {
             {noticia?.autor} | {noticia?.data}
           </Text>
 
-          {noticia?.assuntos.map((assunto) => (
-            <Text style={styles.autor2}>{assunto.nome_ass}</Text>
+          {noticia?.assuntos.map((assunto, index) => (
+            <Text key={index} style={styles.autor2}>{assunto.nome_ass}</Text>
           ))}
           <Text style={styles.titulo}>{noticia?.titulo}</Text>
           <RenderHtml
@@ -167,8 +167,8 @@ export default function Post() {
             padding: 20
           }}
         >
-          {comentarios.map((comentario) => (
-            <>
+          {comentarios.map((comentario, index) => (
+            <View key={index}>
               <Text
                 style={{
                   fontFamily: "Raleway_600SemiBold",
@@ -198,7 +198,7 @@ export default function Post() {
                 setDeleteComentarioId(comentario.id_comentario);
                 setShowDeleteComentario(true);
               }}><Text>Deletar comentário</Text></RectButton> : <></>}
-            </>
+            </View>
           ))}
         </View>
       </View>
