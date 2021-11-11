@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Image, StyleSheet, ScrollView, Button, Modal, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Button,
+  Modal,
+  Pressable,
+} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimais, Animal } from "../../service/animal";
@@ -32,7 +41,7 @@ interface Comentario {
 export default function Post() {
   const [noticia, setNoticia] = useState<Noticia>();
   const [comentarios, setComentarios] = useState(Array<Comentario>());
-  const [novoComentario, setNovoComentario] = useState('');
+  const [novoComentario, setNovoComentario] = useState("");
   const [showDeleteComentario, setShowDeleteComentario] = useState(false);
   const [deleteComentarioId, setDeleteComentarioId] = useState(0);
   const route = useRoute();
@@ -43,9 +52,18 @@ export default function Post() {
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
 
   async function addComentario() {
-    await criarComentario(novoComentario, moment().format('YYYY-MM-DD'), 0, routeParams.noticiaId);
+    if (novoComentario == "") {
+      alert("Escreva um comentário.");
+      return;
+    }
+    await criarComentario(
+      novoComentario,
+      moment().format("YYYY-MM-DD"),
+      0,
+      routeParams.noticiaId
+    );
     await fetchComentarios();
-    setNovoComentario('');
+    setNovoComentario("");
   }
   async function fetchComentarios() {
     const comentario = await getComentarios(routeParams.noticiaId);
@@ -62,7 +80,7 @@ export default function Post() {
     async function fetchAPI() {
       try {
         const noticia = await getPost(routeParams.noticiaId);
-        noticia.data = moment(noticia.data, 'YYYY-MM-DD').format('DD/MM/YYYY');
+        noticia.data = moment(noticia.data, "YYYY-MM-DD").format("DD/MM/YYYY");
         setNoticia(noticia);
         await fetchComentarios();
       } catch (err) {
@@ -81,7 +99,7 @@ export default function Post() {
       <View
         style={{
           backgroundColor: "white",
-          marginBottom: "auto",
+          marginBottom: "5%",
         }}
       >
         <View>
@@ -91,14 +109,23 @@ export default function Post() {
             visible={showDeleteComentario}
           >
             <View style={styles.centeredView}>
-              <Pressable onPress={handleDeleteComentario}><Text>Sim</Text></Pressable>
-              <Pressable onPress={() => { setShowDeleteComentario(false) }}><Text>Não</Text></Pressable>
+              <Text style={styles.rText2}>Deseja realmente excluir?</Text>
+              <Pressable onPress={handleDeleteComentario}>
+                <Text style={styles.rText2}>Sim</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setShowDeleteComentario(false);
+                }}
+              >
+                <Text style={styles.rText2}>Não</Text>
+              </Pressable>
             </View>
           </Modal>
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.69:3333/${noticia?.images[0].filepath}`,
+              uri: `http://192.168.1.64:3333/${noticia?.images[0].filepath}`,
             }}
           ></Image>
         </View>
@@ -115,92 +142,136 @@ export default function Post() {
           </Text>
 
           {noticia?.assuntos.map((assunto, index) => (
-            <Text key={index} style={styles.autor2}>{assunto.nome_ass}</Text>
+            <Text key={index} style={styles.autor2}>
+              {assunto.nome_ass}
+            </Text>
           ))}
           <Text style={styles.titulo}>{noticia?.titulo}</Text>
+
           <RenderHtml
             contentWidth={width}
             source={{ html: noticia?.corpo || "" }}
           />
         </View>
-        <Hr />
+      </View>
+      <Hr />
 
-        <View
+      <View
+        style={{
+          backgroundColor: "white",
+          marginTop: "5%",
+          alignContent: "center",
+          marginLeft: "5%",
+          marginRight: "5%",
+        }}
+      >
+        <TextInput
+          value={novoComentario}
+          multiline={true}
+          numberOfLines={4}
+          placeholderTextColor="#575245"
           style={{
-            backgroundColor: "white",
+            height: 100,
+            textAlignVertical: "top",
+            width: "100%",
             marginTop: "5%",
-            alignContent: "center",
-            marginLeft: "5%",
-            marginRight: "5%",
+            borderWidth: 1,
+            padding: 5,
+            color: "black",
+            borderRadius: 2,
+            backgroundColor: "#f8f8f8",
           }}
-        >
-          <TextInput
-            value={novoComentario}
-            multiline={true}
-            numberOfLines={4}
-            placeholderTextColor="#575245"
+          onChangeText={setNovoComentario}
+          placeholder="Adicionar um comentário..."
+        />
+        <RectButton onPress={addComentario}>
+          <Text
             style={{
-              height: 100,
-              textAlignVertical: "top",
-              width: "100%",
-              marginTop: "5%",
-              borderWidth: 1,
-              padding: 5,
+              fontFamily: "Raleway_600SemiBold",
+              fontSize: 14,
+              marginLeft: "10%",
+              textAlign: "right",
               color: "black",
-              borderRadius: 2,
-              backgroundColor: "#f8f8f8",
             }}
-            onChangeText={setNovoComentario}
-            placeholder="Adicionar um comentário..."
-          />
-          <RectButton onPress={addComentario}><Text>Adicionar comentário</Text></RectButton>
-        </View>
+          >
+            Adicionar comentário
+          </Text>
+        </RectButton>
+      </View>
 
-        <View
-          style={{
-            backgroundColor: "white",
-            marginTop: "10%",
-            alignContent: "center",
-            marginLeft: "5%",
-            marginRight: "5%",
-            borderWidth: 0.2,
-            padding: 20
-          }}
-        >
-          {comentarios.map((comentario, index) => (
-            <View key={index}>
-              <Text
-                style={{
-                  fontFamily: "Raleway_600SemiBold",
-                  fontSize: 12,
-                  margin: "2%",
-                  textAlign: "left",
-                  color: "purple"
-                }}
-              >
-                {comentario.nome_usu}
-              </Text>
-              <Text style={{
+      <View style={{ marginTop: "7%" }}>
+        {comentarios.map((comentario, index) => (
+          <View
+            key={index}
+            style={{
+              backgroundColor: "white",
+              marginTop: 5,
+              alignContent: "center",
+              marginLeft: "5%",
+              marginRight: "5%",
+              borderWidth: 0.2,
+              padding: 20,
+              marginBottom: 5,
+            }}
+          >
+            <Text
+              style={{
                 fontFamily: "Raleway_600SemiBold",
                 fontSize: 12,
                 margin: "2%",
                 textAlign: "left",
-                color: "#737373"
-              }}>{moment(comentario.data).format("DD/MM/YYYY")}</Text>
-              <Text style={{
+                color: "purple",
+              }}
+            >
+              {comentario.nome_usu}
+            </Text>
+            <Text
+              style={{
+                fontFamily: "Raleway_600SemiBold",
+                fontSize: 12,
+                margin: "2%",
+                textAlign: "left",
+                color: "#737373",
+              }}
+            >
+              {moment(comentario.data).format("DD/MM/YYYY")}
+            </Text>
+            <Text
+              style={{
                 fontFamily: "Raleway_600SemiBold",
                 fontSize: 12,
                 marginLeft: "10%",
                 textAlign: "left",
-                color: "black"
-              }}>{comentario.texto}</Text>
-              {(id_usuario === comentario.id_usuario || isAdm) ? <RectButton onPress={() => {
-                setDeleteComentarioId(comentario.id_comentario);
-                setShowDeleteComentario(true);
-              }}><Text>Deletar comentário</Text></RectButton> : <></>}
-            </View>
-          ))}
-        </View>
+                color: "black",
+              }}
+            >
+              {comentario.texto}
+            </Text>
+
+            {id_usuario === comentario.id_usuario || isAdm ? (
+              <RectButton
+                onPress={() => {
+                  setDeleteComentarioId(comentario.id_comentario);
+                  setShowDeleteComentario(true);
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Raleway_600SemiBold",
+                    fontSize: 13,
+                    marginLeft: "10%",
+                    textAlign: "right",
+                    color: "#737373",
+                  }}
+                >
+                  Excluir
+                </Text>
+              </RectButton>
+            ) : (
+              <></>
+            )}
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
@@ -211,7 +282,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    backgroundColor: "white",
+    flexDirection: "row",
   },
   titulo: {
     fontFamily: "Raleway_600SemiBold",
@@ -254,5 +326,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "black",
     textAlign: "left",
+  },
+  rText2: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 17,
+    margin: "2%",
+    textAlign: "center",
   },
 });

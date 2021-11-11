@@ -53,18 +53,10 @@ export default function Noticias() {
           marginBottom: "auto",
         }}
       >
-        <Text
-          style={{
-            alignItems: "center",
-            color: "#FFB800",
-            fontSize: 25,
-            marginTop: 10,
-            marginBottom: 15,
-          }}
-        >
-          Blog
-        </Text>
-        <View>
+        
+        <View  style={{
+          marginTop:"10%",
+        }}>
           {noticias.map((noticia, index) => (
             <RectButton
               key={index}
@@ -102,9 +94,10 @@ const styles = StyleSheet.create({
     margin: "2%",
   },
   stretch: {
-    width: 400,
+    width: 370,
     maxWidth: 400,
     height: 200,
+    marginHorizontal:10
   },
   frase: {
     fontFamily: "Raleway_600SemiBold",

@@ -91,7 +91,7 @@ export default function NoticiasAdm() {
         style={{
           alignItems: "center",
           backgroundColor: "white",
-          marginBottom: "auto",
+          marginVertical:"10%"
         }}
       >
         <View>
@@ -162,9 +162,10 @@ const styles = StyleSheet.create({
     margin: "2%",
   },
   stretch: {
-    width: 400,
+    width: 370,
     maxWidth: 400,
     height: 200,
+    marginHorizontal:10
   },
   frase: {
     fontFamily: "Raleway_600SemiBold",

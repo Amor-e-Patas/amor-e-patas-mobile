@@ -119,7 +119,7 @@ export default function Post() {
       console.log(id_post, "possst");
       console.log(images, "imagenss");
       await criarImgPost(images, String(id_post));
-      alert("Post criado ;)");
+      alert("Notícia cadastrada com sucesso.");
       navigation.navigate("Noticias cadastradas");
     } catch (error) {
       console.log(error);
