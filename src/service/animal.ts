@@ -4,6 +4,7 @@ import { Imagem } from "./img_animal";
 import { Sociavel } from "./sociavel";
 import { Temperamento } from "./temperamento";
 import { Vivencia } from "./vivencia";
+
 export interface Animal {
     id_animal: number
     nome_ani: string,
@@ -113,9 +114,18 @@ export async function getAnimaisDesaparecidosAnalise() {
     }
 }
 
+export async function getAnimaisDesaparecidosAnalise2() {
+    try {
+        const response = await authenticatedAPI.get<Array<Animal>>(`/anianalisedesaparecidos2`);
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
 export async function getAnimaisDesaparecidosReprovados() {
     try {
-        const response = await authenticatedAPI.get(`/animalreprovdesa`);
+        const response = await authenticatedAPI.get<Array<Animal>>(`/animalreprovdesa`);
         return response.data;
     } catch (err) {
         throw err;
@@ -151,7 +161,7 @@ export async function getAnimalIndex(id_animal: number) {
 
 export async function getAnimaisNegados() {
     try {
-        const response = await authenticatedAPI.get(`/animaisnegados`);
+        const response = await authenticatedAPI.get<Array<Animal>>(`/animaisnegados`);
         return response.data;
     } catch (err) {
         throw err;
@@ -228,6 +238,15 @@ export async function alterarAnimal(
 export async function getAniTemperamentos() {
     try {
         const response = await authenticatedAPI.get(`/anitemps/11`);
+        return response.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function getAnimaisEmAnalise2() {
+    try {
+        const response = await authenticatedAPI.get<Array<Animal>>(`/animaisanalise2`);
         return response.data;
     } catch (err) {
         throw err;
