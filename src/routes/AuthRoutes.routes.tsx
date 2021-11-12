@@ -28,6 +28,10 @@ import MeuPerfil from "../screens/User/meuperfil";
 import MeusAnimaisDesaparecidos from "../screens/Animal/meusanimaisdesaparecidos";
 import MenuAnimais from "../screens/Animal/menu";
 import MenuNoticias from "../screens/Noticia/menu";
+import AnimaisNaoAprovados from "../screens/Animal/meusanimaisnaoaprovados";
+import MeusAnimaisEmAnalise from "../screens/Animal/meusanimaisemanalise";
+import MeusAnimaisDesaparecidosEmAnalise from "../screens/Animal/meusanimaisdesaparecidosemanalise";
+import MeusAnimaisDesaparecidosNaoAprovados from "../screens/Animal/meusanimaisdesaparecidosnaoaprovados";
 
 export type AuthRoutesParamList = {
   "Cadastre-se": undefined;
@@ -67,6 +71,10 @@ export type AuthRoutesParamList = {
   "Meu perfil": undefined;
   "Menu animais": undefined;
   "Menu noticias": undefined;
+  "Meus animais não aprovados": undefined;
+  "Meus animais em analise": undefined;
+  "Meus animais desaparecidos em analise": undefined;
+  "Meus animais desaparecidos não aprovados": undefined;
 };
 
 const Drawer = createDrawerNavigator<AuthRoutesParamList>();
@@ -98,6 +106,11 @@ function AuthRoutes() {
           <AuthStack.Screen name="Alterar endereço" component={AlterarEndereco}/>
           <AuthStack.Screen name="Alterar telefone" component={AlterarTelefone}/>
           <AuthStack.Screen name="Cadastro de Animal" component={CriarAnimal} />
+          <AuthStack.Screen name="Meus animais em analise" component={MeusAnimaisEmAnalise} />
+          <AuthStack.Screen name="Meus animais não aprovados" component={AnimaisNaoAprovados}/>
+          <AuthStack.Screen name="Meus animais desaparecidos não aprovados" component={MeusAnimaisDesaparecidosNaoAprovados} />
+          <AuthStack.Screen name="Meus animais desaparecidos em analise" component={MeusAnimaisDesaparecidosEmAnalise} />
+          <AuthStack.Screen name="Analise de animal" component={Analise} />
           {isAdm ? (
             <>
               <AuthStack.Screen
@@ -137,7 +150,6 @@ export function MyDrawer() {
           {isAdm ? (
             <>
               <Drawer.Screen name="Menu noticias" component={MenuNoticias} />
-              <Drawer.Screen name="Analise de animal" component={Analise} />
               <Drawer.Screen name="Analise de animal desaparecido"component={AnaliseAnimalDesaparecidos}/>
             </>
           ) : (
