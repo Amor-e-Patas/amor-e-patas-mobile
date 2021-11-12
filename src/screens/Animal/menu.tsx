@@ -56,7 +56,7 @@ export default function MenuAnimais() {
           </View>
 
           <View style={styles.cards}>
-            <RectButton onPress={() => navigation.navigate("Alterar endereço")}>
+          <RectButton onPress={() => navigation.navigate("Meus animais em analise")}>
               <Image
                 style={styles.stretch}
                 source={require("../../../assets/analise.png")}
@@ -84,6 +84,46 @@ export default function MenuAnimais() {
                 source={require("../../../assets/desaparecidos.png")}
               ></Image>
               <Text style={styles.text}>Meus animais desaparecidos</Text>
+            </RectButton>
+          </View>
+
+          <View style={styles.cards}>
+            <RectButton onPress={() => navigation.navigate("Meus animais não aprovados")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/animais.png")}
+              ></Image>
+              <Text style={styles.text}>Meus animais não aprovados</Text>
+            </RectButton>
+          </View>
+
+          <View style={styles.cards}>
+            <RectButton onPress={() => navigation.navigate("Meus animais em analise")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/animais.png")}
+              ></Image>
+              <Text style={styles.text}>Meus animais em analise</Text>
+            </RectButton>
+          </View>
+
+          <View style={styles.cards}>
+            <RectButton onPress={() => navigation.navigate("Meus animais desaparecidos em analise")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/animais.png")}
+              ></Image>
+              <Text style={styles.text}>Meus animais desaparecidos em analise</Text>
+            </RectButton>
+          </View>
+
+          <View style={styles.cards}>
+            <RectButton onPress={() => navigation.navigate("Meus animais desaparecidos não aprovados")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/animais.png")}
+              ></Image>
+              <Text style={styles.text}>Meus animais desaparecidos não aprovados</Text>
             </RectButton>
           </View>
         </View>
