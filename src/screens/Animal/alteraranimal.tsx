@@ -8,9 +8,9 @@ import {
   Pressable,
   ImageBackground,
   Image,
-  Platform
+  Platform,
 } from "react-native";
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import { Link, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -24,11 +24,9 @@ import { fontFamily } from "../../constants/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { getAnimal, Animal } from "../../service/animal";
-import {
-  Imagem
-} from "../../service/img_animal";
+import { Imagem } from "../../service/img_animal";
 import { getTemperamento, Temperamento } from "../../service/temperamento";
 import { getSociavel, Sociavel } from "../../service/sociavel";
 import { getVivencia, Vivencia } from "../../service/vivencia";
@@ -50,7 +48,7 @@ interface Vive {
 }
 
 interface AnimalParams {
-  animalId: number
+  animalId: number;
 }
 
 function AlterarAnimal() {
@@ -75,9 +73,15 @@ function AlterarAnimal() {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [oldPreviewImages, setOldPreviewImages] = useState<Array<Imagem>>([]);
   const [imagesToRemove, setImagesToRemove] = useState<Array<number>>([]);
-  const [vivenciaCheckBoxes, setVivenviaCheckBoxes] = useState<Array<boolean>>([]);
-  const [temperamentoCheckBoxes, setTemperamentoCheckBoxes] = useState<Array<boolean>>([]);
-  const [sociavelCheckBoxes, setSociavelCheckBoxes] = useState<Array<boolean>>([]);
+  const [vivenciaCheckBoxes, setVivenviaCheckBoxes] = useState<Array<boolean>>(
+    []
+  );
+  const [temperamentoCheckBoxes, setTemperamentoCheckBoxes] = useState<
+    Array<boolean>
+  >([]);
+  const [sociavelCheckBoxes, setSociavelCheckBoxes] = useState<Array<boolean>>(
+    []
+  );
   const navigation =
     useNavigation<
       NativeStackNavigationProp<AuthRoutesParamList, "Cadastro de Animal">
@@ -85,10 +89,12 @@ function AlterarAnimal() {
   const route = useRoute();
   const routeParams = route.params as AnimalParams;
 
-  const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
+  const handleImagePicked = async (
+    pickerResult: ImagePicker.ImagePickerResult
+  ) => {
     try {
       if (pickerResult.cancelled) {
-        alert('Upload cancelled');
+        alert("Upload cancelled");
         return;
       } else {
         setPreviewImages([...previewImages, pickerResult.uri as any]);
@@ -96,7 +102,7 @@ function AlterarAnimal() {
       }
     } catch (e) {
       console.log(e);
-      alert('Upload failed');
+      alert("Upload failed");
     }
   };
 
@@ -107,8 +113,8 @@ function AlterarAnimal() {
       aspect: [1, 1],
       quality: 1,
     });
-    handleImagePicked(result)
-  }
+    handleImagePicked(result);
+  };
 
   async function eventoAlterarAnimal() {
     if (nome_ani == "") {
@@ -136,7 +142,10 @@ function AlterarAnimal() {
       return;
     }
 
-    if ((images.length + oldPreviewImages.length) < 1 || (images.length + oldPreviewImages.length) > 5) {
+    if (
+      images.length + oldPreviewImages.length < 1 ||
+      images.length + oldPreviewImages.length > 5
+    ) {
       alert("Adicione pelo menos uma imagem");
       return;
     }
@@ -159,10 +168,7 @@ function AlterarAnimal() {
         selectVives,
         imagesToRemove
       );
-      await criarImgAnimal(
-        images,
-        String(routeParams.animalId)
-      );
+      await criarImgAnimal(images, String(routeParams.animalId));
 
       alert("Animal atualizado.");
       navigation.navigate("Meu animal", {
@@ -175,20 +181,28 @@ function AlterarAnimal() {
   }
 
   function removerImagem(index: number) {
-    const imagesTemp = [...images.slice(0, index), ...images.slice(index + 1, images.length)]
-    const imagesPreviewTemp = [...previewImages.slice(0, index), ...previewImages.slice(index + 1, previewImages.length)]
-    console.log('312312', imagesPreviewTemp);
+    const imagesTemp = [
+      ...images.slice(0, index),
+      ...images.slice(index + 1, images.length),
+    ];
+    const imagesPreviewTemp = [
+      ...previewImages.slice(0, index),
+      ...previewImages.slice(index + 1, previewImages.length),
+    ];
+    console.log("312312", imagesPreviewTemp);
     setImages([...imagesTemp]);
     setPreviewImages([...imagesPreviewTemp]);
-
   }
 
   function removerImagemAntiga(index: number, imageId: number) {
-    const oldImagesPreviewTemp = [...oldPreviewImages.slice(0, index), ...oldPreviewImages.slice(index + 1, oldPreviewImages.length)]
+    const oldImagesPreviewTemp = [
+      ...oldPreviewImages.slice(0, index),
+      ...oldPreviewImages.slice(index + 1, oldPreviewImages.length),
+    ];
     const imagesToRemoveTemp = [...imagesToRemove, imageId];
     setImagesToRemove([...imagesToRemoveTemp]);
     setOldPreviewImages([...oldImagesPreviewTemp]);
-    console.log(imagesToRemove, 'images to rmv');
+    console.log(imagesToRemove, "images to rmv");
   }
 
   function toggleVivenciaCheckBox(id: number) {
@@ -197,7 +211,7 @@ function AlterarAnimal() {
       aux.push(id);
       setSelectVive(aux);
     } else {
-      const aux = [...selectVives.filter(item => item != id)];
+      const aux = [...selectVives.filter((item) => item != id)];
       setSelectVive(aux);
     }
     const tempCheckboxes = [...vivenciaCheckBoxes];
@@ -211,7 +225,7 @@ function AlterarAnimal() {
       aux.push(id);
       setSelectTemp(aux);
     } else {
-      const aux = [...selectTemps.filter(item => item != id)];
+      const aux = [...selectTemps.filter((item) => item != id)];
       setSelectTemp(aux);
     }
     const tempCheckboxes = [...temperamentoCheckBoxes];
@@ -225,7 +239,7 @@ function AlterarAnimal() {
       aux.push(id);
       setSelectSoci(aux);
     } else {
-      const aux = [...selectSocis.filter(item => item != id)];
+      const aux = [...selectSocis.filter((item) => item != id)];
       setSelectSoci(aux);
     }
     const tempCheckboxes = [...sociavelCheckBoxes];
@@ -245,13 +259,15 @@ function AlterarAnimal() {
       setEspecie(String(animal.id_especie));
       setPorte(String(animal.id_porte));
       setDesaparecido(String(animal.desaparecido));
-      setSelectSoci(animal.sociaveis.map(sociavel => sociavel.id_sociavel));
-      setSelectTemp(animal.temperamentos.map(temperamento => temperamento.id_temperamento));
-      setSelectVive(animal.vivencias.map(vivencia => vivencia.id_vivencia));
+      setSelectSoci(animal.sociaveis.map((sociavel) => sociavel.id_sociavel));
+      setSelectTemp(
+        animal.temperamentos.map((temperamento) => temperamento.id_temperamento)
+      );
+      setSelectVive(animal.vivencias.map((vivencia) => vivencia.id_vivencia));
 
       const selectedImagesPreview = [...animal.images];
       for (const image of animal.images) {
-        image.filepath = `http://192.168.1.69:3333/${image.filepath}`;
+        image.filepath = `http://192.168.1.64:3333/${image.filepath}`;
       }
       setOldPreviewImages(selectedImagesPreview);
 
@@ -266,10 +282,11 @@ function AlterarAnimal() {
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
     })();
@@ -294,31 +311,48 @@ function AlterarAnimal() {
   }, [selectVives]);
 
   return (
-    <ScrollView style={{ backgroundColor: 'white' }}>
+    <ScrollView style={{ backgroundColor: "white" }}>
       <View
         style={{
           alignItems: "center",
           justifyContent: "center",
           marginTop: "15%",
           backgroundColor: "#f8f8f8",
-        }}>
-        {!((images.length + oldPreviewImages.length) >= 5) ? <Button title="Selecionar imagem" onPress={pickImage} /> : <></>}
-        {
-          previewImages.map((imageUri, index) => <View key={imageUri + index}>
-            <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
-            <Pressable onPress={() => removerImagem(index)} style={styles.botao}>
+        }}
+      >
+        {!(images.length + oldPreviewImages.length >= 5) ? (
+          <Button title="Selecionar imagem" onPress={pickImage} />
+        ) : (
+          <></>
+        )}
+        {previewImages.map((imageUri, index) => (
+          <View key={imageUri + index}>
+            <Image
+              source={{ uri: imageUri }}
+              style={{ width: 200, height: 200 }}
+            />
+            <Pressable
+              onPress={() => removerImagem(index)}
+              style={styles.botao}
+            >
               <Text>Remover</Text>
             </Pressable>
-          </View>)
-        }
-        {
-          oldPreviewImages.map((image, index) => <View key={image.filepath + index}>
-            <Image source={{ uri: image.filepath }} style={{ width: 200, height: 200 }} />
-            <Pressable onPress={() => removerImagemAntiga(index, image.id_imagem)} style={styles.botao}>
+          </View>
+        ))}
+        {oldPreviewImages.map((image, index) => (
+          <View key={image.filepath + index}>
+            <Image
+              source={{ uri: image.filepath }}
+              style={{ width: 200, height: 200 }}
+            />
+            <Pressable
+              onPress={() => removerImagemAntiga(index, image.id_imagem)}
+              style={styles.botao}
+            >
               <Text>Remover</Text>
             </Pressable>
-          </View>)
-        }
+          </View>
+        ))}
       </View>
       <View
         style={{
@@ -326,8 +360,7 @@ function AlterarAnimal() {
           justifyContent: "center",
           marginTop: "15%",
           marginBottom: "10%",
-          backgroundColor: 'white',
-
+          backgroundColor: "white",
         }}
       >
         <TextInput
@@ -369,10 +402,10 @@ function AlterarAnimal() {
         </View>
 
         <DatePicker
-            startDate={data_nasc}
-            onChange={setData_nasc}
-            label="Data de nascimento"
-            buttonText="Selecione a data de nascimento"
+          startDate={data_nasc}
+          onChange={setData_nasc}
+          label="Data de nascimento"
+          buttonText="Selecione a data de nascimento"
         />
 
         <Picker
@@ -432,60 +465,85 @@ function AlterarAnimal() {
           placeholder="Características adicionais"
         />
 
-        <Text style={styles.tem}>Temperamento</Text>
-        {temperamentos.map((temperamento, index) => (
-          <View
-            key={index}
-          >
-            <BouncyCheckbox
-              disableBuiltInState
-              isChecked={temperamentoCheckBoxes[temperamento.id_temperamento]}
-              onPress={() => toggleTemperamentoCheckBox(temperamento.id_temperamento)}
-              size={20}
-              style={{ margin: "2%" }}
-              text={temperamento.descricao}
+        <View
+          style={{
+            flex: 2,
+            flexDirection: "column",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
+            width: 300,
+            marginTop: 10,
+          }}
+        >
+          <Text style={styles.tem}>Temperamento</Text>
+          {temperamentos.map((temperamento, index) => (
+            <View key={index}>
+              <BouncyCheckbox
+                disableBuiltInState
+                isChecked={temperamentoCheckBoxes[temperamento.id_temperamento]}
+                onPress={() =>
+                  toggleTemperamentoCheckBox(temperamento.id_temperamento)
+                }
+                size={20}
+                style={{ margin: "2%" }}
+                text={temperamento.descricao}
+              />
+            </View>
+          ))}
+        </View>
 
-            />
-          </View>
-        ))}
-        <Text style={styles.tem}>Vivencia</Text>
-        {vivencias.map((vivencia, index) => (
-          <View
-            key={index}
+        <View
+          style={{
+            flex: 2,
+            flexDirection: "column",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
+            width: 300,
+            marginTop: 10,
+          }}
+        >
+          <Text style={styles.tem}>Vivencia</Text>
+          {vivencias.map((vivencia, index) => (
+            <View key={index}>
+              <BouncyCheckbox
+                disableBuiltInState
+                isChecked={vivenciaCheckBoxes[vivencia.id_vivencia]}
+                onPress={() => toggleVivenciaCheckBox(vivencia.id_vivencia)}
+                size={20}
+                style={{ margin: "2%" }}
+                text={vivencia.descricao}
+              />
+            </View>
+          ))}
+        </View>
 
-          >
-            <BouncyCheckbox
-              disableBuiltInState
-              isChecked={vivenciaCheckBoxes[vivencia.id_vivencia]}
-              onPress={() => toggleVivenciaCheckBox(vivencia.id_vivencia)}
-              size={20}
-              style={{ margin: "2%" }}
-              text={vivencia.descricao}
-            />
-          </View>
-        ))}
-        <Text style={styles.tem}>Sociavel com</Text>
-        {sociaveis.map((sociavel, index) => (
-          <View
-            key={index}
-
-          >
-            <BouncyCheckbox
-              disableBuiltInState
-              isChecked={sociavelCheckBoxes[sociavel.id_sociavel]}
-              onPress={() => toggleSociavelCheckBox(sociavel.id_sociavel)}
-              size={20}
-              style={{ margin: "2%" }}
-              text={sociavel.descricao}
-
-            />
-          </View>
-        ))}
-
+        <View
+          style={{
+            flex: 2,
+            flexDirection: "column",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
+            width: 300,
+            marginTop: 10,
+          }}
+        >
+          <Text style={styles.tem}>Sociavel com</Text>
+          {sociaveis.map((sociavel, index) => (
+            <View key={index}>
+              <BouncyCheckbox
+                disableBuiltInState
+                isChecked={sociavelCheckBoxes[sociavel.id_sociavel]}
+                onPress={() => toggleSociavelCheckBox(sociavel.id_sociavel)}
+                size={20}
+                style={{ margin: "2%" }}
+                text={sociavel.descricao}
+              />
+            </View>
+          ))}
+        </View>
         <RectButton onPress={eventoAlterarAnimal} style={styles.botao}>
           <Text>Atualizar</Text>
         </RectButton>
-
       </View>
     </ScrollView>
   );
@@ -500,7 +558,6 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     fontSize: 15,
     backgroundColor: "#f8f8f8",
-
   },
   tem: {
     color: "#575245",

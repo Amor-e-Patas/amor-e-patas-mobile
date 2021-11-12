@@ -38,7 +38,7 @@ export default function AnimalHome() {
     async function fetchAPI() {
       try {
         const animal = await getAnimal(routeParams.animalId);
-        console.log(animal, 'aniii')
+        console.log(animal, "aniii");
         setAnimal(animal);
       } catch (err) {
         console.log(err);
@@ -61,9 +61,8 @@ export default function AnimalHome() {
     >
       <View
         style={{
-          alignItems: "center",
           backgroundColor: "white",
-          marginBottom: "100%",
+          marginBottom: "10%",
         }}
       >
         <Modal
@@ -75,10 +74,26 @@ export default function AnimalHome() {
           }}
         >
           <View style={styles.centeredView}>
-          <Text>Dados do anunciante</Text>
-          <Text>{animal?.nome_usu}</Text>
-          <Text>{animal?.num_telefone}</Text>
-          <Text>{animal?.cidade} - {animal?.estado}</Text>
+            <Text style={styles.adotar2}>Dados do anunciante</Text>
+            <View style={{
+            flex: 4,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            width: 200,
+            marginTop: 10,
+          }}>
+              
+              
+              <Text style={styles.dados}>{animal?.nome_usu}</Text>
+              
+              <Text style={styles.dados}>{animal?.num_telefone}</Text>
+              
+              <Text style={styles.dados}>
+                {animal?.cidade} - {animal?.estado}
+              </Text>
+            </View>
           </View>
         </Modal>
 
@@ -113,7 +128,7 @@ export default function AnimalHome() {
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
+              uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
             }}
           ></Image>
 
@@ -121,40 +136,191 @@ export default function AnimalHome() {
             <Pressable
               key={index}
               onPress={() =>
-                abrirModalImagem(`http://192.168.1.69:3333/${image.filepath}`)
+                abrirModalImagem(`http://192.168.1.64:3333/${image.filepath}`)
               }
             >
               <Image
                 style={styles.previewImage}
                 source={{
-                  uri: `http://192.168.1.69:3333/${image.filepath}`,
+                  uri: `http://192.168.1.64:3333/${image.filepath}`,
                 }}
               ></Image>
             </Pressable>
           ))}
-          <View></View>
         </View>
-        <View>
-          <Text
-            style={{
-              color: "purple",
-              fontFamily: "Raleway_600SemiBold",
-              fontSize: 20,
-              textAlign: "center",
-            }}
-          >
-            {animal?.nome_ani}
+
+        <Text
+          style={{
+            color: "purple",
+            fontFamily: "Raleway_600SemiBold",
+            fontSize: 20,
+            textAlign: "center",
+          }}
+        >
+          {animal?.nome_ani}
+        </Text>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 20,
+          }}
+        >
+          <Image
+            style={styles.icon}
+            source={require("../../../assets/patas.png")}
+          />
+          <Text style={styles.dados}>{animal?.nome_esp}</Text>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 50,
+            marginTop: 2,
+          }}
+        >
+          <Text style={styles.dados}>{animal?.idade}</Text>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 20,
+            marginTop: 2,
+          }}
+        >
+          {animal?.tipo_sexo == "Masculino" ? (
+            <Image
+              style={styles.icon2}
+              source={require("../../../assets/male-gender.png")}
+            />
+          ) : (
+            <Image
+              style={styles.icon2}
+              source={require("../../../assets/femea.png")}
+            />
+          )}
+          <Text style={styles.dados}>{animal?.tipo_sexo}</Text>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 50,
+            marginTop: 2,
+          }}
+        >
+          <Text style={styles.dados}>{animal?.caracteristica_animal}</Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 20,
+            marginTop: 2,
+          }}
+        >
+          <Image
+            style={styles.icon2}
+            source={require("../../../assets/endereco2.png")}
+          />
+          <Text style={styles.dados}>
+            Localizado em {animal?.cidade} - {animal?.estado}
           </Text>
-          <Text>{animal?.nome_esp}</Text>
-          <Text>{animal?.idade}</Text>
-          <Text>{animal?.tipo_sexo}</Text>
-          <Text>Localizado em {animal?.cidade} - {animal?.estado}</Text>
-          <RectButton onPress={() => setShowAdotarModal(true)}><Text>Quero adotar</Text></RectButton>
-          <Text>{animal?.caracteristica_animal}</Text>
-          {animal?.temperamentos.map((temperamento, index) => <Text key={index}>{temperamento.descricao}</Text>)}
-          {animal?.sociaveis.map((sociavel, index) => <Text key={index}>{sociavel.descricao}</Text>)}
-          {animal?.vivencias.map((vivencia, index) => <Text key={index}>{vivencia.descricao}</Text>)}
         </View>
+
+        <View
+          style={{
+            marginHorizontal: 70,
+            marginTop: 5,
+          }}
+        >
+          <Text style={styles.dados}>Temperamento</Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 90,
+            marginTop: 2,
+          }}
+        >
+          {animal?.temperamentos.map((temperamento, index) => (
+            <Text key={index} style={styles.dados2}>
+              {temperamento.descricao}
+            </Text>
+          ))}
+        </View>
+
+        <View
+          style={{
+            marginHorizontal: 70,
+            marginTop: 5,
+          }}
+        >
+          <Text style={styles.dados}>Sociavel com </Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 90,
+            marginTop: 2,
+          }}
+        >
+          {animal?.sociaveis.map((sociavel, index) => (
+            <Text key={index} style={styles.dados2}>
+              {sociavel.descricao}
+            </Text>
+          ))}
+        </View>
+        <View
+          style={{
+            marginHorizontal: 70,
+            marginTop: 5,
+          }}
+        >
+          <Text style={styles.dados}>Vive bem com </Text>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "flex-start",
+            alignContent: "flex-start",
+            marginHorizontal: 90,
+            marginTop: 2,
+          }}
+        >
+          {animal?.vivencias.map((vivencia, index) => (
+            <Text style={styles.dados2} key={index}>
+              {vivencia.descricao}
+            </Text>
+          ))}
+        </View>
+
+        <RectButton onPress={() => setShowAdotarModal(true)}>
+          <Text style={styles.adotar}>Quero adotar</Text>
+        </RectButton>
       </View>
     </ScrollView>
   );
@@ -166,7 +332,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
-    flexDirection: "row",
+    paddingTop: 350
+    //flexDirection: "row",
+    
   },
 
   stretch: {
@@ -199,5 +367,43 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginLeft: "5%",
     marginRight: "5%",
+  },
+  dados: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 17,
+    color: "gray",
+  },
+
+  dados2: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 15,
+    color: "#7D6B7D",
+  },
+
+  icon: {
+    width: 25,
+    height: 25,
+    marginRight: 5,
+  },
+
+  icon2: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+
+  adotar: {
+    marginTop: 15,
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 17,
+    color: "purple",
+    textAlign: "center",
+  },
+
+  adotar2: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 20,
+    color: "purple",
+    textAlign: "center",
   },
 });
