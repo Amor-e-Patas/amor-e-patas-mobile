@@ -12,7 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import {
   Animal,
-  getAnimaisDesaparecidosAnalise,
+  getAnimaisDesaparecidosAnalise2,
   alterarStatus,
 } from "../../service/animal";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -37,7 +37,7 @@ export default function Analise() {
   useEffect(() => {
     async function fetchAPI() {
       try {
-        const animais = await getAnimaisDesaparecidosAnalise();
+        const animais = await getAnimaisDesaparecidosAnalise2();
         setAnimais(animais);
       } catch (err) {
         console.log(err);
@@ -49,14 +49,14 @@ export default function Analise() {
 
   const aprovarAnimal = async () => {
     await alterarStatus(animalId, 1);
-    const animais = await getAnimaisDesaparecidosAnalise();
+    const animais = await getAnimaisDesaparecidosAnalise2();
     setAnimais(animais);
     setShowAprovarModal(false);
   };
 
   const negarAnimal = async () => {
     await alterarStatus(animalId, 2);
-    const animais = await getAnimaisDesaparecidosAnalise();
+    const animais = await getAnimaisDesaparecidosAnalise2();
     setAnimais(animais);
     setShowNegarModal(false);
   };
