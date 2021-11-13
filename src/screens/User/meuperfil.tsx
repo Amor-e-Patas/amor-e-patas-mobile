@@ -42,41 +42,41 @@ export default function MeuPerfil() {
           }}
         >
           <View style={styles.cards}>
+          <RectButton onPress={() => navigation.navigate("Alterar usuário")}>
             <Image
               style={styles.stretch}
               source={require("../../../assets/perfil.png")}
             ></Image>
-            <RectButton onPress={() => navigation.navigate("Alterar usuário")}>
               <Text style={styles.text}>Atualizar meus dados pessoais</Text>
             </RectButton>
           </View>
 
           <View style={styles.cards}>
+          <RectButton onPress={() => navigation.navigate("Alterar endereço")}>
             <Image
               style={styles.stretchend}
               source={require("../../../assets/endereco2.png")}
             ></Image>
-            <RectButton onPress={() => navigation.navigate("Alterar endereço")}>
               <Text style={styles.text}>Atualizar meu endereço</Text>
             </RectButton>
           </View>
 
           <View style={styles.cards}>
+          <RectButton onPress={() => navigation.navigate("Alterar telefone")}>
             <Image
               style={styles.stretchcall}
               source={require("../../../assets/celular.png")}
             ></Image>
-            <RectButton onPress={() => navigation.navigate("Alterar telefone")}>
               <Text style={styles.text}>Atualizar meu contato</Text>
             </RectButton>
           </View>
 
           <View style={styles.cards}>
+          <RectButton onPress={() => navigation.navigate("Alterar login")}>
             <Image
               style={styles.stretchpass}
               source={require("../../../assets/pass.png")}
             ></Image>
-            <RectButton onPress={() => navigation.navigate("Alterar login")}>
               <Text style={styles.text}>Atualizar senha</Text>
             </RectButton>
           </View>

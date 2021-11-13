@@ -384,7 +384,7 @@ export default function SignUp() {
 
         <BouncyCheckbox
           size={20}
-          style={{ margin: "2%" }}
+          style={{ marginBottom: "1%" }}
           text="Li e aceito os termos"
           onPress={(isChecked: boolean) => {
             setTermos(isChecked);
@@ -393,7 +393,7 @@ export default function SignUp() {
 
         <BouncyCheckbox
           size={20}
-          style={{ margin: "2%" }}
+          style={{ marginHorizontal: "3%" }}
           text="Não permitimos a venda de animais através do site."
           onPress={(isChecked: boolean) => {
             setTermosVenda(isChecked);

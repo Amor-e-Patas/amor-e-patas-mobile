@@ -152,7 +152,7 @@ export async function getAnimal(id_animal: number) {
 
 export async function getAnimalIndex(id_animal: number) {
     try {
-        const response = await authenticatedAPI.get(`/animalindex/${id_animal}`);
+        const response = await authenticatedAPI.get<Animal>(`/animalindex/${id_animal}`);
         return response.data;
     } catch (err) {
         throw err;

@@ -39,7 +39,7 @@ export default function MenuAnimais() {
             justifyContent: "center",
             alignItems: "center",
             width: 400,
-            marginTop: 100,
+            marginTop:20,
           }}
         >
           <View style={styles.cards}>
@@ -56,22 +56,32 @@ export default function MenuAnimais() {
           </View>
 
           <View style={styles.cards}>
-          <RectButton onPress={() => navigation.navigate("Meus animais em analise")}>
-              <Image
-                style={styles.stretch}
-                source={require("../../../assets/analise.png")}
-              ></Image>
-              <Text style={styles.text}>Animais em análise</Text>
-            </RectButton>
-          </View>
-
-          <View style={styles.cards}>
             <RectButton onPress={() => navigation.navigate("Meus animais")}>
               <Image
                 style={styles.stretch}
                 source={require("../../../assets/animais.png")}
               ></Image>
               <Text style={styles.text}>Meus animais</Text>
+            </RectButton>
+          </View>          
+
+          <View style={styles.cards}>
+          <RectButton onPress={() => navigation.navigate("Meus animais em analise")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/analise.png")}
+              ></Image>
+              <Text style={styles.text}>Meus animais em analise</Text>
+            </RectButton>
+          </View>
+
+          <View style={styles.cards}>
+            <RectButton onPress={() => navigation.navigate("Meus animais desaparecidos em analise")}>
+              <Image
+                style={styles.stretch}
+                source={require("../../../assets/animais.png")}
+              ></Image>
+              <Text style={styles.text}>Meus animais desaparecidos em analise</Text>
             </RectButton>
           </View>
 
@@ -94,26 +104,6 @@ export default function MenuAnimais() {
                 source={require("../../../assets/animais.png")}
               ></Image>
               <Text style={styles.text}>Meus animais não aprovados</Text>
-            </RectButton>
-          </View>
-
-          <View style={styles.cards}>
-            <RectButton onPress={() => navigation.navigate("Meus animais em analise")}>
-              <Image
-                style={styles.stretch}
-                source={require("../../../assets/animais.png")}
-              ></Image>
-              <Text style={styles.text}>Meus animais em analise</Text>
-            </RectButton>
-          </View>
-
-          <View style={styles.cards}>
-            <RectButton onPress={() => navigation.navigate("Meus animais desaparecidos em analise")}>
-              <Image
-                style={styles.stretch}
-                source={require("../../../assets/animais.png")}
-              ></Image>
-              <Text style={styles.text}>Meus animais desaparecidos em analise</Text>
             </RectButton>
           </View>
 

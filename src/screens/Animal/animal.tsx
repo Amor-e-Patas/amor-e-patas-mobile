@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Modal,
-  Pressable,
-} from "react-native";
+import {View, Text, Image, StyleSheet, ScrollView, Modal, Pressable,} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
-import { getAnimal, Animal, deleteAnimal } from "../../service/animal";
+import { getAnimalIndex, Animal, deleteAnimal } from "../../service/animal";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
@@ -37,7 +29,7 @@ export default function AnimalHome() {
   useEffect(() => {
     async function fetchAPI() {
       try {
-        const animal = await getAnimal(routeParams.animalId);
+        const animal = await getAnimalIndex(routeParams.animalId);
         console.log(animal, "aniii");
         setAnimal(animal);
       } catch (err) {

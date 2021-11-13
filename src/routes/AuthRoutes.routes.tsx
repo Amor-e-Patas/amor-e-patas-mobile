@@ -86,14 +86,12 @@ function AuthRoutes() {
   console.log(isAuthenticated, isAdm, "autenticação");
   return (
     <AuthStack.Navigator>
-      <AuthStack.Screen
-        name="Navigator"
-        options={{ headerShown: false }}
-        component={MyDrawer}
+      <AuthStack.Screen name="Navigator" options={{ headerShown: false }}component={MyDrawer}
       />
+      <AuthStack.Screen name="Animal" component={Animal} />
       {isAuthenticated ? (
         <>
-          <AuthStack.Screen name="Animal" component={Animal} />
+          
           <AuthStack.Screen name="Meu animal" component={MeuAnimal} />
           <AuthStack.Screen name="Noticias cadastradas"component={NoticiasAdm}/>
           <AuthStack.Screen name="Cadastrar Notícia" component={Post} />
@@ -110,7 +108,6 @@ function AuthRoutes() {
           <AuthStack.Screen name="Meus animais não aprovados" component={AnimaisNaoAprovados}/>
           <AuthStack.Screen name="Meus animais desaparecidos não aprovados" component={MeusAnimaisDesaparecidosNaoAprovados} />
           <AuthStack.Screen name="Meus animais desaparecidos em analise" component={MeusAnimaisDesaparecidosEmAnalise} />
-          <AuthStack.Screen name="Analise de animal" component={Analise} />
           {isAdm ? (
             <>
               <AuthStack.Screen
@@ -150,6 +147,7 @@ export function MyDrawer() {
           {isAdm ? (
             <>
               <Drawer.Screen name="Menu noticias" component={MenuNoticias} />
+              <Drawer.Screen name="Analise de animal" component={Analise} />
               <Drawer.Screen name="Analise de animal desaparecido"component={AnaliseAnimalDesaparecidos}/>
             </>
           ) : (

@@ -54,7 +54,7 @@ export default function MeuAnimal() {
     await deleteAnimal(excluirAnimalId);
     console.log(excluirAnimalId);
     setShowExcluirModal(false);
-    navigation.navigate("Meus animais");
+    navigation.navigate("Menu animais");
   };
 
   const abrirAlterarAnimal = (animalId: number) => {
