@@ -69,6 +69,14 @@ export default function Desaparecidos() {
           marginBottom: "auto",
         }}
       >
+        <Text style={styles.titulo}>Desaparecidos</Text>
+          <Text style={styles.frase2}>
+            Você me viu? 
+            </Text>
+            <Text style={styles.frase}>
+            Ajude a encontrar esses peludos que estão sumidos.
+            Entre em contato com os responsáveis.
+          </Text>
         <View
           style={{
             flex: 2,
@@ -80,6 +88,7 @@ export default function Desaparecidos() {
             marginTop: 10,
           }}
         >
+          
           {animais.map((animal, index) => (
             <RectButton
               key={index}
@@ -136,7 +145,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: 20,
+    fontSize: 25,
     margin: "2%",
   },
 
@@ -148,6 +157,16 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
     marginRight: "5%",
   },
+
+  frase2: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: 16,
+    color: "#737373",
+    textAlign: "center",
+    marginLeft: "5%",
+    marginRight: "5%",
+  },
+
   imgani: {
     width: 180,
     height: 400,

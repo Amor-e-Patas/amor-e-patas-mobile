@@ -66,14 +66,16 @@ export default function AnimalHome() {
           }}
         >
           <View style={styles.centeredView}>
-            <Text style={styles.adotar2}>Dados do anunciante</Text>
+            <Text style={styles.adotar2}>{animal?.desaparecido == "N"
+                    ? `Dados Anunciante`
+                    : `Dados do Responsável`}</Text>
             <View style={{
             flex: 4,
             flexDirection: "row",
             flexWrap: "wrap",
             justifyContent: "center",
             alignItems: "center",
-            width: 200,
+            width: 220,
             marginTop: 10,
           }}>
               
@@ -231,7 +233,11 @@ export default function AnimalHome() {
             source={require("../../../assets/endereco2.png")}
           />
           <Text style={styles.dados}>
-            Localizado em {animal?.cidade} - {animal?.estado}
+            
+
+            {animal?.desaparecido == "N"
+                    ? `Localizado em ${animal?.cidade}, ${animal?.estado}`
+                    : `Ultima vez visto em ${animal?.cidade}, ${animal?.estado}`}
           </Text>
         </View>
 
@@ -311,7 +317,7 @@ export default function AnimalHome() {
         </View>
 
         <RectButton onPress={() => setShowAdotarModal(true)}>
-          <Text style={styles.adotar}>Quero adotar</Text>
+          <Text style={styles.adotar}>{animal?.desaparecido == "N" ? `Quero adotar` : `Você me viu?`}</Text>
         </RectButton>
       </View>
     </ScrollView>
