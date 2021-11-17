@@ -116,7 +116,7 @@ export default function SignUp() {
     try {
       const token = await alterarAddres(cep, bairro, endereco, numero, referencia, estado, cidade);
       alert("Endereço atualizado");
-      navigation.navigate("Alterar endereço");
+      navigation.navigate("Meu perfil");
     } catch (error) {
       alert("Erro ao criar conta.");
     }
@@ -176,6 +176,7 @@ export default function SignUp() {
         <TextInput
           style={styles.input}
           placeholder="Número"
+          value={numero}
           placeholderTextColor="#575245"
           onChangeText={(text) => setNumero(text)}
         />

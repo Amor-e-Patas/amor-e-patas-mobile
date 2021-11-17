@@ -53,7 +53,7 @@ export default function SignUp() {
     }
     try {
       const token = await alterarPhone(celular);
-      alert("Telefone atualizado");
+      alert("Meu perfil");
       //window.location.href = "/alterartelefone";
     } catch (err) {
       alert("Erro ao atualizar telefone.")
@@ -87,6 +87,7 @@ export default function SignUp() {
           placeholderTextColor="#575245"
           keyboardType="decimal-pad"
           value={celular}
+          maxLength={15}
           onChangeText={(text) => setCelular(formata_telefone(text, text))}
         />
 

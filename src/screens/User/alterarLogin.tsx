@@ -69,7 +69,7 @@ export default function SignUp() {
     try {
       const token = await alterarLogin(email, password);
       alert("Login atualizado");
-      navigation.navigate("Alterar login");
+      navigation.navigate("Meu perfil");
   } catch (err) {
       alert("Erro ao atualizar login.")
   }
