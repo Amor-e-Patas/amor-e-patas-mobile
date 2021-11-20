@@ -46,7 +46,7 @@ export default function Post() {
   const [deleteComentarioId, setDeleteComentarioId] = useState(0);
   const route = useRoute();
   const routeParams = route.params as NoticiaParams;
-  const { id_usuario, isAdm } = useContext(AuthContext);
+  const { id_usuario, isAdm, isAuthenticated } = useContext(AuthContext);
   const { width } = useWindowDimensions();
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
@@ -125,7 +125,7 @@ export default function Post() {
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.64:3333/${noticia?.images[0].filepath}`,
+              uri: `http://192.168.1.69:3333/${noticia?.images[0].filepath}`,
             }}
           ></Image>
         </View>
@@ -165,6 +165,8 @@ export default function Post() {
           marginRight: "5%",
         }}
       >
+      { isAuthenticated ? (
+      <>
         <TextInput
           value={novoComentario}
           multiline={true}
@@ -197,6 +199,11 @@ export default function Post() {
             Adicionar comentário
           </Text>
         </RectButton>
+        </>) : (
+          <></>
+        )
+        
+        }
       </View>
 
       <View style={{ marginTop: "7%" }}>

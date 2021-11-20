@@ -120,7 +120,7 @@ export default function Post() {
       console.log(images, "imagenss");
       await criarImgPost(images, String(id_post));
       alert("Notícia cadastrada com sucesso.");
-      navigation.navigate("Noticias cadastradas");
+      navigation.navigate("Menu noticias");
     } catch (error) {
       console.log(error);
       alert("Erro ao criar post.");
@@ -244,7 +244,7 @@ export default function Post() {
             backgroundColor: "#f8f8f8",
           }}
           onChangeText={(e) => setCorpo(e)}
-          placeholder="Características adicionais"
+          placeholder="Corpo do texto"
         />
 
         <RectButton onPress={eventoCriarPost} style={styles.botao}>

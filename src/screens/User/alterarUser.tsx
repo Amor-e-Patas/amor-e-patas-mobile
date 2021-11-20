@@ -73,7 +73,7 @@ export default function SignUp() {
     try {
         const token = await alterarUser(nome, cpf, datanasc, genero);
         alert("Usuario atualizado");
-        navigation.navigate("Alterar usuário");
+        navigation.navigate("Meu perfil");
       } catch (err) {
         alert("Erro ao atualizar usuario.")
       }

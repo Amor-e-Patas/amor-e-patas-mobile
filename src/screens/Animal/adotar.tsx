@@ -10,7 +10,7 @@ import {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthRoutesParamList } from "../../routes/AuthRoutes.routes";
 import { getAnimais, getAnimaisApro } from "../../service/animal";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Hr from "../../components/Hr";
 import { TextInput } from "react-native-gesture-handler";
 import { BackgroundImage } from "react-native-elements/dist/config";
@@ -41,6 +41,8 @@ export default function Adotar() {
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthRoutesParamList, "Home">>();
 
+    const isFocused = useIsFocused();
+
   useEffect(() => {
     async function fetchAPI() {
       try {
@@ -54,7 +56,7 @@ export default function Adotar() {
       }
     }
     fetchAPI();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     let animaisTemp = [...animais];
@@ -158,7 +160,7 @@ export default function Adotar() {
                 <Image
                   style={styles.imgani}
                   source={{
-                    uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+                    uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
                   }}
                 ></Image>
                 <Text

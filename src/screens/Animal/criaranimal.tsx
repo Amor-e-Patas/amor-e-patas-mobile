@@ -301,9 +301,9 @@ function Animal() {
           }}
         >
           <Picker.Item label="Selecione o porte" value={0} />
-          <Picker.Item label="Pequeno" value="1" />
-          <Picker.Item label="Médio" value="2" />
-          <Picker.Item label="Grande" value="3" />
+          <Picker.Item label="Pequeno" value="2" />
+          <Picker.Item label="Médio" value="3" />
+          <Picker.Item label="Grande" value="1" />
         </Picker>
 
         <Picker

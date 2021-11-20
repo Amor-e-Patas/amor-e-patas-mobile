@@ -99,7 +99,7 @@ export default function AnimalHome() {
             setShowImageModal(!showImageModal);
           }}
         >
-          <View style={styles.centeredView}>
+          <View style={styles.centeredView2}>
             <Pressable
               onPress={() => setShowImageModal(!showImageModal)}
             ></Pressable>
@@ -122,7 +122,7 @@ export default function AnimalHome() {
           <Image
             style={styles.stretch}
             source={{
-              uri: `http://192.168.1.64:3333/${animal?.images[0].filepath}`,
+              uri: `http://192.168.1.69:3333/${animal?.images[0].filepath}`,
             }}
           ></Image>
 
@@ -130,13 +130,13 @@ export default function AnimalHome() {
             <Pressable
               key={index}
               onPress={() =>
-                abrirModalImagem(`http://192.168.1.64:3333/${image.filepath}`)
+                abrirModalImagem(`http://192.168.1.69:3333/${image.filepath}`)
               }
             >
               <Image
                 style={styles.previewImage}
                 source={{
-                  uri: `http://192.168.1.64:3333/${image.filepath}`,
+                  uri: `http://192.168.1.69:3333/${image.filepath}`,
                 }}
               ></Image>
             </Pressable>
@@ -403,5 +403,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "purple",
     textAlign: "center",
+  },
+
+  centeredView2:{
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    //flexDirection: "row",
   },
 });

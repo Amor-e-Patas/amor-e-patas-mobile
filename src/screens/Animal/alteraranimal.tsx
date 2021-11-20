@@ -267,7 +267,7 @@ function AlterarAnimal() {
 
       const selectedImagesPreview = [...animal.images];
       for (const image of animal.images) {
-        image.filepath = `http://192.168.1.64:3333/${image.filepath}`;
+        image.filepath = `http://192.168.1.69:3333/${image.filepath}`;
       }
       setOldPreviewImages(selectedImagesPreview);
 
@@ -428,9 +428,9 @@ function AlterarAnimal() {
           }}
         >
           <Picker.Item label="Selecione o porte" value={0} />
-          <Picker.Item label="Pequeno" value="1" />
-          <Picker.Item label="Médio" value="2" />
-          <Picker.Item label="Grande" value="3" />
+          <Picker.Item label="Pequeno" value="2" />
+          <Picker.Item label="Médio" value="3" />
+          <Picker.Item label="Grande" value="1" />
         </Picker>
 
         <Picker

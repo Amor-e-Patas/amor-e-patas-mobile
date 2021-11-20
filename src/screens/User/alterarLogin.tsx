@@ -62,7 +62,7 @@ export default function SignUp() {
     }
 
     if (password.length < 6 || password.length > 10) {
-      alert("Senha não atende os requisitos mínimos.");
+      alert("Senha não atende os requisitos mínimos. Ela deve conter no mínimo 6 dígitos e no máximo 10");
       return;
     }
 

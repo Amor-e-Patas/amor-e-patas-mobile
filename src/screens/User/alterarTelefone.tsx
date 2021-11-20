@@ -53,8 +53,8 @@ export default function SignUp() {
     }
     try {
       const token = await alterarPhone(celular);
-      alert("Meu perfil");
-      //window.location.href = "/alterartelefone";
+        alert("Usuario atualizado");
+        navigation.navigate("Meu perfil");
     } catch (err) {
       alert("Erro ao atualizar telefone.")
     }

@@ -89,6 +89,7 @@ function AuthRoutes() {
       <AuthStack.Screen name="Navigator" options={{ headerShown: false }}component={MyDrawer}
       />
       <AuthStack.Screen name="Animal" component={Animal} />
+      <AuthStack.Screen name="Noticia" component={Noticia} />
       {isAuthenticated ? (
         <>
           
@@ -96,7 +97,6 @@ function AuthRoutes() {
           <AuthStack.Screen name="Noticias cadastradas"component={NoticiasAdm}/>
           <AuthStack.Screen name="Cadastrar Notícia" component={Post} />
           <AuthStack.Screen name="Alterar animal" component={AlterarAnimal} />
-          <AuthStack.Screen name="Noticia" component={Noticia} />
           <AuthStack.Screen name="Meus animais" component={MeusAnimais} />
           <AuthStack.Screen name="Meus animais desaparecidos" component={MeusAnimaisDesaparecidos}/>
           <AuthStack.Screen name="Alterar usuário" component={AlterarUser} />
@@ -131,6 +131,9 @@ export function MyDrawer() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Blog" component={Noticias} />
+      <Drawer.Screen name="Desaparecidos" component={Desaparecidos} />
+      <Drawer.Screen name="Adotar" component={Adotar} />
 
       {!isAuthenticated ? (
         <>
@@ -139,9 +142,6 @@ export function MyDrawer() {
         </>
       ) : (
         <>
-          <Drawer.Screen name="Adotar" component={Adotar} />
-          <Drawer.Screen name="Blog" component={Noticias} />
-          <Drawer.Screen name="Desaparecidos" component={Desaparecidos} />
           <Drawer.Screen name="Meu perfil" component={MeuPerfil} />
           <Drawer.Screen name="Menu animais" component={MenuAnimais} />
           {isAdm ? (
